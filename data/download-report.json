@@ -1,0 +1,134 @@
+[
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2024/04/logo_gadamax.png",
+    "destination": "public/assets/images/brand-logo-gadamax.png",
+    "bytes": 9975,
+    "note": "Source site logo"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2024/04/cropped-logo_gadamax-180x180.png",
+    "destination": "public/assets/images/favicon-touch.png",
+    "bytes": 2338,
+    "note": "Apple touch icon"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2025/05/about-us.jpg",
+    "destination": "public/assets/images/about-driven-impact.jpg",
+    "bytes": 59276,
+    "note": "About page visual"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2025/05/femal-programmer.png",
+    "destination": "public/assets/images/services-web-development.png",
+    "bytes": 350026,
+    "note": "Services visual"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2025/05/matrix.png",
+    "destination": "public/assets/images/hero-automation-matrix.png",
+    "bytes": 980486,
+    "note": "Automation texture"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/10/attachment-01.jpg",
+    "destination": "public/assets/images/page-header-about-services.jpg",
+    "bytes": 132452,
+    "note": "Page hero background"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/10/attachment-04.jpg",
+    "destination": "public/assets/images/page-header-portfolio.jpg",
+    "bytes": 111031,
+    "note": "Portfolio hero background"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2025/05/product.png",
+    "destination": "public/assets/images/portfolio-travel-finder.png",
+    "bytes": 137166,
+    "note": "Travel Finder card"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/10/product-1.png",
+    "destination": "public/assets/images/portfolio-smart-loyalty-app.png",
+    "bytes": 284448,
+    "note": "Smart Loyalty App card"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/02/product-2.png",
+    "destination": "public/assets/images/portfolio-modern-ecommerce-template.png",
+    "bytes": 409000,
+    "note": "Modern E-Commerce Template card"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/02/product-3.png",
+    "destination": "public/assets/images/portfolio-corporate-web-presence.png",
+    "bytes": 455112,
+    "note": "Corporate Web Presence card"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/02/product-4.png",
+    "destination": "public/assets/images/portfolio-digital-rewards-catalog.png",
+    "bytes": 399155,
+    "note": "Digital Rewards Catalog card"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/02/product-5.png",
+    "destination": "public/assets/images/portfolio-performance-dashboard.png",
+    "bytes": 290575,
+    "note": "Performance Dashboard card"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/02/product-6.png",
+    "destination": "public/assets/images/portfolio-real-estate-finder.png",
+    "bytes": 345560,
+    "note": "Real Estate Finder card"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2025/05/Screenshot-2025-05-24-at-7.46.44%E2%80%AFAM-Editado.png",
+    "destination": "public/assets/images/showcase-corporate-platform.png",
+    "bytes": 92188,
+    "note": "Showcase image"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2025/05/Screenshot-2025-05-24-at-7.46.54%E2%80%AFAM-Editado.png",
+    "destination": "public/assets/images/showcase-rewards-mobile.png",
+    "bytes": 51566,
+    "note": "Showcase image"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2025/05/Screenshot-2025-05-24-at-7.47.04%E2%80%AFAM-Editado.png",
+    "destination": "public/assets/images/showcase-dashboard-ui.png",
+    "bytes": 106740,
+    "note": "Showcase image"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2025/05/Screenshot-2025-05-24-at-7.47.15%E2%80%AFAM-Editado.png",
+    "destination": "public/assets/images/showcase-commerce-ui.png",
+    "bytes": 79412,
+    "note": "Showcase image"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2025/05/Screenshot-2025-05-24-at-7.47.30%E2%80%AFAM-Editado.png",
+    "destination": "public/assets/images/showcase-property-search-ui.png",
+    "bytes": 69411,
+    "note": "Showcase image"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/04/avatar-01.jpg",
+    "destination": "public/assets/images/testimonial-laura-mendez.jpg",
+    "bytes": 10852,
+    "note": "Testimonial portrait"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/04/avatar-02.jpg",
+    "destination": "public/assets/images/testimonial-valentina-rios.jpg",
+    "bytes": 8890,
+    "note": "Testimonial portrait"
+  },
+  {
+    "source": "https://www.gadamax.com/wp-content/uploads/2020/04/avatar-03.jpg",
+    "destination": "public/assets/images/testimonial-ricardo-jimenez.jpg",
+    "bytes": 8850,
+    "note": "Testimonial portrait"
+  }
+]

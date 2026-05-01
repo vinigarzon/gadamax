@@ -1,0 +1,107 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionIntro from "../components/SectionIntro.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import CTASection from "../components/CTASection.astro";
+import { services, showcaseImages } from "../content/site.js";
+---
+
+<BaseLayout
+  title="About us"
+  description="Learn how Gadamax connects strategy, design, and digital execution to build ventures with long-term impact."
+  currentPath="/about-us"
+>
+  <section class="page-hero section">
+    <div class="container page-hero-grid">
+      <div>
+        <p class="eyebrow">About us</p>
+        <h1>Built for the Digital Age</h1>
+        <p>
+          Gadamax LLC is a U.S.-based company dedicated to creating and scaling digital
+          solutions that drive innovation, growth, and long-term impact.
+        </p>
+      </div>
+      <img
+        src="/assets/images/page-header-about-services.jpg"
+        alt="Abstract digital background from the original Gadamax site"
+        width="1707"
+        height="960"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container feature-split">
+      <div>
+        <SectionIntro
+          eyebrow="How we think"
+          title="Ideas become momentum when vision meets execution"
+          description="The original About page positioned Gadamax as a team that turns ideas into experiences and challenges into progress. This rebuild keeps that message and turns it into a clearer story about how the company works."
+        />
+        <div class="story-block">
+          <p>
+            We connect strategy, design, and delivery so digital ventures can move from concept
+            to traction without losing clarity along the way.
+          </p>
+          <p>
+            Our approach blends curiosity, precision, and business awareness. The goal is not
+            just to ship polished interfaces, but to build systems that can evolve.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-visual">
+        <img
+          src="/assets/images/about-driven-impact.jpg"
+          alt="About Gadamax visual"
+          width="800"
+          height="627"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-muted">
+    <div class="container">
+      <SectionIntro
+        eyebrow="Core capabilities"
+        title="Four disciplines, one connected delivery model"
+        description="These are the same core service areas shown on the source website, presented with sharper positioning and reusable card components."
+      />
+      <div class="service-grid">
+        {services.map((service) => (
+          <ServiceCard service={service} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionIntro
+        eyebrow="Showcase"
+        title="Built across multiple digital product contexts"
+        description="A curated strip of real interface assets migrated from the original website and localized into the new project."
+        align="center"
+      />
+      <div class="showcase-strip">
+        {showcaseImages.map((item) => (
+          <figure>
+            <img src={item.src} alt={item.alt} loading="lazy" />
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Looking for a team that can think strategically and ship with care?"
+    body="Gadamax works best when strong ideas need disciplined execution, thoughtful design, and room to grow."
+    primaryHref="/contact"
+    primaryLabel="Talk to Gadamax"
+    secondaryHref="/portfolio"
+    secondaryLabel="See our work"
+  />
+</BaseLayout>

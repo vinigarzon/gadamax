@@ -1,0 +1,50 @@
+---
+const { item } = Astro.props;
+const websiteHost = item.website
+  ? new URL(item.website).hostname.replace(/^www\./, "")
+  : null;
+---
+
+<article class="portfolio-card" data-category={item.category}>
+  <a class="portfolio-card__link" href={`/portfolio/${item.slug}`}>
+    <div class="portfolio-card__media">
+      <img
+        class="portfolio-card__preview"
+        src={item.image}
+        alt={`${item.name} preview`}
+        loading="lazy"
+      />
+      {item.logo && (
+        <div class:list={[
+          "portfolio-card__brand",
+          item.logoTheme === "dark" && "portfolio-card__brand--dark"
+        ]}>
+          <img
+            class="portfolio-card__brand-image"
+            src={item.logo}
+            alt={item.logoAlt ?? `${item.name} logo`}
+            loading="lazy"
+          />
+        </div>
+      )}
+    </div>
+    <div class="portfolio-card__body">
+      <div class="portfolio-card__meta">
+        <span>{item.category}</span>
+        <img src="/assets/icons/arrow-up-right.svg" alt="" width="20" height="20" />
+      </div>
+      <h3>{item.name}</h3>
+      <h4>{item.title}</h4>
+      <p>{item.cardDescription}</p>
+      <ul class="tag-list">
+        {item.services.map((service) => (
+          <li>{service}</li>
+        ))}
+      </ul>
+      <div class="portfolio-card__footer">
+        <span class="portfolio-card__site">{websiteHost ?? item.availability}</span>
+        <span class="text-link">View project</span>
+      </div>
+    </div>
+  </a>
+</article>

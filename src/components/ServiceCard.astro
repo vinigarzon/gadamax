@@ -1,0 +1,15 @@
+---
+const { service } = Astro.props;
+---
+
+<article class="service-card">
+  <div class="service-icon-wrap">
+    <img src={service.icon} alt="" width="32" height="32" />
+  </div>
+  <h3>{service.title}</h3>
+  <p>{service.summary}</p>
+  <div class="service-detail">
+    <span></span>
+    <p>{service.detail}</p>
+  </div>
+</article>

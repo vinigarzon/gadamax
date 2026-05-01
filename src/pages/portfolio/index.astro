@@ -1,0 +1,95 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SectionIntro from "../../components/SectionIntro.astro";
+import PortfolioCard from "../../components/PortfolioCard.astro";
+import CTASection from "../../components/CTASection.astro";
+import { portfolioCategories, portfolioItems } from "../../content/site.js";
+---
+
+<BaseLayout
+  title="Portfolio"
+  description="Explore Gadamax portfolio work across live launches, loyalty platforms, hospitality, civic projects, e-learning, and digital product design."
+  currentPath="/portfolio"
+>
+  <section class="page-hero section">
+    <div class="container page-hero-grid">
+      <div>
+        <p class="eyebrow">Portfolio</p>
+        <h1>Our works</h1>
+        <p>
+          A curated selection of real Gadamax launches across hospitality, workforce, healthcare,
+          loyalty, translation, e-learning, art commerce, and product platforms.
+        </p>
+      </div>
+      <img
+        src="/assets/images/page-header-portfolio.jpg"
+        alt="Portfolio section background"
+        width="1707"
+        height="960"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionIntro
+        eyebrow="Case studies"
+        title="Filter by product context"
+        description="Every item below uses locally stored media and local detail pages, so the portfolio stays intact even if any source site changes or disappears."
+      />
+
+      <div class="filter-bar" data-filter-bar>
+        {portfolioCategories.map((category) => (
+          <button
+            class={category === "All" ? "is-active" : undefined}
+            type="button"
+            data-filter={category}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      <div class="portfolio-grid" data-filter-grid>
+        {portfolioItems.map((item) => (
+          <PortfolioCard item={item} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Want a product story that feels as credible as the product itself?"
+    body="We design portfolio experiences to feel intentional, polished, and easy to scan, without losing the substance behind the work."
+    primaryHref="/contact"
+    primaryLabel="Discuss your project"
+    secondaryHref="/services"
+    secondaryLabel="View services"
+  />
+</BaseLayout>
+
+<script>
+  const bar = document.querySelector("[data-filter-bar]");
+  const grid = document.querySelector("[data-filter-grid]");
+
+  if (bar && grid) {
+    const buttons = [...bar.querySelectorAll("button")];
+    const cards = [...grid.querySelectorAll("[data-category]")];
+
+    bar.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLButtonElement)) return;
+
+      const selected = target.dataset.filter;
+      buttons.forEach((button) =>
+        button.classList.toggle("is-active", button === target)
+      );
+
+      cards.forEach((card) => {
+        const matches = selected === "All" || card.dataset.category === selected;
+        card.toggleAttribute("hidden", !matches);
+      });
+    });
+  }
+</script>

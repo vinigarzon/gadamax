@@ -1,0 +1,17 @@
+---
+const { title, body, primaryHref, primaryLabel, secondaryHref, secondaryLabel } = Astro.props;
+---
+
+<section class="cta section">
+  <div class="container cta-panel">
+    <div>
+      <p class="eyebrow">Let’s build the next chapter</p>
+      <h2>{title}</h2>
+      <p>{body}</p>
+    </div>
+    <div class="cta-actions">
+      <a class="button button-primary" href={primaryHref}>{primaryLabel}</a>
+      <a class="button button-secondary" href={secondaryHref}>{secondaryLabel}</a>
+    </div>
+  </div>
+</section>

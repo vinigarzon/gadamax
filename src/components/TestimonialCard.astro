@@ -1,0 +1,22 @@
+---
+const { testimonial } = Astro.props;
+---
+
+<article class="testimonial-card">
+  <div class="testimonial-author">
+    <img
+      src={testimonial.image}
+      alt={`${testimonial.name} portrait`}
+      width="72"
+      height="72"
+      loading="lazy"
+    />
+    <div>
+      <h3>{testimonial.name}</h3>
+      <p>
+        {testimonial.role} <span>— {testimonial.company}</span>
+      </p>
+    </div>
+  </div>
+  <blockquote>{testimonial.quote}</blockquote>
+</article>

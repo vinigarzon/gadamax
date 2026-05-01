@@ -1,0 +1,16 @@
+{
+  "name": "gadamax-static-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@fontsource/manrope": "^5.0.0",
+    "@fontsource/space-grotesk": "^5.0.0"
+  }
+}

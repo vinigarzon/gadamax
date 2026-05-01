@@ -1,0 +1,55 @@
+---
+import { siteMeta } from "../content/site.js";
+
+const { navigation } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <a class="brand footer-brand" href="/">
+        <img
+          src="/assets/images/brand-logo-gadamax.png"
+          alt="Gadamax"
+          width="112"
+          height="112"
+        />
+        <span>Gadamax</span>
+      </a>
+      <p class="footer-copy">
+        U.S.-based venture studio building, investing in, and scaling digital products with
+        clarity, craft, and long-term momentum.
+      </p>
+    </div>
+
+    <div>
+      <h3>Navigate</h3>
+      <ul class="footer-links">
+        {navigation.map((item) => (
+          <li><a href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h3>Contact</h3>
+      <ul class="footer-links footer-contact">
+        <li><a href={`mailto:${siteMeta.email}`}>{siteMeta.email}</a></li>
+        <li><a href={siteMeta.phoneMxHref}>{siteMeta.phoneMx}</a></li>
+        <li><a href={siteMeta.phoneUsHref}>{siteMeta.phoneUs}</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Offices</h3>
+      <address class="footer-addresses">
+        <span>{siteMeta.addressMx}</span>
+        <span>{siteMeta.addressUs}</span>
+      </address>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>{siteMeta.copyright}</p>
+  </div>
+</footer>

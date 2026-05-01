@@ -1,0 +1,164 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import SectionIntro from "../components/SectionIntro.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import PortfolioCard from "../components/PortfolioCard.astro";
+import TestimonialCard from "../components/TestimonialCard.astro";
+import ContactForm from "../components/ContactForm.astro";
+import CTASection from "../components/CTASection.astro";
+import {
+  services,
+  portfolioItems,
+  testimonials,
+  ventureSignals,
+  siteMeta
+} from "../content/site.js";
+
+const featuredProjects = portfolioItems.filter((item) => item.featuredOnHome).slice(0, 6);
+const liveProjects = portfolioItems.filter((item) => item.website);
+---
+
+<BaseLayout
+  title="Innovating the Digital Future"
+  description={siteMeta.description}
+  currentPath="/"
+>
+  <Hero
+    eyebrow="Venture studio • strategy • build • scale"
+    title="Innovating the Digital Future"
+    description="Gadamax is a U.S.-based company focused on building, investing in, and scaling digital ventures that shape how people connect, learn, and grow."
+    primaryHref="/contact"
+    primaryLabel="Get Started"
+    secondaryHref="/portfolio"
+    secondaryLabel="View Portfolio"
+    stats={[
+      { value: "4", label: "Core service pillars" },
+      { value: `${liveProjects.length}`, label: "Live client platforms" },
+      { value: "US + LATAM", label: "Cross-border venture footprint" }
+    ]}
+    image={{
+      src: "/assets/images/hero-gadamax-home.png",
+      alt: "Abstract digital horizon expressing scale, momentum, and venture growth"
+    }}
+  />
+
+  <section class="section">
+    <div class="container feature-split">
+      <div>
+        <SectionIntro
+          eyebrow="About us"
+          title="Driven by Ideas, Built for Impact"
+          description="At Gadamax, we believe in the power of digital innovation to transform industries, elevate experiences, and create lasting value. Our work is guided by curiosity, integrity, and a commitment to meaningful progress."
+        />
+        <div class="signal-list">
+          {ventureSignals.map((signal) => (
+            <article class="signal-card">
+              <h3>{signal.title}</h3>
+              <p>{signal.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="feature-visual feature-visual--cards-align">
+        <img
+          src="/assets/images/about-driven-impact.jpg"
+          alt="Gadamax team and workspace visual"
+          width="800"
+          height="627"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-muted">
+    <div class="container">
+      <SectionIntro
+        eyebrow="Services"
+        title="Smart Solutions. Real Results."
+        description="The original Gadamax site centers on four offers. This rebuild keeps that structure and reframes each capability with clearer positioning, stronger hierarchy, and a more premium presentation."
+      />
+      <div class="service-grid">
+        {services.map((service) => (
+          <ServiceCard service={service} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head-row">
+      <SectionIntro
+        eyebrow="Portfolio"
+        title="Selected digital ventures"
+        description="A curated mix of real launches across hospitality, civic, healthcare, rewards, education, art commerce, and product platforms."
+      />
+        <a class="button button-secondary" href="/portfolio">See all projects</a>
+      </div>
+      <div class="portfolio-grid">
+        {featuredProjects.map((item) => (
+          <PortfolioCard item={item} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="container">
+      <SectionIntro
+        eyebrow="Testimonials"
+        title="Trusted by founders and operators"
+        description="We preserved the current testimonial voices while presenting them in a more editorial, mobile-friendly format."
+      />
+      <div class="testimonial-grid">
+        {testimonials.map((testimonial) => (
+          <TestimonialCard testimonial={testimonial} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Need a partner to shape, launch, or scale a digital venture?"
+    body="From strategic direction to front-end execution and automation, Gadamax helps ambitious teams move with more clarity and less drag."
+    primaryHref="/contact"
+    primaryLabel="Start the conversation"
+    secondaryHref="/services"
+    secondaryLabel="Explore services"
+  />
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="contact-copy">
+        <SectionIntro
+          eyebrow="Contact us"
+          title="Have a project in mind?"
+          description="Reach out to explore new ideas and build lasting partnerships. The contact experience is now Netlify-ready and easier to maintain than the original WordPress form."
+        />
+        <div class="contact-cards">
+          <article class="contact-card">
+            <h3>Email</h3>
+            <a href={`mailto:${siteMeta.email}`}>{siteMeta.email}</a>
+          </article>
+          <article class="contact-card">
+            <h3>Phone</h3>
+            <a href={siteMeta.phoneMxHref}>{siteMeta.phoneMx}</a>
+            <a href={siteMeta.phoneUsHref}>{siteMeta.phoneUs}</a>
+          </article>
+          <article class="contact-card">
+            <h3>Locations</h3>
+            <p>{siteMeta.addressMx}</p>
+            <p>{siteMeta.addressUs}</p>
+          </article>
+        </div>
+      </div>
+
+      <ContactForm
+        subtitle="Share the venture, product, or workflow challenge you're tackling and we’ll follow up with a practical next step."
+      />
+    </div>
+  </section>
+</BaseLayout>

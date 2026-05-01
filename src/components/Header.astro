@@ -1,0 +1,66 @@
+---
+const { navigation, currentPath } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="container shell">
+    <a class="brand" href="/" aria-label="Gadamax home">
+      <img
+        src="/assets/images/brand-logo-gadamax.png"
+        alt="Gadamax"
+        width="112"
+        height="112"
+      />
+      <span>Gadamax</span>
+    </a>
+
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      data-nav-toggle
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+      <span class="sr-only">Toggle navigation</span>
+    </button>
+
+    <nav class="site-nav" id="primary-navigation" data-nav-panel>
+      <ul>
+        {navigation.map((item) => {
+          const isActive =
+            item.href === "/"
+              ? currentPath === "/"
+              : currentPath === item.href || currentPath.startsWith(`${item.href}/`);
+
+          return (
+            <li>
+              <a class={isActive ? "active" : undefined} href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <a class="header-cta" href="/contact">
+        Start a project
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector("[data-nav-toggle]");
+  const panel = document.querySelector("[data-nav-panel]");
+
+  if (toggle && panel) {
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      panel.classList.toggle("is-open", !expanded);
+      document.body.classList.toggle("menu-open", !expanded);
+    });
+  }
+</script>

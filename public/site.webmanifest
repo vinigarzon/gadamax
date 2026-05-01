@@ -1,0 +1,19 @@
+{
+  "name": "Gadamax",
+  "short_name": "Gadamax",
+  "icons": [
+    {
+      "src": "/assets/images/brand-logo-gadamax.png",
+      "sizes": "500x500",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/favicon-touch.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#0d1321",
+  "background_color": "#f5f7fb",
+  "display": "standalone"
+}

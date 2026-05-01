@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactForm from "../components/ContactForm.astro";
+import CTASection from "../components/CTASection.astro";
+import { siteMeta } from "../content/site.js";
+---
+
+<BaseLayout
+  title="Contact us"
+  description="Get in touch with Gadamax to discuss digital strategy, web development, e-commerce, or automation."
+  currentPath="/contact"
+>
+  <section class="page-hero section">
+    <div class="container page-hero-grid">
+      <div>
+        <p class="eyebrow">Contact us</p>
+        <h1>Keep in touch</h1>
+        <p>
+          Have questions or ideas to share? Get in touch — we’re ready to collaborate, build,
+          and grow with you.
+        </p>
+      </div>
+      <img
+        src="/assets/images/hero-automation-matrix.png"
+        alt="Digital systems background"
+        width="1800"
+        height="500"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="contact-copy">
+        <div class="contact-cards">
+          <article class="contact-card">
+            <h2>Email</h2>
+            <p>You can reach us directly any time.</p>
+            <a href={`mailto:${siteMeta.email}`}>{siteMeta.email}</a>
+          </article>
+          <article class="contact-card">
+            <h2>Phone</h2>
+            <p>Call the team in Mexico or the United States.</p>
+            <a href={siteMeta.phoneMxHref}>{siteMeta.phoneMx}</a>
+            <a href={siteMeta.phoneUsHref}>{siteMeta.phoneUs}</a>
+          </article>
+          <article class="contact-card">
+            <h2>Locations</h2>
+            <p>{siteMeta.addressMx}</p>
+            <p>{siteMeta.addressUs}</p>
+          </article>
+        </div>
+      </div>
+
+      <ContactForm
+        title="Tell us what you're exploring"
+        subtitle="Share your timeline, goals, and the kind of digital venture or system you need to build."
+      />
+    </div>
+  </section>
+
+  <CTASection
+    title="Prefer to start with a focused conversation?"
+    body="Send the essentials through the form and we’ll follow up with a practical next step."
+    primaryHref={`mailto:${siteMeta.email}`}
+    primaryLabel="Email Gadamax"
+    secondaryHref="/portfolio"
+    secondaryLabel="Review portfolio"
+  />
+</BaseLayout>

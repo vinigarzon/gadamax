@@ -1,0 +1,110 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionIntro from "../components/SectionIntro.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import PortfolioCard from "../components/PortfolioCard.astro";
+import CTASection from "../components/CTASection.astro";
+import { capabilityPillars, portfolioItems, services } from "../content/site.js";
+
+const serviceProjects = portfolioItems.filter((item) => item.featuredOnHome).slice(0, 6);
+---
+
+<BaseLayout
+  title="Services"
+  description="Explore Gadamax services across digital strategy, web development, e-commerce, and smart automation."
+  currentPath="/services"
+>
+  <section class="page-hero section">
+    <div class="container page-hero-grid">
+      <div>
+        <p class="eyebrow">Services</p>
+        <h1>Turning vision into digital reality.</h1>
+        <ul class="hero-bullet-list">
+          <li>Clarity that drives action</li>
+          <li>Design with purpose</li>
+          <li>Growth through technology</li>
+          <li>Efficiency, reimagined</li>
+        </ul>
+        <p>
+          We don’t just follow digital trends, we help shape them. The new structure keeps the
+          original promise while translating it into a more focused, maintainable service page.
+        </p>
+      </div>
+      <img
+        src="/assets/images/services-web-development.png"
+        alt="Developer-focused illustration from the source site"
+        width="1536"
+        height="1024"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <section class="section section-muted">
+    <div class="container">
+      <SectionIntro
+        eyebrow="Core services"
+        title="Where strategy, craft, and systems meet"
+        description="Rebuilt as reusable cards for a cleaner architecture and easier future updates."
+      />
+      <div class="service-grid">
+        {services.map((service) => (
+          <ServiceCard service={service} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container feature-split">
+      <div class="feature-visual feature-visual-square">
+        <img
+          src="/assets/images/hero-automation-matrix.png"
+          alt="Automation matrix visualization"
+          width="1800"
+          height="500"
+          loading="lazy"
+        />
+      </div>
+      <div>
+        <SectionIntro
+          eyebrow="Execution pillars"
+          title="Practical capabilities behind every engagement"
+          description="The original site highlighted UX/UI, API integration, CMS and e-commerce tools, and data automation. These remain central, with updated wording and a cleaner layout."
+        />
+        <div class="pillar-list">
+          {capabilityPillars.map((pillar) => (
+            <article class="pillar-card">
+              <h3>{pillar.title}</h3>
+              <p>{pillar.description}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionIntro
+        eyebrow="Applied work"
+        title="Capabilities expressed through real products"
+        description="Selected live platforms and digital products that map directly to the services above."
+      />
+      <div class="portfolio-grid">
+        {serviceProjects.map((item) => (
+          <PortfolioCard item={item} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Need strategy, delivery, or both?"
+    body="Whether you're launching a new venture or modernizing an existing digital experience, Gadamax can help shape the roadmap and the interface that brings it to life."
+    primaryHref="/contact"
+    primaryLabel="Request a consultation"
+    secondaryHref="/portfolio"
+    secondaryLabel="Browse case studies"
+  />
+</BaseLayout>

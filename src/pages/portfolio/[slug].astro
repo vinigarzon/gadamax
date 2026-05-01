@@ -1,0 +1,175 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CTASection from "../../components/CTASection.astro";
+import { portfolioItems } from "../../content/site.js";
+
+export function getStaticPaths() {
+  return portfolioItems.map((item) => ({
+    params: { slug: item.slug },
+    props: { item }
+  }));
+}
+
+const { item } = Astro.props;
+const websiteHost = item.website
+  ? new URL(item.website).hostname.replace(/^www\./, "")
+  : null;
+const projectMeta = [
+  {
+    label: "Category",
+    value: item.category
+  },
+  {
+    label: "Availability",
+    value: item.availability
+  },
+  ...(websiteHost
+    ? [
+        {
+          label: "Website",
+          value: websiteHost,
+          href: item.website
+        }
+      ]
+    : [])
+];
+const related = portfolioItems
+  .filter((entry) => entry.slug !== item.slug)
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title={`${item.name} — ${item.title}`}
+  description={item.cardDescription}
+  image={item.image}
+  currentPath={`/portfolio/${item.slug}`}
+>
+  <section class="project-hero section">
+    <div class="container">
+      <div class="project-hero-panel">
+        <div class="project-hero-grid">
+          <div class="project-hero-copy">
+            <p class="eyebrow">Project</p>
+            <div class="project-title-stack">
+              <div class="project-heading-row">
+                <h1>{item.name}</h1>
+              </div>
+              <p class="project-title-lead">{item.title}</p>
+            </div>
+            <p class="project-summary">{item.summary}</p>
+            <ul class="tag-list project-tag-list">
+              {item.services.map((service) => (
+                <li>{service}</li>
+              ))}
+            </ul>
+            <div class="project-actions">
+              {item.website && (
+                <a class="button" href={item.website} target="_blank" rel="noreferrer">
+                  Visit live site
+                </a>
+              )}
+              <a class="button button-secondary" href="/portfolio">Back to portfolio</a>
+            </div>
+            <div class="project-meta">
+              {projectMeta.map((entry) => (
+                <article>
+                  <span>{entry.label}</span>
+                  {entry.href ? (
+                    <p>
+                      <a href={entry.href} target="_blank" rel="noreferrer">
+                        {entry.value}
+                      </a>
+                    </p>
+                  ) : (
+                    <p>{entry.value}</p>
+                  )}
+                </article>
+              ))}
+            </div>
+          </div>
+          <div class="project-hero-visual">
+            {item.logo && (
+              <div class="project-hero-brand-top">
+                <div class:list={[
+                  "project-brand",
+                  item.logoTheme === "dark" && "project-brand--dark"
+                ]}>
+                  <img
+                    class="project-brand__image"
+                    src={item.logo}
+                    alt={item.logoAlt ?? `${item.name} logo`}
+                    loading="eager"
+                  />
+                </div>
+              </div>
+            )}
+            <figure class="project-hero-media">
+              <div class="project-hero-stage">
+                <img src={item.image} alt={`${item.name} product preview`} loading="eager" />
+              </div>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container project-story">
+      <article class="story-card">
+        <h2>Project overview</h2>
+        <p>{item.cardDescription}</p>
+      </article>
+      <article class="story-card">
+        <h2>What Gadamax focused on</h2>
+        <ul class="story-list">
+          {item.focus.map((focus) => (
+            <li>{focus}</li>
+          ))}
+        </ul>
+      </article>
+      <article class="story-card">
+        <h2>Services delivered</h2>
+        <ul class="story-list">
+          {item.services.map((service) => (
+            <li>{service}</li>
+          ))}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section-muted">
+    <div class="container">
+      <div class="section-head-row">
+        <div class="section-intro">
+          <p class="eyebrow">More projects</p>
+          <h2>Continue exploring</h2>
+          <p>Additional Gadamax work across live launches, loyalty products, commerce, and digital platforms.</p>
+        </div>
+        <a class="button button-secondary" href="/portfolio">Back to portfolio</a>
+      </div>
+      <div class="mini-project-grid">
+        {related.map((entry) => (
+          <a class="mini-project-card" href={`/portfolio/${entry.slug}`}>
+            <img src={entry.image} alt={`${entry.name} preview`} loading="lazy" />
+            <div>
+              <span>{entry.category}</span>
+              <h3>{entry.name}</h3>
+              <p>{entry.title}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Interested in a similar digital product direction?"
+    body="Gadamax can help shape the strategy, interface, and build system behind the next iteration."
+    primaryHref="/contact"
+    primaryLabel="Start a project"
+    secondaryHref="/services"
+    secondaryLabel="See capabilities"
+  />
+</BaseLayout>

@@ -1,0 +1,70 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { navigation, siteMeta } from "../content/site.js";
+import "../styles/global.css";
+
+const {
+  title = siteMeta.name,
+  description = siteMeta.description,
+  image = siteMeta.ogImage,
+  currentPath = "/"
+} = Astro.props;
+
+const pageTitle = title === siteMeta.name ? siteMeta.name : `${title} | ${siteMeta.name}`;
+const siteUrl = Astro.site ?? new URL(siteMeta.url);
+const canonical = new URL(currentPath, siteUrl).toString();
+const ogImage = new URL(image, siteUrl).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0d1321" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteMeta.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" href="/assets/images/favicon-touch.png" type="image/png" sizes="180x180" />
+    <link rel="shortcut icon" href="/assets/images/favicon-touch.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/images/favicon-touch.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: siteMeta.legalName,
+      url: canonical,
+      email: siteMeta.email,
+      telephone: [siteMeta.phoneMx, siteMeta.phoneUs],
+      address: [
+        {
+          "@type": "PostalAddress",
+          streetAddress: siteMeta.addressMx
+        },
+        {
+          "@type": "PostalAddress",
+          streetAddress: siteMeta.addressUs
+        }
+      ]
+    })} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <Header navigation={navigation} currentPath={currentPath} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer navigation={navigation} />
+  </body>
+</html>

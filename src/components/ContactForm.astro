@@ -1,0 +1,126 @@
+---
+const { title = "Tell us what you're building", subtitle } = Astro.props;
+---
+
+<section class="contact-form-panel">
+  <div class="contact-form-header">
+    <h2>{title}</h2>
+    {subtitle && <p>{subtitle}</p>}
+  </div>
+
+  <form
+    class="contact-form"
+    name="contact"
+    method="POST"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    data-contact-form
+  >
+    <input type="hidden" name="form-name" value="contact" />
+    <input
+      type="hidden"
+      name="subject"
+      data-remove-prefix
+      value="New lead from %{formName} (%{submissionId})"
+    />
+
+    <p class="form-honeypot">
+      <label>
+        <span>Leave this field empty</span>
+        <input name="bot-field" tabindex="-1" autocomplete="off" />
+      </label>
+    </p>
+
+    <label>
+      <span>Your name*</span>
+      <input type="text" name="name" autocomplete="name" required />
+    </label>
+
+    <label>
+      <span>Your email*</span>
+      <input type="email" name="email" autocomplete="email" required />
+    </label>
+
+    <label>
+      <span>Company</span>
+      <input type="text" name="company" autocomplete="organization" />
+    </label>
+
+    <label>
+      <span>Service focus</span>
+      <select name="service">
+        <option value="Digital Strategy">Digital Strategy</option>
+        <option value="Web Development">Web Development</option>
+        <option value="E-Commerce">E-Commerce</option>
+        <option value="Smart Automation">Smart Automation</option>
+      </select>
+    </label>
+
+    <label class="full-span">
+      <span>Your message</span>
+      <textarea name="message" rows="6" required></textarea>
+    </label>
+
+    <div class="form-submit-wrap full-span">
+      <button class="button button-primary" type="submit" data-submit-button>
+        Send message
+      </button>
+      <p class="form-feedback" data-form-feedback aria-live="polite"></p>
+    </div>
+  </form>
+</section>
+
+<script>
+  const forms = document.querySelectorAll("[data-contact-form]");
+
+  const encodeForm = (formData) => new URLSearchParams(formData).toString();
+
+  forms.forEach((form) => {
+    const feedback = form.querySelector("[data-form-feedback]");
+    const button = form.querySelector("[data-submit-button]");
+
+    if (!(feedback instanceof HTMLElement) || !(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    const defaultLabel = button.textContent?.trim() || "Send message";
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      feedback.textContent = "";
+      feedback.className = "form-feedback";
+      button.disabled = true;
+      button.textContent = "Sending...";
+
+      try {
+        const formData = new FormData(form);
+
+        const response = await fetch("/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: encodeForm(formData)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Submission failed with status ${response.status}`);
+        }
+
+        form.reset();
+        feedback.textContent =
+          "Thank you. Your message was sent successfully. We'll get back to you soon.";
+        feedback.classList.add("is-success");
+      } catch (error) {
+        console.error(error);
+        feedback.textContent =
+          "We couldn't send your message right now. Please try again in a moment or email info@gadamax.com.";
+        feedback.classList.add("is-error");
+      } finally {
+        button.disabled = false;
+        button.textContent = defaultLabel;
+      }
+    });
+  });
+</script>
