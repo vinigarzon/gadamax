@@ -1,9 +1,9 @@
 const RESEND_API_URL = "https://api.resend.com/emails";
+const GADAMAX_LOGO_URL = "https://www.gadamax.com/assets/images/brand-logo-gadamax.png";
 
 export default async (req) => {
   const resendApiKey = process.env.RESEND_API_KEY;
   const resendFromEmail = process.env.RESEND_FROM_EMAIL;
-  const resendToEmail = process.env.RESEND_TO_EMAIL || "info@gadamax.com";
 
   if (!resendApiKey || !resendFromEmail) {
     console.warn(
@@ -33,9 +33,7 @@ export default async (req) => {
 
   const submitterName = data.name?.trim() || "there";
   const submitterEmail = data.email?.trim();
-  const company = data.company?.trim() || "Not provided";
   const service = data.service?.trim() || "Not provided";
-  const message = data.message?.trim() || "No message provided.";
 
   if (!submitterEmail) {
     console.warn("submission-created: missing submitter email");
@@ -43,49 +41,26 @@ export default async (req) => {
   }
 
   try {
-    await Promise.all([
-      sendResendEmail({
-        apiKey: resendApiKey,
-        from: resendFromEmail,
-        to: submitterEmail,
-        subject: "We received your message — Gadamax will follow up shortly",
-        html: buildAutoReplyHtml({
-          name: submitterName,
-          service
-        }),
-        text: buildAutoReplyText({
-          name: submitterName,
-          service
-        })
+    await sendResendEmail({
+      apiKey: resendApiKey,
+      from: resendFromEmail,
+      to: submitterEmail,
+      subject: "We received your message — Gadamax will follow up shortly",
+      html: buildAutoReplyHtml({
+        name: submitterName,
+        service
       }),
-      sendResendEmail({
-        apiKey: resendApiKey,
-        from: resendFromEmail,
-        to: resendToEmail,
-        replyTo: submitterEmail,
-        subject: `New Gadamax lead: ${submitterName}`,
-        html: buildInternalLeadHtml({
-          name: submitterName,
-          email: submitterEmail,
-          company,
-          service,
-          message
-        }),
-        text: buildInternalLeadText({
-          name: submitterName,
-          email: submitterEmail,
-          company,
-          service,
-          message
-        })
+      text: buildAutoReplyText({
+        name: submitterName,
+        service
       })
-    ]);
+    });
   } catch (error) {
     console.error("submission-created: failed to send email", error);
     return new Response("Email send failed", { status: 500 });
   }
 
-  return new Response("Autoresponder and internal email sent.", { status: 200 });
+  return new Response("Autoresponder sent.", { status: 200 });
 };
 
 async function sendResendEmail({
@@ -125,10 +100,16 @@ function buildAutoReplyHtml({ name, service }) {
       <div style="max-width:640px;margin:0 auto;padding:32px 20px;">
         <div style="background:#ffffff;border:1px solid rgba(13,19,33,0.08);border-radius:24px;overflow:hidden;box-shadow:0 18px 45px rgba(8,17,31,0.08);">
           <div style="padding:32px;background:linear-gradient(135deg,#0d1321 0%,#16284a 100%);">
-            <div style="display:inline-block;padding:10px 14px;border-radius:999px;background:rgba(242,139,91,0.16);color:#f28b5b;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">
-              Gadamax
+            <div style="margin-bottom:24px;">
+              <img
+                src="${GADAMAX_LOGO_URL}"
+                alt="Gadamax"
+                width="152"
+                height="40"
+                style="display:block;width:152px;max-width:100%;height:auto;"
+              />
             </div>
-            <h1 style="margin:18px 0 0;color:#ffffff;font-size:32px;line-height:1.05;">
+            <h1 style="margin:0;color:#ffffff;font-size:32px;line-height:1.05;">
               We received your message.
             </h1>
           </div>
@@ -150,9 +131,6 @@ function buildAutoReplyHtml({ name, service }) {
                 ${escapeHtml(service)}
               </p>
             </div>
-            <p style="margin:0 0 18px;font-size:16px;line-height:1.7;">
-              If you need to add anything else, simply reply to this email.
-            </p>
             <p style="margin:0;font-size:16px;line-height:1.7;">
               Best,<br />
               <strong>Gadamax</strong><br />
@@ -174,61 +152,8 @@ Service focus: ${service}
 
 We typically respond with a practical next step after reviewing the goals, context, and scope behind the request.
 
-If you need to add anything else, simply reply to this email.
-
 Best,
 Gadamax`;
-}
-
-function buildInternalLeadHtml({ name, email, company, service, message }) {
-  return `
-    <div style="margin:0;padding:0;background:#f5f7fb;font-family:Arial,sans-serif;color:#0d1321;">
-      <div style="max-width:720px;margin:0 auto;padding:32px 20px;">
-        <div style="background:#ffffff;border:1px solid rgba(13,19,33,0.08);border-radius:24px;overflow:hidden;box-shadow:0 18px 45px rgba(8,17,31,0.08);">
-          <div style="padding:28px 32px;background:linear-gradient(135deg,#0d1321 0%,#16284a 100%);">
-            <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#f28b5b;">
-              New contact submission
-            </p>
-            <h1 style="margin:0;color:#ffffff;font-size:28px;line-height:1.1;">
-              ${escapeHtml(name)}
-            </h1>
-          </div>
-          <div style="padding:32px;">
-            <table style="width:100%;border-collapse:collapse;">
-              <tr>
-                <td style="padding:0 0 16px;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#f28b5b;">Email</td>
-                <td style="padding:0 0 16px;font-size:16px;color:#0d1321;">${escapeHtml(email)}</td>
-              </tr>
-              <tr>
-                <td style="padding:0 0 16px;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#f28b5b;">Company</td>
-                <td style="padding:0 0 16px;font-size:16px;color:#0d1321;">${escapeHtml(company)}</td>
-              </tr>
-              <tr>
-                <td style="padding:0 0 16px;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#f28b5b;">Service</td>
-                <td style="padding:0 0 16px;font-size:16px;color:#0d1321;">${escapeHtml(service)}</td>
-              </tr>
-            </table>
-            <div style="margin-top:8px;padding:20px;border-radius:18px;background:#f7f9fc;border:1px solid rgba(13,19,33,0.08);">
-              <p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#f28b5b;">Message</p>
-              <p style="margin:0;font-size:16px;line-height:1.7;color:#0d1321;white-space:pre-wrap;">${escapeHtml(message)}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function buildInternalLeadText({ name, email, company, service, message }) {
-  return `New contact submission
-
-Name: ${name}
-Email: ${email}
-Company: ${company}
-Service: ${service}
-
-Message:
-${message}`;
 }
 
 function escapeHtml(value) {

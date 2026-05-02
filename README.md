@@ -56,20 +56,16 @@ The site supports two optional environment-based integrations:
 - `PUBLIC_GA_MEASUREMENT_ID`
   Use this to enable Google Analytics 4 site-wide tracking.
 - `RESEND_API_KEY`
-  Required for the branded autoresponder and internal lead email triggered by verified Netlify form submissions.
+  Required for the branded autoresponder triggered by verified Netlify form submissions.
 - `RESEND_FROM_EMAIL`
   The sender address used by Resend, for example `Gadamax <hello@gadamax.com>`.
-- `RESEND_TO_EMAIL`
-  Optional override for the internal destination inbox. Defaults to `info@gadamax.com`.
 
 Autoresponder flow:
 
 1. A visitor submits the Netlify `contact` form.
 2. Netlify verifies the submission.
 3. Netlify triggers `netlify/functions/submission-created.js`.
-4. The function sends:
-   - a branded confirmation email to the submitter
-   - an internal lead email to the Gadamax inbox
+4. The function sends a branded confirmation email to the submitter.
 
 To activate this in Netlify:
 
@@ -77,8 +73,7 @@ To activate this in Netlify:
 2. Add `PUBLIC_GA_MEASUREMENT_ID` if using GA4.
 3. Add `RESEND_API_KEY`.
 4. Add `RESEND_FROM_EMAIL`.
-5. Optionally add `RESEND_TO_EMAIL`.
-6. Trigger a new deploy.
+5. Trigger a new deploy.
 
 ### Netlify form notifications
 
