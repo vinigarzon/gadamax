@@ -56,8 +56,11 @@ export default async (req) => {
       })
     });
   } catch (error) {
-    console.error("submission-created: failed to send email", error);
-    return new Response("Email send failed", { status: 500 });
+    // Never block lead capture if the autoresponder provider has a transient issue.
+    console.error("submission-created: autoresponder failed, submission accepted", error);
+    return new Response("Submission accepted; autoresponder failed.", {
+      status: 202
+    });
   }
 
   return new Response("Autoresponder sent.", { status: 200 });
