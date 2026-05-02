@@ -11,28 +11,29 @@ const serviceProjects = portfolioItems.filter((item) => item.featuredOnHome).sli
 
 <BaseLayout
   title="Services"
-  description="Explore Gadamax services across digital strategy, web development, e-commerce, and smart automation."
+  description="Gadamax combines strategic consulting, AI-accelerated development, commerce systems, and automation to build digital solutions across industries."
   currentPath="/services"
 >
   <section class="page-hero section">
     <div class="container page-hero-grid">
       <div>
         <p class="eyebrow">Services</p>
-        <h1>Turning vision into digital reality.</h1>
+        <h1>From business problem to digital solution.</h1>
         <ul class="hero-bullet-list">
-          <li>Clarity that drives action</li>
-          <li>Design with purpose</li>
-          <li>Growth through technology</li>
-          <li>Efficiency, reimagined</li>
+          <li>Market strategy and buyer persona clarity</li>
+          <li>Brand, content, and trust-building UX</li>
+          <li>Websites, platforms, portals, and commerce</li>
+          <li>AI automation, integrations, and reporting</li>
         </ul>
         <p>
-          We don’t just follow digital trends, we help shape them. The new structure keeps the
-          original promise while translating it into a more focused, maintainable service page.
+          We can build almost any digital solution, but we don’t start by coding. We start by
+          understanding the market, the customer, the goals, the operating model, and the budget
+          so the right system gets built for the right reason.
         </p>
       </div>
       <img
         src="/assets/images/services-web-development.png"
-        alt="Developer-focused illustration from the source site"
+        alt="Developer-focused illustration for Gadamax services"
         width="1536"
         height="1024"
         loading="eager"
@@ -44,8 +45,8 @@ const serviceProjects = portfolioItems.filter((item) => item.featuredOnHome).sli
     <div class="container">
       <SectionIntro
         eyebrow="Core services"
-        title="Where strategy, craft, and systems meet"
-        description="Rebuilt as reusable cards for a cleaner architecture and easier future updates."
+        title="Four pillars that support almost any digital engagement"
+        description="Whether the outcome is a website, platform, loyalty program, dashboard, internal tool, e-commerce operation, or AI workflow, these are the capabilities that shape and ship the work."
       />
       <div class="service-grid">
         {services.map((service) => (
@@ -69,8 +70,8 @@ const serviceProjects = portfolioItems.filter((item) => item.featuredOnHome).sli
       <div>
         <SectionIntro
           eyebrow="Execution pillars"
-          title="Practical capabilities behind every engagement"
-          description="The original site highlighted UX/UI, API integration, CMS and e-commerce tools, and data automation. These remain central, with updated wording and a cleaner layout."
+          title="What sits underneath the deliverables"
+          description="Behind every launch is a mix of business analysis, offer design, content structure, product thinking, technical execution, and operational automation."
         />
         <div class="pillar-list">
           {capabilityPillars.map((pillar) => (
@@ -88,8 +89,8 @@ const serviceProjects = portfolioItems.filter((item) => item.featuredOnHome).sli
     <div class="container">
       <SectionIntro
         eyebrow="Applied work"
-        title="Capabilities expressed through real products"
-        description="Selected live platforms and digital products that map directly to the services above."
+        title="Proof across sectors and product types"
+        description="These launches span very different industries, but they all come from the same principle: align strategy and execution so the digital product actually serves the business."
       />
       <div class="portfolio-grid">
         {serviceProjects.map((item) => (
@@ -100,8 +101,8 @@ const serviceProjects = portfolioItems.filter((item) => item.featuredOnHome).sli
   </section>
 
   <CTASection
-    title="Need strategy, delivery, or both?"
-    body="Whether you're launching a new venture or modernizing an existing digital experience, Gadamax can help shape the roadmap and the interface that brings it to life."
+    title="Need a digital solution, not just a vendor?"
+    body="Bring the business problem, the opportunity, or even just the rough idea. Gadamax can help define the strategy and ship the right product path."
     primaryHref="/contact"
     primaryLabel="Request a consultation"
     secondaryHref="/portfolio"

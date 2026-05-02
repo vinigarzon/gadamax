@@ -20,22 +20,22 @@ const liveProjects = portfolioItems.filter((item) => item.website);
 ---
 
 <BaseLayout
-  title="Innovating the Digital Future"
+  title="AI-Native Strategy, Brand, and Software"
   description={siteMeta.description}
   currentPath="/"
 >
   <Hero
-    eyebrow="Venture studio • strategy • build • scale"
-    title="Innovating the Digital Future"
-    description="Gadamax is a U.S.-based company focused on building, investing in, and scaling digital ventures that shape how people connect, learn, and grow."
+    eyebrow="AI-native strategy • brand • build • scale"
+    title="Strategy, brand, and software for businesses ready to move faster."
+    description="Gadamax combines strategic consulting, brand thinking, AI-accelerated delivery, and cross-industry expert insight to launch websites, platforms, e-commerce, loyalty systems, automations, dashboards, and digital ventures with far less overhead than traditional agency models."
     primaryHref="/contact"
-    primaryLabel="Get Started"
+    primaryLabel="Start a project"
     secondaryHref="/portfolio"
-    secondaryLabel="View Portfolio"
+    secondaryLabel="See real work"
     stats={[
-      { value: "4", label: "Core service pillars" },
-      { value: `${liveProjects.length}`, label: "Live client platforms" },
-      { value: "US + LATAM", label: "Cross-border venture footprint" }
+      { value: "AI-native", label: "Execution with senior oversight" },
+      { value: `${liveProjects.length}+`, label: "Live launches across industries" },
+      { value: "U.S. + LATAM", label: "Strategy and expert network" }
     ]}
     image={{
       src: "/assets/images/hero-gadamax-home.png",
@@ -48,8 +48,8 @@ const liveProjects = portfolioItems.filter((item) => item.website);
       <div>
         <SectionIntro
           eyebrow="About us"
-          title="Driven by Ideas, Built for Impact"
-          description="At Gadamax, we believe in the power of digital innovation to transform industries, elevate experiences, and create lasting value. Our work is guided by curiosity, integrity, and a commitment to meaningful progress."
+          title="Not just development. A full digital growth engine."
+          description="We help businesses define the market, sharpen the message, shape the brand, choose the right product path, and then execute the build with speed. Strategy, content, design, and software stay connected from day one."
         />
         <div class="signal-list">
           {ventureSignals.map((signal) => (
@@ -77,8 +77,8 @@ const liveProjects = portfolioItems.filter((item) => item.website);
     <div class="container">
       <SectionIntro
         eyebrow="Services"
-        title="Smart Solutions. Real Results."
-        description="The original Gadamax site centers on four offers. This rebuild keeps that structure and reframes each capability with clearer positioning, stronger hierarchy, and a more premium presentation."
+        title="Four entry points into a much broader delivery model"
+        description="Some clients need a website. Others need a platform, loyalty engine, internal tool, automation layer, e-commerce operation, or sharper commercial strategy. We organize the work into four connected pillars so the solution fits the business."
       />
       <div class="service-grid">
         {services.map((service) => (
@@ -93,8 +93,8 @@ const liveProjects = portfolioItems.filter((item) => item.website);
       <div class="section-head-row">
       <SectionIntro
         eyebrow="Portfolio"
-        title="Selected digital ventures"
-        description="A curated mix of real launches across hospitality, civic, healthcare, rewards, education, art commerce, and product platforms."
+        title="Real launches across very different industries"
+        description="From hospitality and healthcare to civic programs, loyalty ecosystems, education, translation commerce, and gaming, these projects show how Gadamax adapts the same strategic and execution model to very different operating realities."
       />
         <a class="button button-secondary" href="/portfolio">See all projects</a>
       </div>
@@ -110,8 +110,8 @@ const liveProjects = portfolioItems.filter((item) => item.website);
     <div class="container">
       <SectionIntro
         eyebrow="Testimonials"
-        title="Trusted by founders and operators"
-        description="We preserved the current testimonial voices while presenting them in a more editorial, mobile-friendly format."
+        title="Trusted by founders, operators, and growth teams"
+        description="Clients come to Gadamax when they need more than code: they need clearer thinking, faster execution, and a partner who can connect strategy to delivery."
       />
       <div class="testimonial-grid">
         {testimonials.map((testimonial) => (
@@ -122,8 +122,8 @@ const liveProjects = portfolioItems.filter((item) => item.website);
   </section>
 
   <CTASection
-    title="Need a partner to shape, launch, or scale a digital venture?"
-    body="From strategic direction to front-end execution and automation, Gadamax helps ambitious teams move with more clarity and less drag."
+    title="Need strategy, brand, software, or all of it working together?"
+    body="Gadamax can help define the opportunity, shape the message, choose the right digital product, and build the system that supports growth."
     primaryHref="/contact"
     primaryLabel="Start the conversation"
     secondaryHref="/services"
@@ -135,8 +135,8 @@ const liveProjects = portfolioItems.filter((item) => item.website);
       <div class="contact-copy">
         <SectionIntro
           eyebrow="Contact us"
-          title="Have a project in mind?"
-          description="Reach out to explore new ideas and build lasting partnerships. The contact experience is now Netlify-ready and easier to maintain than the original WordPress form."
+          title="Tell us what you need to solve"
+          description="A website, platform, loyalty product, e-commerce flow, AI automation, dashboard, internal tool, or broader market strategy. Share the context, objectives, users, and budget, and we’ll help frame the right next move."
         />
         <div class="contact-cards">
           <article class="contact-card">
@@ -157,7 +157,7 @@ const liveProjects = portfolioItems.filter((item) => item.website);
       </div>
 
       <ContactForm
-        subtitle="Share the venture, product, or workflow challenge you're tackling and we’ll follow up with a practical next step."
+        subtitle="Tell us about the industry, users, goals, timeline, and budget range if you have it. A website, platform, e-commerce flow, AI automation, loyalty system, dashboard, or full digital strategy are all on the table."
       />
     </div>
   </section>

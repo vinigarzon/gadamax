@@ -2,7 +2,7 @@ export const siteMeta = {
   name: "Gadamax",
   legalName: "Gadamax LLC",
   description:
-    "Gadamax is a U.S.-based company focused on building, investing in, and scaling digital ventures that shape how people connect, learn, and grow.",
+    "Gadamax combines AI-accelerated delivery, strategic consulting, branding, and cross-industry expertise to build websites, platforms, e-commerce, automation, and digital ventures with speed, clarity, and lower overhead.",
   url: "https://www.gadamax.com",
   ogImage: "/assets/images/about-driven-impact.jpg",
   email: "info@gadamax.com",
@@ -29,77 +29,77 @@ export const services = [
     title: "Digital Strategy",
     icon: "/assets/icons/strategy.svg",
     summary:
-      "Clear, future-ready roadmaps that connect business ambition with measurable digital opportunity.",
+      "Market analysis, buyer persona mapping, offer design, and execution plans before a single screen gets built.",
     detail:
-      "We align positioning, product priorities, and delivery plans so every digital move serves a bigger growth story."
+      "We pressure-test the market, the message, the objectives, and the budget so the product is built with commercial intent, not guesswork."
   },
   {
     slug: "web-development",
     title: "Web Development",
     icon: "/assets/icons/web-development.svg",
     summary:
-      "Responsive, high-performance platforms designed to feel premium across every screen size.",
+      "High-performance websites, portals, dashboards, internal tools, and custom platforms built with AI-accelerated execution.",
     detail:
-      "From landing pages to scalable product experiences, we build reliable interfaces that turn strategy into execution."
+      "From corporate sites to multi-role products, we ship robust interfaces and connected systems quickly without bloated agency overhead."
   },
   {
     slug: "e-commerce",
     title: "E-Commerce",
     icon: "/assets/icons/ecommerce.svg",
     summary:
-      "Commerce systems built to convert, simplify operations, and support sustainable growth.",
+      "Commerce experiences, catalogs, loyalty flows, and monetization systems designed to convert and scale.",
     detail:
-      "We design storefronts, purchase flows, and backend integrations that help brands launch fast and scale confidently."
+      "We build storefronts, service-commerce flows, reward catalogs, and digital buying journeys around customer behavior and revenue goals."
   },
   {
     slug: "smart-automation",
     title: "Smart Automation",
     icon: "/assets/icons/automation.svg",
     summary:
-      "Connected workflows and data-driven systems that reduce friction and free teams to move faster.",
+      "AI workflows, integrations, rules engines, reporting layers, and automations that remove manual work and increase visibility.",
     detail:
-      "Automation at Gadamax is practical, elegant, and business-aware, built to save time without sacrificing control."
+      "We connect tools, automate repetitive tasks, structure data, and create AI-assisted operations that help teams move faster with fewer people."
   }
 ];
 
 export const capabilityPillars = [
   {
-    title: "UX/UI Design",
+    title: "Market, Offer & Buyer Persona",
     description:
-      "Crafting intuitive and elegant interfaces that elevate the user experience."
+      "We study the customer, the message, the goals, and the budget before shaping the product or go-to-market plan."
   },
   {
-    title: "API Integration",
+    title: "Brand, Content & Trust",
     description:
-      "Connecting platforms for seamless data flow and automation."
+      "We build the narrative, content structure, and interface clarity that help businesses look credible and commercially sharp."
   },
   {
-    title: "CMS & E-Commerce Tools",
+    title: "Platforms, Commerce & Custom Systems",
     description:
-      "Leveraging modern content and commerce stacks to launch scalable solutions without WordPress lock-in."
+      "From corporate sites to portals, dashboards, loyalty systems, and e-commerce, we build around the operating model, not a template."
   },
   {
-    title: "Data & Automation",
+    title: "AI Workflows, Integrations & Reporting",
     description:
-      "Using smart workflows and insights to streamline business operations."
+      "We connect tools, automate repetitive work, structure data, and create AI-assisted systems that save time and improve decision-making."
   }
 ];
 
 export const ventureSignals = [
   {
-    title: "Product-minded execution",
+    title: "Strategy before screens",
     body:
-      "We think beyond launch day, shaping ventures that can evolve, learn, and scale."
+      "We start with market reality, customer intent, positioning, objectives, and budget so the solution fits the business, not just the brief."
   },
   {
-    title: "Design with conviction",
+    title: "AI-native execution",
     body:
-      "Interfaces are refined for clarity, trust, and momentum instead of template-driven sameness."
+      "We use modern AI-assisted workflows to move faster, reduce overhead, and iterate robustly without sacrificing quality or structure."
   },
   {
-    title: "Operational simplicity",
+    title: "Cross-industry expert network",
     body:
-      "From architecture to automation, we reduce maintenance burden while keeping room for growth."
+      "Gadamax pairs technical execution with operators, MBAs, and specialist perspectives across LATAM to strengthen the business model behind the build."
   }
 ];
 
