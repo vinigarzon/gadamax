@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gadamax-studio.netlify.app/sitemap.xml
+Sitemap: https://www.gadamax.com/sitemap.xml

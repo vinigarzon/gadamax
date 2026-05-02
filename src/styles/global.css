@@ -1137,6 +1137,15 @@ blockquote {
   grid-column: 1 / -1;
 }
 
+.netlify-recaptcha-wrap {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.netlify-recaptcha-wrap > div {
+  min-height: 78px;
+}
+
 .form-submit-wrap {
   display: grid;
   gap: 0.9rem;

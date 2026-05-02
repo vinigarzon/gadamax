@@ -3,7 +3,7 @@ export const siteMeta = {
   legalName: "Gadamax LLC",
   description:
     "Gadamax is a U.S.-based company focused on building, investing in, and scaling digital ventures that shape how people connect, learn, and grow.",
-  url: "https://gadamax-studio.netlify.app",
+  url: "https://www.gadamax.com",
   ogImage: "/assets/images/about-driven-impact.jpg",
   email: "info@gadamax.com",
   phoneMx: "+52 81 8526 2288",

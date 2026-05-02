@@ -13,6 +13,7 @@ const { title = "Tell us what you're building", subtitle } = Astro.props;
     name="contact"
     method="POST"
     data-netlify="true"
+    data-netlify-recaptcha="true"
     netlify-honeypot="bot-field"
     data-contact-form
   >
@@ -61,6 +62,10 @@ const { title = "Tell us what you're building", subtitle } = Astro.props;
       <textarea name="message" rows="6" required></textarea>
     </label>
 
+    <div class="netlify-recaptcha-wrap full-span">
+      <div data-netlify-recaptcha="true"></div>
+    </div>
+
     <div class="form-submit-wrap full-span">
       <button class="button button-primary" type="submit" data-submit-button>
         Send message
@@ -94,6 +99,19 @@ const { title = "Tell us what you're building", subtitle } = Astro.props;
       button.textContent = "Sending...";
 
       try {
+        const recaptchaResponse = form.querySelector(
+          "[name='g-recaptcha-response']"
+        );
+
+        if (
+          recaptchaResponse instanceof HTMLInputElement ||
+          recaptchaResponse instanceof HTMLTextAreaElement
+        ) {
+          if (!recaptchaResponse.value.trim()) {
+            throw new Error("Complete the reCAPTCHA challenge before submitting.");
+          }
+        }
+
         const formData = new FormData(form);
 
         const response = await fetch("/", {
@@ -115,9 +133,16 @@ const { title = "Tell us what you're building", subtitle } = Astro.props;
       } catch (error) {
         console.error(error);
         feedback.textContent =
-          "We couldn't send your message right now. Please try again in a moment or email info@gadamax.com.";
+          error instanceof Error &&
+          error.message === "Complete the reCAPTCHA challenge before submitting."
+            ? "Please complete the security check before sending your message."
+            : "We couldn't send your message right now. Please try again in a moment or email info@gadamax.com.";
         feedback.classList.add("is-error");
       } finally {
+        if (typeof window.grecaptcha !== "undefined") {
+          window.grecaptcha.reset();
+        }
+
         button.disabled = false;
         button.textContent = defaultLabel;
       }
