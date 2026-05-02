@@ -11,6 +11,7 @@ const {
   currentPath = "/"
 } = Astro.props;
 
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 const pageTitle = title === siteMeta.name ? siteMeta.name : `${title} | ${siteMeta.name}`;
 const siteUrl = Astro.site ?? new URL(siteMeta.url);
 const canonical = new URL(currentPath, siteUrl).toString();
@@ -40,6 +41,22 @@ const ogImage = new URL(image, siteUrl).toString();
     <link rel="shortcut icon" href="/assets/images/favicon-touch.png" type="image/png" />
     <link rel="apple-touch-icon" href="/assets/images/favicon-touch.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    {gaMeasurementId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+        <script is:inline define:vars={{ gaMeasurementId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            window.dataLayer.push(arguments);
+          }
+          window.gtag = gtag;
+          gtag("js", new Date());
+          gtag("config", gaMeasurementId, {
+            anonymize_ip: true
+          });
+        </script>
+      </>
+    )}
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Organization",

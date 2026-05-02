@@ -130,6 +130,15 @@ const { title = "Tell us what you're building", subtitle } = Astro.props;
         feedback.textContent =
           "Thank you. Your message was sent successfully. We'll get back to you soon.";
         feedback.classList.add("is-success");
+
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "generate_lead", {
+            event_category: "contact",
+            event_label: "contact_form",
+            form_name: "contact",
+            page_path: window.location.pathname
+          });
+        }
       } catch (error) {
         console.error(error);
         feedback.textContent =
