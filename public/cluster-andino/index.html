@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gadamax · Optimización de procesos con IA — Cluster Ecuador · Colombia · Venezuela</title>
+<meta name="description" content="Propuesta de capacidades de Gadamax para optimización de procesos con Inteligencia Artificial en operaciones multinacionales del cluster andino.">
+<meta name="theme-color" content="#0D1321">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   GADAMAX · Sistema de diseño
+   Dirección: "sala de control editorial" — papel técnico frío,
+   tinta azul marino de marca, cobalto como única señal de acción.
+   ============================================================ */
+:root{
+  --ink:#0D1321;
+  --ink-2:#182033;
+  --ink-3:#2A3550;
+  --paper:#EDF0F6;
+  --paper-2:#F7F9FC;
+  --paper-3:#FFFFFF;
+  --rule:#C9D2E1;
+  --rule-soft:#DEE4EE;
+  --muted:#5C6880;
+  --muted-dark:#8C99B2;
+  --cobalt:#1F3BE0;
+  --cobalt-ink:#152BA8;
+  --cobalt-soft:#E3E8FF;
+  --flag:#B23A2E;
+  --flag-soft:#F7E4E1;
+  --gain:#0E8F76;
+  --gain-soft:#DFF2ED;
+  --amber:#B07C10;
+  --amber-soft:#FBF0D8;
+
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Source Serif 4",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+
+  --max:1240px;
+  --pad:clamp(20px,5vw,64px);
+  --radius:3px;
+  --shadow:0 1px 2px rgba(13,19,33,.06),0 12px 32px -18px rgba(13,19,33,.35);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--f-body);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit}
+a{color:var(--cobalt);text-decoration-thickness:1px;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+
+/* ---------- Tipografía ---------- */
+.eyebrow{
+  font-family:var(--f-mono);font-size:11px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+}
+.on-dark .eyebrow{color:var(--muted-dark)}
+h1,h2,h3,h4{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.05}
+h1{font-size:clamp(34px,5.6vw,64px);font-weight:800;letter-spacing:-.035em}
+h2{font-size:clamp(26px,3.6vw,42px);letter-spacing:-.03em}
+h3{font-size:clamp(18px,2vw,23px);letter-spacing:-.02em}
+h4{font-size:15px;letter-spacing:-.01em}
+p{margin:0 0 1em}
+.lead{font-family:var(--f-serif);font-size:clamp(17px,2vw,21px);line-height:1.5;color:var(--ink-2)}
+.on-dark .lead{color:#CBD4E6}
+.small{font-size:13.5px;color:var(--muted)}
+.on-dark .small{color:var(--muted-dark)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* ---------- Estructura ---------- */
+.band{padding:clamp(56px,8vw,104px) var(--pad);position:relative}
+.band--dark{background:var(--ink);color:var(--paper)}
+.band--paper2{background:var(--paper-2)}
+.band--tight{padding-top:clamp(36px,5vw,60px);padding-bottom:clamp(36px,5vw,60px)}
+.wrap{max-width:var(--max);margin:0 auto;width:100%}
+.wrap--narrow{max-width:840px}
+.rule-top{border-top:1px solid var(--rule)}
+.band--dark.rule-top{border-color:#26314A}
+
+.band-head{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-bottom:clamp(32px,4vw,52px)}
+@media(min-width:900px){
+  .band-head{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:48px;align-items:end}
+}
+.band-head .eyebrow{display:block;margin-bottom:14px}
+
+/* ---------- Nav ---------- */
+.nav{
+  position:sticky;top:0;z-index:60;background:rgba(13,19,33,.94);
+  backdrop-filter:blur(10px);border-bottom:1px solid #26314A;color:#fff;
+}
+.nav-in{max-width:var(--max);margin:0 auto;padding:12px var(--pad);
+  display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;flex:0 0 auto}
+.brand img{height:26px;width:auto}
+.brand-word{font-family:var(--f-display);font-weight:800;letter-spacing:.14em;font-size:15px;text-transform:uppercase}
+.nav-tag{
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted-dark);border-left:1px solid #2E3A54;padding-left:18px;white-space:nowrap;
+}
+.nav-links{margin-left:auto;display:none;gap:20px;align-items:center}
+@media(min-width:1040px){.nav-links{display:flex}}
+.nav-links a{
+  color:#C3CCE0;text-decoration:none;font-size:13px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;
+  padding:6px 0;border-bottom:1px solid transparent;transition:color .18s,border-color .18s;
+}
+.nav-links a:hover{color:#fff;border-color:var(--cobalt)}
+.nav .btn{margin-left:auto;white-space:nowrap;flex:0 0 auto}
+@media(min-width:1040px){.nav .btn{margin-left:8px}}
+@media(max-width:1300px){.nav-tag{display:none}}
+
+/* ---------- Botones ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:9px;justify-content:center;
+  background:var(--cobalt);color:#fff;border:1px solid var(--cobalt);
+  padding:11px 20px;border-radius:var(--radius);cursor:pointer;
+  font-family:var(--f-display);font-weight:600;font-size:14px;letter-spacing:-.01em;
+  text-decoration:none;transition:background .18s,transform .18s,border-color .18s;
+}
+.btn:hover{background:var(--cobalt-ink);border-color:var(--cobalt-ink)}
+.btn:active{transform:translateY(1px)}
+.btn--ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn--ghost:hover{background:#fff;border-color:var(--ink);color:var(--ink)}
+.on-dark .btn--ghost{color:#fff;border-color:#3A4560}
+.btn--ghost-d{background:transparent;color:#fff;border-color:#3A4560}
+.btn--ghost-d:hover{background:#1B2436;border-color:#5C6C8E}
+.btn--sm{padding:8px 14px;font-size:13px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* ---------- Hero ---------- */
+.hero{background:var(--ink);color:var(--paper);padding:clamp(48px,7vw,88px) var(--pad) clamp(56px,7vw,96px);position:relative;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(#1A2233 1px,transparent 1px),linear-gradient(90deg,#1A2233 1px,transparent 1px);
+  background-size:64px 64px;mask-image:radial-gradient(ellipse 90% 70% at 20% 0%,#000 20%,transparent 75%);
+}
+.hero-in{max-width:var(--max);margin:0 auto;position:relative}
+.hero-top{display:grid;gap:28px;grid-template-columns:minmax(0,1fr);align-items:end}
+@media(min-width:980px){.hero-top{grid-template-columns:minmax(0,1.35fr) minmax(0,.9fr);gap:56px}}
+.hero h1{color:#fff;max-width:15ch}
+.hero h1 em{font-style:normal;color:#8FA3FF}
+.hero-sub{margin-top:20px;max-width:46ch}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chip{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid #303C58;color:#AFBBD4;padding:6px 11px;border-radius:100px;
+}
+.chip strong{color:#fff;font-weight:500}
+
+/* ---------- Simulador de proceso (elemento firma) ---------- */
+.sim{margin-top:clamp(40px,5vw,64px);border:1px solid #2A3550;background:#111827;border-radius:4px;overflow:hidden}
+.sim-bar{
+  display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid #2A3550;background:#0F1626;
+}
+.sim-title{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8C99B2}
+.sim-title b{color:#fff;font-weight:500}
+.toggle{display:inline-flex;border:1px solid #33405E;border-radius:100px;padding:3px;background:#0B1220}
+.toggle button{
+  border:0;background:transparent;color:#9AA7C0;padding:7px 16px;border-radius:100px;cursor:pointer;
+  font-size:13px;font-weight:600;letter-spacing:-.01em;transition:background .22s,color .22s;
+}
+.toggle button[aria-pressed="true"]{background:var(--cobalt);color:#fff}
+.toggle button:first-child[aria-pressed="true"]{background:#3A4560;color:#fff}
+
+.sim-body{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+@media(min-width:1000px){.sim-body{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
+.sim-lanes{padding:20px 18px 22px}
+.lane{
+  display:grid;grid-template-columns:150px minmax(0,1fr) 62px;gap:14px;align-items:center;
+  padding:9px 8px;border-radius:3px;cursor:pointer;border:1px solid transparent;text-align:left;
+  background:transparent;width:100%;transition:background .18s,border-color .18s;
+}
+.lane:hover{background:#151E33;border-color:#2A3550}
+.lane[aria-selected="true"]{background:#151E33;border-color:var(--cobalt)}
+.lane-name{font-size:13.5px;font-weight:600;color:#DCE3F1;letter-spacing:-.01em}
+.lane-name span{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;color:#6E7C99;font-weight:400;text-transform:uppercase;margin-top:2px}
+.track{position:relative;height:26px;background:#0B1220;border:1px solid #232E47;border-radius:2px;overflow:hidden}
+.ghost{position:absolute;inset:0 auto 0 0;background:repeating-linear-gradient(135deg,#232E47 0 5px,transparent 5px 10px);border-right:1px dashed #46557A;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#2B4BFF,#1F3BE0);transition:width .9s cubic-bezier(.2,.8,.2,1),background .4s}
+.lane[data-bottleneck="1"] .fill{background:linear-gradient(90deg,#C4483A,#B23A2E)}
+.lane-val{font-family:var(--f-mono);font-size:12.5px;color:#fff;text-align:right;font-variant-numeric:tabular-nums}
+.lane-val i{font-style:normal;color:#6E7C99;font-size:10px}
+
+.sim-total{display:flex;align-items:baseline;gap:12px;margin:16px 8px 0;padding-top:16px;border-top:1px solid #2A3550;flex-wrap:wrap}
+.sim-total .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8C99B2}
+.sim-total .v{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,4vw,40px);letter-spacing:-.03em;color:#fff}
+.sim-total .d{font-size:12.5px;color:#7FD8C4;font-family:var(--f-mono)}
+
+.sim-side{border-top:1px solid #2A3550;padding:20px 18px;background:#0F1626}
+@media(min-width:1000px){.sim-side{border-top:0;border-left:1px solid #2A3550}}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#2A3550;border:1px solid #2A3550;border-radius:3px;overflow:hidden;margin-bottom:18px}
+.kpi{background:#111827;padding:13px 14px}
+.kpi .k{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#7E8CA8;display:block;margin-bottom:6px}
+.kpi .v{font-family:var(--f-display);font-weight:700;font-size:21px;color:#fff;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:11px;font-weight:500;color:#8C99B2;margin-left:3px}
+.diag{border:1px solid #2A3550;border-radius:3px;padding:15px;background:#0B1220;min-height:186px}
+.diag .tag{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:100px;margin-bottom:10px}
+.tag--flag{background:rgba(178,58,46,.18);color:#F0A79C;border:1px solid rgba(178,58,46,.45)}
+.tag--ok{background:rgba(14,143,118,.16);color:#7FD8C4;border:1px solid rgba(14,143,118,.4)}
+.diag h4{color:#fff;margin-bottom:8px;font-size:14.5px}
+.diag p{font-size:13.2px;line-height:1.5;color:#AEBACF;margin-bottom:10px}
+.diag ul{margin:0;padding-left:16px;font-size:12.8px;color:#AEBACF;line-height:1.6}
+.diag ul li::marker{color:var(--cobalt)}
+.diag .impact{margin-top:11px;padding-top:11px;border-top:1px dashed #2A3550;font-family:var(--f-mono);font-size:11.5px;color:#7FD8C4}
+.sim-note{padding:11px 18px;border-top:1px solid #2A3550;background:#0B1220;font-family:var(--f-mono);font-size:10.5px;color:#66748F;letter-spacing:.03em}
+@media(max-width:640px){
+  .lane{grid-template-columns:110px minmax(0,1fr) 54px;gap:9px}
+  .lane-name{font-size:12px}
+}
+
+/* ---------- Tarjetas y rejillas ---------- */
+.grid{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.g2{grid-template-columns:1fr}
+.g3{grid-template-columns:1fr}
+@media(min-width:760px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}}
+@media(min-width:1040px){.g3{grid-template-columns:repeat(3,1fr)}}
+.cell{background:var(--paper-2);padding:26px 24px}
+.cell h3{margin-bottom:10px}
+.cell p{font-size:14.5px;color:var(--muted);margin-bottom:0;line-height:1.55}
+.cell .eyebrow{display:block;margin-bottom:14px}
+
+.pillar{background:var(--paper-3);padding:28px 24px;display:flex;flex-direction:column;gap:12px}
+.pillar-n{font-family:var(--f-mono);font-size:11px;color:var(--cobalt);letter-spacing:.14em}
+.pillar ul{margin:6px 0 0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+.pillar li{font-size:13.5px;color:var(--ink-2);padding-left:16px;position:relative;line-height:1.45}
+.pillar li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:1px;background:var(--cobalt)}
+
+/* ---------- Cita del prospecto ---------- */
+.quote{
+  background:var(--paper-3);border:1px solid var(--rule);border-left:3px solid var(--cobalt);
+  padding:clamp(22px,3vw,32px);
+}
+.quote p{font-family:var(--f-serif);font-size:clamp(16px,2vw,19px);line-height:1.5;color:var(--ink-2);margin-bottom:14px}
+.quote .who{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+mark{background:var(--cobalt-soft);color:var(--cobalt-ink);padding:0 3px;border-radius:2px}
+
+/* ---------- Laboratorio / demos ---------- */
+.lab{border:1px solid var(--rule);background:var(--paper-3);border-radius:4px;overflow:hidden;box-shadow:var(--shadow)}
+.lab-tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--rule);background:var(--paper-2);scrollbar-width:thin}
+.lab-tabs button{
+  flex:0 0 auto;border:0;background:transparent;padding:15px 20px;cursor:pointer;
+  font-size:13.5px;font-weight:600;color:var(--muted);letter-spacing:-.01em;white-space:nowrap;
+  border-bottom:2px solid transparent;transition:color .18s,border-color .18s,background .18s;
+}
+.lab-tabs button:hover{color:var(--ink);background:#fff}
+.lab-tabs button[aria-selected="true"]{color:var(--cobalt);border-color:var(--cobalt);background:#fff}
+.lab-tabs .idx{font-family:var(--f-mono);font-size:10px;color:var(--rule);margin-right:8px}
+.lab-tabs button[aria-selected="true"] .idx{color:var(--cobalt)}
+.panel{padding:clamp(20px,3vw,30px);display:none}
+.panel[data-active="1"]{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.panel-head{margin-bottom:20px;max-width:66ch}
+.panel-head h3{margin-bottom:8px}
+.panel-head p{font-size:14.5px;color:var(--muted);margin:0}
+.demo{display:grid;gap:18px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:920px){.demo{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}}
+.pane{border:1px solid var(--rule);border-radius:3px;background:var(--paper-2);display:flex;flex-direction:column;min-height:300px}
+.pane-h{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:9px 13px;border-bottom:1px solid var(--rule);background:var(--paper-3);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+}
+.pane-b{padding:15px;flex:1;overflow:auto}
+textarea,select,input[type=text]{
+  width:100%;font-family:var(--f-mono);font-size:12.8px;line-height:1.6;color:var(--ink);
+  background:#fff;border:1px solid var(--rule);border-radius:3px;padding:11px 12px;resize:vertical;
+}
+textarea{min-height:172px}
+select{font-family:var(--f-display);font-size:13.5px;padding:9px 11px}
+.row{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:12px}
+.presets{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
+.pill{
+  border:1px solid var(--rule);background:#fff;border-radius:100px;padding:6px 12px;cursor:pointer;
+  font-size:12.5px;font-weight:500;color:var(--muted);transition:all .16s;
+}
+.pill:hover{border-color:var(--cobalt);color:var(--cobalt)}
+.pill[aria-pressed="true"]{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+
+.empty{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;height:100%;min-height:220px;color:var(--muted);font-size:13.5px;gap:8px;padding:6px}
+.empty .dot{width:7px;height:7px;border-radius:50%;background:var(--rule)}
+.thinking{font-family:var(--f-mono);font-size:12px;color:var(--cobalt);display:flex;align-items:center;gap:9px}
+.spin{width:11px;height:11px;border:2px solid var(--cobalt-soft);border-top-color:var(--cobalt);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stepline{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);padding:3px 0;opacity:0;animation:fade .25s forwards}
+.stepline b{color:var(--ink);font-weight:600}
+
+.out-row{display:flex;gap:12px;padding:9px 0;border-bottom:1px dashed var(--rule-soft);align-items:flex-start}
+.out-row:last-child{border-bottom:0}
+.out-k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex:0 0 128px;padding-top:2px}
+.out-v{font-size:14px;font-weight:600;color:var(--ink);flex:1;min-width:0;letter-spacing:-.01em}
+.out-v.mono{font-family:var(--f-mono);font-size:12.8px;font-weight:500}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:100px;border:1px solid}
+.b-red{background:var(--flag-soft);color:var(--flag);border-color:#E8C4BE}
+.b-amber{background:var(--amber-soft);color:var(--amber);border-color:#EBD9AC}
+.b-green{background:var(--gain-soft);color:var(--gain);border-color:#B9E0D6}
+.b-blue{background:var(--cobalt-soft);color:var(--cobalt-ink);border-color:#C3CCFA}
+.conf{height:4px;background:var(--rule-soft);border-radius:100px;overflow:hidden;margin-top:6px;max-width:190px}
+.conf i{display:block;height:100%;background:var(--gain);width:0;transition:width .7s ease}
+.reply{background:#fff;border:1px solid var(--rule);border-radius:3px;padding:13px;font-family:var(--f-serif);font-size:14.5px;line-height:1.55;color:var(--ink-2);white-space:pre-wrap}
+
+/* Factura simulada */
+.doc{background:#fff;border:1px solid var(--rule);padding:16px;font-family:var(--f-mono);font-size:11.5px;line-height:1.7;color:var(--ink-2)}
+.doc .hd{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--ink);padding-bottom:8px;margin-bottom:10px}
+.doc .hd b{font-family:var(--f-display);font-size:14px;letter-spacing:-.01em}
+.doc table{width:100%;border-collapse:collapse;margin:9px 0}
+.doc td,.doc th{border-bottom:1px dashed var(--rule);padding:4px 0;text-align:left;font-weight:400}
+.doc th{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.doc .tot{text-align:right;margin-top:8px}
+.doc .hl{background:var(--cobalt-soft);transition:background .3s}
+
+/* Chart */
+.chart{width:100%;height:250px}
+.chart-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.chart-legend i{display:inline-block;width:9px;height:9px;margin-right:6px;border-radius:1px}
+.sqlbox{font-family:var(--f-mono);font-size:12px;white-space:pre;background:var(--ink);color:#C9D6FF;padding:13px;border-radius:3px;overflow-x:auto;line-height:1.6}
+.sqlbox .kw{color:#7FD8C4}
+.sqlbox .st{color:#F0B27A}
+
+/* Agente */
+.trace{display:flex;flex-direction:column;gap:0}
+.tstep{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;padding-bottom:16px;position:relative}
+.tstep:not(:last-child)::before{content:"";position:absolute;left:10px;top:22px;bottom:0;width:1px;background:var(--rule)}
+.tdot{width:21px;height:21px;border-radius:50%;border:1px solid var(--rule);background:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:10px;color:var(--muted);z-index:1}
+.tstep[data-state="run"] .tdot{border-color:var(--cobalt);color:var(--cobalt)}
+.tstep[data-state="done"] .tdot{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+.tstep h4{font-size:13.5px;margin-bottom:4px}
+.tstep .tool{font-family:var(--f-mono);font-size:11px;color:var(--cobalt-ink);background:var(--cobalt-soft);display:inline-block;padding:2px 8px;border-radius:2px;margin-bottom:6px}
+.tstep p{font-size:13px;color:var(--muted);margin:0}
+.tstep .res{margin-top:7px;font-family:var(--f-mono);font-size:11.5px;color:var(--ink-2);background:var(--paper-2);border-left:2px solid var(--gain);padding:7px 10px;white-space:pre-wrap}
+
+/* ---------- Calculadora ---------- */
+.calc{display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.calc{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:40px}}
+.field{margin-bottom:20px}
+.field label{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px}
+.field .lb{font-size:13.5px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.field .vl{font-family:var(--f-mono);font-size:13px;color:var(--cobalt);font-variant-numeric:tabular-nums}
+.field .hint{font-size:12px;color:var(--muted);margin-top:6px;display:block}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:3px;background:var(--rule);border-radius:100px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--cobalt);cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--cobalt)}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--cobalt);cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--cobalt)}
+.results{background:var(--ink);color:#fff;border-radius:4px;padding:clamp(20px,3vw,28px)}
+.res-main{border-bottom:1px solid #2A3550;padding-bottom:18px;margin-bottom:18px}
+.res-main .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8C99B2;display:block;margin-bottom:8px}
+.res-main .v{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,5vw,52px);letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.res-grid .k{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8C99B2;display:block;margin-bottom:5px}
+.res-grid .v{font-family:var(--f-display);font-weight:700;font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.res-note{margin-top:18px;padding-top:16px;border-top:1px solid #2A3550;font-size:12.2px;color:#8C99B2;line-height:1.5}
+
+/* ---------- Cluster ---------- */
+.countries{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);grid-template-columns:1fr}
+@media(min-width:860px){.countries{grid-template-columns:repeat(3,1fr)}}
+.co{background:var(--paper-3);padding:24px}
+.co-h{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.co-flag{width:26px;height:18px;border-radius:2px;overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--rule)}
+.co-flag i{flex:1}
+.co-h h3{font-size:19px}
+.co dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-size:12.8px}
+.co dt{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.co dd{margin:0;color:var(--ink-2);font-weight:500}
+.co .watch{margin-top:16px;padding-top:14px;border-top:1px dashed var(--rule);font-size:12.8px;color:var(--muted);line-height:1.5}
+.co .watch b{color:var(--ink);font-weight:600;display:block;margin-bottom:3px;font-size:11.5px;letter-spacing:.02em}
+
+/* ---------- Plan 90 días ---------- */
+.phases{display:grid;gap:1px;background:#2A3550;border:1px solid #2A3550;grid-template-columns:1fr}
+@media(min-width:820px){.phases{grid-template-columns:repeat(4,1fr)}}
+.ph{background:var(--ink);padding:24px 20px}
+.ph .wk{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:#8FA3FF;margin-bottom:12px;display:block}
+.ph h3{color:#fff;font-size:17px;margin-bottom:10px}
+.ph p{font-size:13px;color:#9FACC6;margin-bottom:12px;line-height:1.5}
+.ph .del{font-family:var(--f-mono);font-size:11px;color:#7FD8C4;border-top:1px dashed #2A3550;padding-top:11px;line-height:1.5}
+
+/* ---------- Prueba ---------- */
+.proof{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);grid-template-columns:1fr}
+@media(min-width:700px){.proof{grid-template-columns:1fr 1fr}}
+@media(min-width:1040px){.proof{grid-template-columns:repeat(3,1fr)}}
+.pr{background:var(--paper-3);padding:22px;display:flex;flex-direction:column;gap:9px}
+.pr .cat{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt)}
+.pr h4{font-size:15.5px}
+.pr p{font-size:13.2px;color:var(--muted);margin:0;flex:1}
+.pr a{font-family:var(--f-mono);font-size:11.5px;text-decoration:none;border-bottom:1px solid var(--cobalt-soft);align-self:flex-start;padding-bottom:2px}
+.pr a:hover{border-color:var(--cobalt)}
+
+/* ---------- Cierre ---------- */
+.cta-box{display:grid;gap:28px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.cta-box{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:56px;align-items:start}}
+.contact dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:12px 20px;font-size:14px}
+.contact dt{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-dark);padding-top:3px}
+.contact dd{margin:0;color:#fff}
+.contact dd a{color:#fff;text-decoration:none;border-bottom:1px solid #3A4560}
+.contact dd a:hover{border-color:var(--cobalt)}
+.foot{padding:24px var(--pad);background:var(--ink);border-top:1px solid #2A3550;color:#66748F;font-size:12px}
+.foot-in{max-width:var(--max);margin:0 auto;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+
+/* ---------- Asistente flotante ---------- */
+.ask-fab{
+  position:fixed;right:20px;bottom:20px;z-index:70;border:0;cursor:pointer;
+  background:var(--cobalt);color:#fff;border-radius:100px;padding:13px 20px;
+  font-family:var(--f-display);font-weight:600;font-size:14px;
+  box-shadow:0 10px 30px -8px rgba(31,59,224,.6);display:flex;align-items:center;gap:9px;
+}
+.ask-fab:hover{background:var(--cobalt-ink)}
+@media(max-width:560px){.ask-fab{right:14px;bottom:14px;padding:11px 16px;font-size:13px}.ask-fab .lbl-long{display:none}}
+@media(min-width:561px){.ask-fab .lbl-short{display:none}}
+.ask{
+  position:fixed;right:20px;bottom:20px;z-index:71;width:min(390px,calc(100vw - 40px));
+  background:#fff;border:1px solid var(--rule);border-radius:6px;box-shadow:0 24px 60px -20px rgba(13,19,33,.5);
+  display:none;flex-direction:column;max-height:min(620px,calc(100vh - 40px));overflow:hidden;
+}
+.ask[data-open="1"]{display:flex}
+.ask-h{background:var(--ink);color:#fff;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ask-h b{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.ask-h span{display:block;font-family:var(--f-mono);font-size:10px;color:#8C99B2;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.ask-h button{background:transparent;border:0;color:#8C99B2;cursor:pointer;font-size:20px;line-height:1;padding:4px}
+.ask-h button:hover{color:#fff}
+.ask-log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--paper-2)}
+.msg{max-width:88%;padding:11px 13px;border-radius:10px;font-size:13.6px;line-height:1.5}
+.msg.a{background:#fff;border:1px solid var(--rule);border-bottom-left-radius:2px;color:var(--ink-2);align-self:flex-start;white-space:pre-wrap}
+.msg.u{background:var(--cobalt);color:#fff;border-bottom-right-radius:2px;align-self:flex-end}
+.ask-sug{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 12px;background:var(--paper-2)}
+.ask-sug button{border:1px solid var(--rule);background:#fff;border-radius:100px;padding:6px 11px;font-size:12px;cursor:pointer;color:var(--muted)}
+.ask-sug button:hover{border-color:var(--cobalt);color:var(--cobalt)}
+.ask-f{display:flex;gap:8px;padding:12px;border-top:1px solid var(--rule);background:#fff}
+.ask-f input{flex:1;font-family:var(--f-display);font-size:13.5px}
+
+/* ---------- Reveal ---------- */
+.rv{opacity:0;transform:translateY(16px)}
+.rv.in{opacity:1;transform:none;transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+@media(print){.nav,.ask,.ask-fab{display:none!important}}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  .rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="https://www.gadamax.com" target="_blank" rel="noopener">
+      <img src="https://www.gadamax.com/assets/images/brand-logo-gadamax.png" alt="" onerror="this.remove()">
+      <span class="brand-word">Gadamax</span>
+    </a>
+    <span class="nav-tag">Optimización de procesos con IA</span>
+    <div class="nav-links">
+      <a href="#entendimiento">El pedido</a>
+      <a href="#capacidades">Qué hacemos</a>
+      <a href="#laboratorio">Demos en vivo</a>
+      <a href="#retorno">Retorno</a>
+      <a href="#cluster">Cluster EC·CO·VE</a>
+      <a href="#plan">Plan 90 días</a>
+    </div>
+    <a class="btn btn--sm" href="#contacto">Agendar una llamada</a>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero on-dark" id="inicio">
+  <div class="hero-in">
+    <div class="hero-top">
+      <div>
+        <span class="eyebrow">Propuesta de capacidades · Gadamax</span>
+        <h1 style="margin-top:16px">Primero medimos el proceso.<br><em>Después la IA lo hace corto.</em></h1>
+        <p class="lead hero-sub">Optimizar procesos con inteligencia artificial no empieza con un modelo. Empieza con un mapa honesto de dónde se pierde el tiempo, cuánto cuesta y qué parte de eso una máquina puede hacer mejor que una persona.</p>
+        <div class="hero-meta">
+          <span class="chip">Cluster <strong>Ecuador · Colombia · Venezuela</strong></span>
+          <span class="chip">Entrega <strong>AI-native</strong></span>
+          <span class="chip">Piloto en <strong>30 días</strong></span>
+        </div>
+      </div>
+      <div>
+        <div style="border-left:1px solid #2A3550;padding-left:24px">
+          <span class="eyebrow">Cómo leer esta página</span>
+          <p class="small" style="margin-top:12px;line-height:1.6">No es un PDF. Todo lo que ve aquí es interactivo: mueva el simulador, pruebe los demos, ajuste la calculadora con sus propios números. Está construido con las mismas técnicas que usaríamos en su operación.</p>
+          <a class="btn btn--ghost-d btn--sm" href="#laboratorio" style="margin-top:6px">Ir a los demos ↓</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SIMULADOR (elemento firma) ── -->
+    <section class="sim" aria-labelledby="sim-t">
+      <div class="sim-bar">
+        <div class="sim-title" id="sim-t">Proceso de referencia · <b>Factura de proveedor a pago (P2P) en 3 países</b></div>
+        <div class="toggle" role="group" aria-label="Escenario">
+          <button id="btnHoy" aria-pressed="true">Hoy · manual</button>
+          <button id="btnIA" aria-pressed="false">Con Gadamax IA</button>
+        </div>
+      </div>
+
+      <div class="sim-body">
+        <div class="sim-lanes" id="lanes" role="tablist" aria-label="Etapas del proceso"></div>
+        <div class="sim-side">
+          <div class="kpis">
+            <div class="kpi"><span class="k">Ciclo total</span><span class="v" id="kCiclo">16,5<small>días</small></span></div>
+            <div class="kpi"><span class="k">Horas-hombre / mes</span><span class="v" id="kHoras">1.240</span></div>
+            <div class="kpi"><span class="k">Tasa de error</span><span class="v" id="kError">6,8<small>%</small></span></div>
+            <div class="kpi"><span class="k">Costo operativo / mes</span><span class="v" id="kCosto">$31k</span></div>
+          </div>
+          <div class="diag" id="diag" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <p class="sim-note">Escenario de referencia construido con rangos típicos de operaciones multipaís. Toque cualquier etapa para ver el diagnóstico. En un proyecto real estos números salen de <em>su</em> ERP, no de un promedio.</p>
+    </section>
+
+    <div class="sim-total" style="max-width:var(--max);margin-left:2px">
+      <span class="k">Reducción de ciclo en el escenario simulado</span>
+      <span class="v" id="tDelta">—</span>
+      <span class="d" id="tDeltaNote">active el escenario “Con Gadamax IA”</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ ENTENDIMIENTO ══════════════ -->
+<section class="band band--tight" id="entendimiento">
+  <div class="wrap">
+    <div class="band-head">
+      <div>
+        <span class="eyebrow">Punto de partida</span>
+        <h2>Lo que usted pidió, y lo que normalmente hay detrás</h2>
+      </div>
+      <p class="lead" style="margin:0">Un pedido de referencias suele significar que el problema ya está identificado, pero no dimensionado. Ahí es donde empezamos.</p>
+    </div>
+
+    <div class="grid g2 rv">
+      <div class="cell" style="background:#fff">
+        <div class="quote" style="border:0;padding:0;background:transparent">
+          <span class="eyebrow" style="display:block;margin-bottom:14px">Solicitud recibida</span>
+          <p>“…por si acaso conocen algún proveedor que ejecute trabajos de <mark>optimización de procesos utilizando Inteligencia Artificial</mark>… es para un proyecto de una multinacional que maneja un <mark>cluster de Ecuador, Colombia y Venezuela</mark>.”</p>
+          <span class="who">Consulta del cliente</span>
+        </div>
+      </div>
+      <div class="cell">
+        <span class="eyebrow">Cómo lo leemos</span>
+        <h3 style="margin-bottom:14px">Tres restricciones que cambian el diseño de la solución</h3>
+        <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:12px">
+          <li style="padding-left:22px;position:relative;font-size:14.2px;line-height:1.5;color:var(--muted)"><span style="position:absolute;left:0;top:0;font-family:var(--f-mono);font-size:11px;color:var(--cobalt)">01</span><b style="color:var(--ink)">Tres marcos regulatorios distintos.</b> SRI, DIAN y SENIAT no piden lo mismo. Un solo modelo genérico falla en la validación fiscal.</li>
+          <li style="padding-left:22px;position:relative;font-size:14.2px;line-height:1.5;color:var(--muted)"><span style="position:absolute;left:0;top:0;font-family:var(--f-mono);font-size:11px;color:var(--cobalt)">02</span><b style="color:var(--ink)">Un cluster, no tres filiales.</b> La consolidación regional es el punto de dolor: monedas, calendarios de cierre y niveles de madurez desiguales.</li>
+          <li style="padding-left:22px;position:relative;font-size:14.2px;line-height:1.5;color:var(--muted)"><span style="position:absolute;left:0;top:0;font-family:var(--f-mono);font-size:11px;color:var(--cobalt)">03</span><b style="color:var(--ink)">Una multinacional tiene gobierno de datos.</b> Cualquier propuesta debe responder por trazabilidad, control de acceso y auditoría antes de hablar de modelos.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CAPACIDADES ══════════════ -->
+<section class="band band--paper2 rule-top" id="capacidades">
+  <div class="wrap">
+    <div class="band-head">
+      <div>
+        <span class="eyebrow">Qué ejecutamos</span>
+        <h2>Cuatro pilares conectados. La IA atraviesa los cuatro.</h2>
+      </div>
+      <p class="lead" style="margin:0">Gadamax no vende un modelo. Vende un proceso más corto, más barato y más auditable — y construye el software que lo sostiene.</p>
+    </div>
+
+    <div class="grid g2 rv" style="grid-template-columns:1fr">
+      <div class="grid g2" style="border:0;gap:1px">
+        <div class="pillar">
+          <span class="pillar-n">Pilar 01</span>
+          <h3>Diagnóstico y estrategia de proceso</h3>
+          <p style="font-size:14.2px;color:var(--muted);margin:0">Levantamos el proceso real —no el del manual— con datos del ERP, entrevistas y minería de eventos. Salimos con un mapa medido y un caso de negocio.</p>
+          <ul>
+            <li>Process mining sobre logs de SAP, Oracle, Dynamics o Siigo</li>
+            <li>Tiempos de ciclo, reprocesos y costo por transacción</li>
+            <li>Matriz de automatización: qué sí, qué no, y por qué</li>
+            <li>Caso de negocio con supuestos abiertos y verificables</li>
+          </ul>
+        </div>
+        <div class="pillar">
+          <span class="pillar-n">Pilar 02</span>
+          <h3>Automatización inteligente</h3>
+          <p style="font-size:14.2px;color:var(--muted);margin:0">Donde hoy hay una persona leyendo, copiando, clasificando o comparando, ponemos un componente de IA con supervisión humana en los puntos críticos.</p>
+          <ul>
+            <li>Lectura de documentos: facturas, guías, contratos, actas</li>
+            <li>Clasificación y ruteo de correos, tickets y solicitudes</li>
+            <li>Conciliaciones y cruces entre sistemas que no se hablan</li>
+            <li>Agentes que ejecutan flujos completos con bitácora auditable</li>
+          </ul>
+        </div>
+        <div class="pillar">
+          <span class="pillar-n">Pilar 03</span>
+          <h3>Datos y decisión</h3>
+          <p style="font-size:14.2px;color:var(--muted);margin:0">Consolidamos las tres operaciones en una sola verdad y la abrimos a preguntas en lenguaje natural, para que el negocio no dependa de TI para mirar sus números.</p>
+          <ul>
+            <li>Capa de datos regional con reglas de conversión y calendario común</li>
+            <li>Tableros por país, por proceso y consolidados</li>
+            <li>Consultas en español sobre los datos, sin SQL</li>
+            <li>Alertas de anomalía y detección temprana de desvíos</li>
+          </ul>
+        </div>
+        <div class="pillar">
+          <span class="pillar-n">Pilar 04</span>
+          <h3>Adopción, gobierno y sostenibilidad</h3>
+          <p style="font-size:14.2px;color:var(--muted);margin:0">Una automatización que nadie usa o que nadie puede auditar es un pasivo. Entregamos el control junto con la herramienta.</p>
+          <ul>
+            <li>Política de uso de IA, control de acceso y registro de decisiones</li>
+            <li>Umbrales de confianza y escalamiento a revisión humana</li>
+            <li>Capacitación por rol en español, con material propio</li>
+            <li>Transferencia de conocimiento y código al cliente</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ LABORATORIO ══════════════ -->
+<section class="band rule-top" id="laboratorio">
+  <div class="wrap">
+    <div class="band-head">
+      <div>
+        <span class="eyebrow">Demostración · funciona ahora mismo</span>
+        <h2>En vez de explicarle qué puede hacer la IA, pruébela.</h2>
+      </div>
+      <p class="lead" style="margin:0">Cuatro capacidades que aparecen en casi todo proyecto de optimización. Cada una con datos parecidos a los de una operación andina.</p>
+    </div>
+
+    <div class="lab rv">
+      <div class="lab-tabs" role="tablist" aria-label="Demostraciones">
+        <button role="tab" aria-selected="true" data-tab="0"><span class="idx">01</span>Clasificar y rutear</button>
+        <button role="tab" aria-selected="false" data-tab="1"><span class="idx">02</span>Leer documentos</button>
+        <button role="tab" aria-selected="false" data-tab="2"><span class="idx">03</span>Preguntar a los datos</button>
+        <button role="tab" aria-selected="false" data-tab="3"><span class="idx">04</span>Agente que ejecuta</button>
+      </div>
+
+      <!-- DEMO 1 -->
+      <div class="panel" data-panel="0" data-active="1" role="tabpanel">
+        <div class="panel-head">
+          <h3>Clasificación y ruteo de correos entrantes</h3>
+          <p>Una casilla compartida recibe cientos de mensajes al día. El modelo lee, entiende el contexto, detecta el país, extrae los datos clave, asigna prioridad y propone respuesta. Edite el texto o pruebe otro caso.</p>
+        </div>
+        <div class="demo">
+          <div class="pane">
+            <div class="pane-h"><span>Entrada · correo del proveedor</span><span id="d1len">0 car.</span></div>
+            <div class="pane-b">
+              <div class="presets" id="d1presets"></div>
+              <textarea id="d1in" spellcheck="false" aria-label="Texto del correo"></textarea>
+              <div class="row">
+                <button class="btn" id="d1go">Analizar mensaje</button>
+                <button class="btn btn--ghost btn--sm" id="d1clear">Limpiar</button>
+              </div>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="pane-h"><span>Salida estructurada</span><span id="d1ms"></span></div>
+            <div class="pane-b" id="d1out"><div class="empty"><span class="dot"></span>Escriba o elija un caso y presione <b>Analizar mensaje</b>.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO 2 -->
+      <div class="panel" data-panel="1" role="tabpanel">
+        <div class="panel-head">
+          <h3>Lectura de documentos con validación fiscal por país</h3>
+          <p>El mismo componente lee una factura ecuatoriana, una colombiana y una venezolana, y aplica las reglas de cada una: identificador tributario, tarifa de IVA, retenciones y moneda. Cambie el país y vuelva a extraer.</p>
+        </div>
+        <div class="demo">
+          <div class="pane">
+            <div class="pane-h"><span>Documento recibido</span><span id="d2co">Ecuador</span></div>
+            <div class="pane-b">
+              <div class="presets" id="d2presets"></div>
+              <div class="doc" id="d2doc"></div>
+              <div class="row"><button class="btn" id="d2go">Extraer y validar</button></div>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="pane-h"><span>Campos extraídos · confianza</span><span id="d2ms"></span></div>
+            <div class="pane-b" id="d2out"><div class="empty"><span class="dot"></span>Presione <b>Extraer y validar</b> para procesar el documento.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO 3 -->
+      <div class="panel" data-panel="2" role="tabpanel">
+        <div class="panel-head">
+          <h3>Preguntas en español sobre los datos del cluster</h3>
+          <p>Un gerente regional no debería esperar tres días por un reporte. Pregunta en su idioma, el sistema traduce a consulta, la ejecuta sobre el modelo de datos consolidado y devuelve la respuesta con su gráfico.</p>
+        </div>
+        <div class="demo">
+          <div class="pane">
+            <div class="pane-h"><span>Pregunta del negocio</span><span>lenguaje natural</span></div>
+            <div class="pane-b">
+              <div class="presets" id="d3presets"></div>
+              <div class="row" style="margin-top:2px"><button class="btn" id="d3go">Consultar</button></div>
+              <div style="margin-top:16px">
+                <div class="pane-h" style="border:1px solid var(--rule);border-bottom:0;border-radius:3px 3px 0 0"><span>Consulta generada</span><span>solo lectura</span></div>
+                <div class="sqlbox" id="d3sql" style="border-radius:0 0 3px 3px">-- la consulta aparecerá aquí</div>
+              </div>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="pane-h"><span>Resultado</span><span id="d3ms"></span></div>
+            <div class="pane-b" id="d3out"><div class="empty"><span class="dot"></span>Elija una pregunta y presione <b>Consultar</b>.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO 4 -->
+      <div class="panel" data-panel="3" role="tabpanel">
+        <div class="panel-head">
+          <h3>Un agente ejecutando el cierre de conciliación regional</h3>
+          <p>No es un chat: es un proceso corriendo solo. El agente consulta sistemas, aplica reglas, resuelve diferencias y deja bitácora de cada paso. Lo que no puede resolver, lo escala con evidencia.</p>
+        </div>
+        <div class="demo">
+          <div class="pane">
+            <div class="pane-h"><span>Tarea asignada</span><span>conciliación P2P</span></div>
+            <div class="pane-b">
+              <div style="border:1px solid var(--rule);background:#fff;border-radius:3px;padding:14px;font-size:13.6px;line-height:1.55;color:var(--ink-2)">
+                <b style="display:block;margin-bottom:6px;font-size:12px;font-family:var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Instrucción</b>
+                Concilia la cuenta puente de proveedores de las tres filiales al cierre de mes. Cruza el ERP contra el extracto bancario, aplica la tasa de cierre a las partidas en moneda local, marca las diferencias mayores a US$ 500 y prepara el asiento de ajuste. Escala lo que no se pueda resolver con evidencia.
+              </div>
+              <div class="row"><button class="btn" id="d4go">Ejecutar agente</button><button class="btn btn--ghost btn--sm" id="d4reset">Reiniciar</button></div>
+              <p class="small" style="margin-top:14px;line-height:1.5">Cada paso queda registrado con hora, sistema consultado, regla aplicada y resultado. Esa bitácora es lo que hace auditable una automatización.</p>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="pane-h"><span>Bitácora de ejecución</span><span id="d4ms"></span></div>
+            <div class="pane-b" id="d4out"><div class="empty"><span class="dot"></span>Presione <b>Ejecutar agente</b> para ver el proceso completo.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="small" style="margin-top:18px;max-width:76ch">Estos demos corren enteramente en su navegador con lógica de demostración, para que la página funcione sin conexión a ningún servidor. En una implementación real los mismos flujos se conectan a modelos de lenguaje en producción, a su ERP y a sus fuentes de datos.</p>
+  </div>
+</section>
+
+<!-- ══════════════ ROI ══════════════ -->
+<section class="band band--paper2 rule-top" id="retorno">
+  <div class="wrap">
+    <div class="band-head">
+      <div>
+        <span class="eyebrow">Caso de negocio</span>
+        <h2>Ponga sus números. La calculadora no está amañada.</h2>
+      </div>
+      <p class="lead" style="margin:0">Los supuestos están a la vista y usted los controla. Si el retorno no aparece con sus propios datos, se lo decimos antes de firmar.</p>
+    </div>
+
+    <div class="calc rv">
+      <div>
+        <div class="field">
+          <label for="r1"><span class="lb">Personas dedicadas al proceso en el cluster</span><span class="vl" id="v1">24</span></label>
+          <input type="range" id="r1" min="3" max="120" value="24" step="1">
+          <span class="hint">Sumando Ecuador, Colombia y Venezuela.</span>
+        </div>
+        <div class="field">
+          <label for="r2"><span class="lb">Horas por semana en tareas repetitivas</span><span class="vl" id="v2">14 h</span></label>
+          <input type="range" id="r2" min="2" max="35" value="14" step="1">
+          <span class="hint">Capturar, cotejar, clasificar, reenviar, corregir, consolidar.</span>
+        </div>
+        <div class="field">
+          <label for="r3"><span class="lb">Costo total por hora-persona</span><span class="vl" id="v3">US$ 12</span></label>
+          <input type="range" id="r3" min="4" max="45" value="12" step="1">
+          <span class="hint">Salario más cargas sociales y overhead, promedio del cluster.</span>
+        </div>
+        <div class="field">
+          <label for="r4"><span class="lb">Porcentaje realmente automatizable</span><span class="vl" id="v4">55 %</span></label>
+          <input type="range" id="r4" min="15" max="85" value="55" step="5">
+          <span class="hint">Somos conservadores: rara vez pasa del 70 % en procesos con criterio humano.</span>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label for="r5"><span class="lb">Inversión estimada del programa</span><span class="vl" id="v5">US$ 85.000</span></label>
+          <input type="range" id="r5" min="25000" max="400000" value="85000" step="5000">
+          <span class="hint">Diagnóstico, construcción, integración, adopción y primer año de soporte.</span>
+        </div>
+      </div>
+
+      <div class="results">
+        <div class="res-main">
+          <span class="k">Ahorro operativo anual estimado</span>
+          <span class="v" id="oAhorro">US$ 0</span>
+        </div>
+        <div class="res-grid">
+          <div><span class="k">Horas liberadas / año</span><span class="v" id="oHoras">0</span></div>
+          <div><span class="k">Equivalente en personas</span><span class="v" id="oFte">0</span></div>
+          <div><span class="k">Retorno del primer año</span><span class="v" id="oRoi">0 %</span></div>
+          <div><span class="k">Recuperación de la inversión</span><span class="v" id="oPay">— meses</span></div>
+        </div>
+        <p class="res-note">Estimación aritmética directa a partir de los valores que usted ingresó; no incluye el ahorro por reducción de errores, multas fiscales evitadas ni el valor de decidir con información al día — que en operaciones multipaís suele pesar más que las horas. Tampoco descuenta el tiempo de adopción de los primeros meses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CLUSTER ══════════════ -->
+<section class="band rule-top" id="cluster">
+  <div class="wrap">
+    <div class="band-head">
+      <div>
+        <span class="eyebrow">Contexto regional</span>
+        <h2>Tres países, tres reglas. Un solo tablero.</h2>
+      </div>
+      <p class="lead" style="margin:0">La razón por la que muchas automatizaciones regionales fracasan: se diseñan para un país y se “adaptan” a los otros dos.</p>
+    </div>
+
+    <div class="countries rv">
+      <div class="co">
+        <div class="co-h">
+          <span class="co-flag"><i style="background:#FFDD00;flex:2"></i><i style="background:#0033A0"></i><i style="background:#EF3340"></i></span>
+          <h3>Ecuador</h3>
+        </div>
+        <dl>
+          <dt>Autoridad</dt><dd>SRI</dd>
+          <dt>Documento</dt><dd>Factura electrónica XML con clave de acceso</dd>
+          <dt>Identificador</dt><dd>RUC de 13 dígitos</dd>
+          <dt>IVA general</dt><dd>15 %</dd>
+          <dt>Moneda</dt><dd>Dólar estadounidense</dd>
+        </dl>
+        <p class="watch"><b>Lo que hay que vigilar</b>La autorización electrónica y la clave de acceso deben validarse contra el SRI antes de contabilizar; un XML bien formado no significa un comprobante válido.</p>
+      </div>
+      <div class="co">
+        <div class="co-h">
+          <span class="co-flag"><i style="background:#FCD116;flex:2"></i><i style="background:#003893"></i><i style="background:#CE1126"></i></span>
+          <h3>Colombia</h3>
+        </div>
+        <dl>
+          <dt>Autoridad</dt><dd>DIAN</dd>
+          <dt>Documento</dt><dd>Factura electrónica UBL 2.1 con CUFE</dd>
+          <dt>Identificador</dt><dd>NIT con dígito de verificación</dd>
+          <dt>IVA general</dt><dd>19 %</dd>
+          <dt>Moneda</dt><dd>Peso colombiano</dd>
+        </dl>
+        <p class="watch"><b>Lo que hay que vigilar</b>Las retenciones —fuente, IVA e ICA municipal— cambian el valor a pagar. Automatizar el pago sin calcularlas correctamente genera diferencias que aparecen meses después.</p>
+      </div>
+      <div class="co">
+        <div class="co-h">
+          <span class="co-flag"><i style="background:#FCE300"></i><i style="background:#00247D"></i><i style="background:#CF142B"></i></span>
+          <h3>Venezuela</h3>
+        </div>
+        <dl>
+          <dt>Autoridad</dt><dd>SENIAT</dd>
+          <dt>Documento</dt><dd>Factura con formatos y numeración autorizados</dd>
+          <dt>Identificador</dt><dd>RIF</dd>
+          <dt>IVA general</dt><dd>16 % (más IGTF en pagos en divisa)</dd>
+          <dt>Moneda</dt><dd>Bolívar, con referencia en divisa</dd>
+        </dl>
+        <p class="watch"><b>Lo que hay que vigilar</b>La conversión y la fecha de tasa aplicada son la principal fuente de diferencias en la consolidación. La regla de conversión debe estar escrita en el sistema, no en la cabeza del contador.</p>
+      </div>
+    </div>
+
+    <div class="grid g3 rv" style="margin-top:1px;border-top:0">
+      <div class="cell"><span class="eyebrow">Operación</span><h3 style="font-size:17px">Trabajamos en su huso y en su idioma</h3><p>Equipo en LATAM, reuniones en horario del cluster, documentación y capacitación en español. Sin traducción de por medio.</p></div>
+      <div class="cell"><span class="eyebrow">Datos</span><h3 style="font-size:17px">Sus datos no entrenan modelos ajenos</h3><p>Trabajamos con proveedores empresariales sin retención ni entrenamiento sobre su información, y con opción de despliegue en su propia nube.</p></div>
+      <div class="cell"><span class="eyebrow">Salida</span><h3 style="font-size:17px">Sin dependencia del proveedor</h3><p>El código, los prompts, la documentación y la infraestructura quedan a nombre del cliente. Si mañana nos cambia, el sistema sigue funcionando.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PLAN ══════════════ -->
+<section class="band band--dark on-dark rule-top" id="plan">
+  <div class="wrap">
+    <div class="band-head">
+      <div>
+        <span class="eyebrow">Cómo se ejecuta</span>
+        <h2 style="color:#fff">De la conversación al primer proceso en producción, en 90 días</h2>
+      </div>
+      <p class="lead" style="margin:0">Las fases van numeradas porque el orden importa: no automatizamos nada que no esté medido, y no escalamos nada que no esté adoptado.</p>
+    </div>
+
+    <div class="phases rv">
+      <div class="ph">
+        <span class="wk">Fase 1 · Semanas 1–3</span>
+        <h3>Medir</h3>
+        <p>Levantamiento del proceso real en los tres países, extracción de logs del ERP, entrevistas con quienes ejecutan el trabajo y cuantificación del costo actual.</p>
+        <p class="del">Entrega: mapa de proceso medido, matriz de automatización y caso de negocio con supuestos abiertos.</p>
+      </div>
+      <div class="ph">
+        <span class="wk">Fase 2 · Semanas 4–6</span>
+        <h3>Probar</h3>
+        <p>Construcción del primer componente sobre el cuello de botella de mayor impacto, con datos reales en ambiente controlado y métricas de precisión definidas antes de empezar.</p>
+        <p class="del">Entrega: piloto funcionando, precisión medida contra revisión humana y decisión de continuar o corregir.</p>
+      </div>
+      <div class="ph">
+        <span class="wk">Fase 3 · Semanas 7–11</span>
+        <h3>Integrar</h3>
+        <p>Conexión al ERP y a los sistemas de origen, reglas por país, umbrales de confianza, escalamiento humano, control de acceso y bitácora de auditoría.</p>
+        <p class="del">Entrega: proceso en producción para un país, tablero de control y documentación técnica.</p>
+      </div>
+      <div class="ph">
+        <span class="wk">Fase 4 · Semanas 12–13</span>
+        <h3>Extender</h3>
+        <p>Despliegue a los otros dos países con sus reglas propias, capacitación por rol, transferencia de conocimiento y definición del siguiente proceso del portafolio.</p>
+        <p class="del">Entrega: cluster completo operando, equipo capacitado y hoja de ruta de los siguientes procesos.</p>
+      </div>
+    </div>
+
+    <div class="grid g3 rv" style="background:#2A3550;border-color:#2A3550;margin-top:1px">
+      <div class="cell" style="background:var(--ink-2)"><span class="eyebrow">Compromiso</span><h3 style="font-size:17px;color:#fff">Si el piloto no da, se para</h3><p style="color:#9FACC6">Al final de la fase 2 hay una decisión formal con números sobre la mesa. Preferimos un proyecto detenido a tiempo que uno que se arrastra.</p></div>
+      <div class="cell" style="background:var(--ink-2)"><span class="eyebrow">Equipo</span><h3 style="font-size:17px;color:#fff">Senior en la mesa, IA en la ejecución</h3><p style="color:#9FACC6">La velocidad viene de trabajar con herramientas de IA en la construcción; el criterio viene de gente con experiencia operando negocios.</p></div>
+      <div class="cell" style="background:var(--ink-2)"><span class="eyebrow">Alcance</span><h3 style="font-size:17px;color:#fff">Un proceso a la vez</h3><p style="color:#9FACC6">Los programas que intentan transformar toda la operación de una vez son los que no llegan. Empezamos por el que más duele.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PRUEBA ══════════════ -->
+<section class="band rule-top" id="prueba">
+  <div class="wrap">
+    <div class="band-head">
+      <div>
+        <span class="eyebrow">Antecedentes</span>
+        <h2>Plataformas en producción, no maquetas</h2>
+      </div>
+      <p class="lead" style="margin:0">Once lanzamientos en industrias muy distintas, con el mismo modelo de trabajo: estrategia primero, construcción acelerada por IA, entrega con documentación.</p>
+    </div>
+    <div class="proof rv">
+      <div class="pr"><span class="cat">Lealtad y recompensas</span><h4>OhMyRewards</h4><p>Orquestador de lealtad para LATAM con operación multiempresa, documentación de API, flujos de órdenes y cumplimiento vía webhooks. Arquitectura multipaís real.</p><a href="https://app.ohmyrewards.com" target="_blank" rel="noopener">app.ohmyrewards.com →</a></div>
+      <div class="pr"><span class="cat">Automatización de reglas</span><h4>GamerLeal.club</h4><p>Plataforma de operación con backoffice modular, motor de reglas automatizadas y flujos transaccionales listos para API. El mismo patrón que se aplica a reglas fiscales por país.</p><a href="https://gamerleal.club" target="_blank" rel="noopener">gamerleal.club →</a></div>
+      <div class="pr"><span class="cat">Flujo de servicio</span><h4>Translatoria</h4><p>Comercio de servicios que convierte un trámite complejo en un flujo guiado con validación paso a paso. Ejercicio puro de simplificación de proceso.</p><a href="https://translatoria.us" target="_blank" rel="noopener">translatoria.us →</a></div>
+      <div class="pr"><span class="cat">Salud · verificación</span><h4>Diego Chiriboga, MD</h4><p>Plataforma clínica bilingüe con infraestructura de verificación de certificados. Trazabilidad y confianza como requisito, no como agregado.</p><a href="https://diegochiriboga.doctor" target="_blank" rel="noopener">diegochiriboga.doctor →</a></div>
+      <div class="pr"><span class="cat">Programa público</span><h4>Lincoln BizLab</h4><p>Plataforma de formación laboral con arquitectura de información compleja y múltiples audiencias en una sola experiencia estructurada.</p><a href="https://lincolnbizlab.com" target="_blank" rel="noopener">lincolnbizlab.com →</a></div>
+      <div class="pr" style="background:var(--paper-2);justify-content:center"><span class="cat">Y el resto</span><h4 style="font-size:19px">Seis proyectos más en portafolio abierto</h4><p>Hospitalidad, salud, programas cívicos, educación y comercio. Referencias verificables a solicitud.</p><a href="https://www.gadamax.com/portfolio" target="_blank" rel="noopener">Ver portafolio completo →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CONTACTO ══════════════ -->
+<section class="band band--dark on-dark rule-top" id="contacto">
+  <div class="wrap cta-box">
+    <div>
+      <span class="eyebrow">Siguiente paso</span>
+      <h2 style="color:#fff;margin-top:14px;max-width:18ch">Una sesión de 45 minutos, sin costo, para dimensionar el problema</h2>
+      <p class="lead" style="margin-top:18px;max-width:52ch">Llegamos con preguntas concretas sobre volúmenes, sistemas y puntos de dolor. Usted sale con una primera lectura de dónde está el mayor retorno, se trabaje con nosotros o no.</p>
+      <div class="row" style="margin-top:26px">
+        <a class="btn" id="ctaMail" href="https://www.gadamax.com/contact" target="_blank" rel="noopener">Agendar la sesión</a>
+        <a class="btn btn--ghost-d" href="https://www.gadamax.com" target="_blank" rel="noopener">Conocer Gadamax</a>
+      </div>
+    </div>
+    <div class="contact">
+      <span class="eyebrow" style="display:block;margin-bottom:18px">Contacto directo</span>
+      <dl>
+        <dt>Web</dt><dd><a href="https://www.gadamax.com" target="_blank" rel="noopener">www.gadamax.com</a></dd>
+        <dt>Correo</dt><dd><a id="mailLink" href="#">—</a></dd>
+        <dt>Teléfono</dt><dd><a href="tel:+528185262288">+52 81 8526 2288</a><br><a href="tel:+13128204788">+1 (312) 820 4788</a></dd>
+        <dt>Oficinas</dt><dd>Monterrey, México<br>Naperville, Illinois, EE. UU.</dd>
+        <dt>Cobertura</dt><dd>Estados Unidos y LATAM</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot-in">
+    <span>© 2026 Gadamax LLC · Estrategia, marca y software AI-native</span>
+    <span>Documento de capacidades preparado para el cluster Ecuador · Colombia · Venezuela</span>
+  </div>
+</footer>
+
+<!-- ══════════════ ASISTENTE ══════════════ -->
+<button class="ask-fab" id="askOpen" aria-label="Abrir asistente">
+  <span style="width:7px;height:7px;border-radius:50%;background:#7FD8C4;display:inline-block"></span>
+  <span class="lbl-long">Pregúntele a esta propuesta</span><span class="lbl-short">Preguntar</span>
+</button>
+<div class="ask" id="ask" role="dialog" aria-label="Asistente de la propuesta">
+  <div class="ask-h">
+    <div><b>Asistente Gadamax</b><span>Responde sobre esta propuesta</span></div>
+    <button id="askClose" aria-label="Cerrar">×</button>
+  </div>
+  <div class="ask-log" id="askLog"></div>
+  <div class="ask-sug" id="askSug"></div>
+  <div class="ask-f">
+    <input type="text" id="askIn" placeholder="Escriba su pregunta…" aria-label="Su pregunta">
+    <button class="btn btn--sm" id="askGo">Enviar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ══════════════════════════════════════════════════════════
+   CONFIGURACIÓN — lo único que hay que editar
+   ══════════════════════════════════════════════════════════ */
+var CFG = {
+  email: "mvg@gadamax.com",                    // correo de contacto de la propuesta
+  formulario: "https://www.gadamax.com/contact",
+  asunto: "Optimización de procesos con IA — cluster Ecuador, Colombia y Venezuela"
+};
+(function initContacto(){
+  var a = document.getElementById('mailLink'), c = document.getElementById('ctaMail');
+  if(CFG.email){
+    var href = "mailto:" + CFG.email + "?subject=" + encodeURIComponent(CFG.asunto);
+    a.href = href; a.textContent = CFG.email;
+    c.href = href; c.removeAttribute('target');
+  }else{
+    a.href = CFG.formulario; a.target = "_blank"; a.rel = "noopener";
+    a.textContent = "Formulario de contacto →";
+  }
+})();
+
+var $  = function(s,c){return (c||document).querySelector(s);};
+var $$ = function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s));};
+var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var nf = function(n,d){return n.toLocaleString('es-EC',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});};
+var usd = function(n){return "US$ " + nf(Math.round(n));};
+
+/* ── Reveal on scroll ── */
+(function(){
+  if(!('IntersectionObserver' in window)){ $$('.rv').forEach(function(e){e.classList.add('in');}); return; }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12});
+  $$('.rv').forEach(function(e){io.observe(e);});
+})();
+
+/* ── Contador animado ── */
+function countTo(el, from, to, dec, suffix, prefix){
+  if(REDUCED){ el.innerHTML = (prefix||"") + nf(to,dec) + (suffix||""); return; }
+  var t0 = null, dur = 750;
+  function step(t){
+    if(!t0) t0 = t;
+    var p = Math.min((t-t0)/dur,1), e = 1-Math.pow(1-p,3);
+    el.innerHTML = (prefix||"") + nf(from + (to-from)*e, dec) + (suffix||"");
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ══════════════════════════════════════════════════════════
+   1 · SIMULADOR DE PROCESO
+   ══════════════════════════════════════════════════════════ */
+var ETAPAS = [
+  { n:"Recepción y digitalización", s:"buzón · escaneo", hoy:2.5, ia:0.1, bn:false,
+    dHoy:{t:"Entrada sin control", p:"Las facturas llegan por tres canales distintos: correo de cada filial, portal del proveedor y físico. Nadie sabe cuántas hay en tránsito ni desde cuándo.",
+      b:["Sin acuse automático al proveedor","Duplicados que se detectan semanas después","El reloj del vencimiento corre sin que nadie lo vea"], i:"2,5 días perdidos antes de que el proceso empiece"},
+    dIA:{t:"Captura unificada", p:"Un solo punto de entrada lee correo, portal y documento escaneado, identifica al proveedor y abre el expediente con acuse inmediato.",
+      b:["Detección de duplicados en el momento de la recepción","Acuse automático con número de seguimiento","Reloj de vencimiento visible desde el primer minuto"], i:"De 2,5 días a 2 horas"} },
+
+  { n:"Validación y codificación", s:"IVA · centro de costo", hoy:3.0, ia:0.3, bn:true,
+    dHoy:{t:"Cuello de botella · criterio disperso", p:"Cada analista aplica la regla fiscal de su país de memoria. La codificación contable depende de quién la haga y del día que sea.",
+      b:["Tres tarifas de IVA y tres esquemas de retención distintos","Retrabajo cuando el centro de costo queda mal asignado","El conocimiento vive en tres personas, no en el sistema"], i:"3 días y la mayor fuente de errores del proceso"},
+    dIA:{t:"Reglas escritas en el sistema", p:"El modelo extrae los campos, aplica la regla fiscal del país que corresponde y propone la codificación contable con nivel de confianza declarado.",
+      b:["Validación contra SRI, DIAN o SENIAT según el emisor","Escalamiento a revisión humana bajo el umbral de confianza","La regla se cambia una vez y aplica en los tres países"], i:"De 3 días a 7 horas, con trazabilidad de cada decisión"} },
+
+  { n:"Aprobación multipaís", s:"3 niveles · 3 filiales", hoy:5.5, ia:1.0, bn:true,
+    dHoy:{t:"Cuello de botella principal", p:"La cadena de aprobación viaja por correo. Se detiene en vacaciones, en viajes y en bandejas llenas. Nadie puede decir dónde está una factura sin preguntar.",
+      b:["Sin visibilidad del estado ni del responsable actual","Umbrales de monto distintos por filial, aplicados a mano","Aprobaciones que se otorgan sin ver el contexto completo"], i:"5,5 días — un tercio del ciclo total"},
+    dIA:{t:"Ruteo con contexto", p:"El sistema arma el expediente completo, lo enruta al aprobador correcto según monto, país y categoría, y recuerda con evidencia. La excepción sube sola.",
+      b:["Delegación automática por ausencia","Resumen del gasto y comparación con órdenes previas","Tablero en vivo del estado de cada documento"], i:"De 5,5 días a 1 día"} },
+
+  { n:"Registro en el ERP", s:"captura manual", hoy:1.5, ia:0.1, bn:false,
+    dHoy:{t:"Transcripción", p:"Una persona vuelve a escribir en el ERP datos que ya existen en un documento digital. Es el trabajo más caro y menos valioso de toda la cadena.",
+      b:["Errores de dedo que se descubren en la conciliación","Sin control de que lo registrado coincida con lo aprobado","Tiempo que no agrega nada al negocio"], i:"1,5 días de pura transcripción"},
+    dIA:{t:"Registro directo", p:"El asiento se genera desde el expediente ya validado y se escribe en el ERP por integración, con verificación posterior contra el documento origen.",
+      b:["Cero transcripción manual","Verificación automática de lo registrado contra lo aprobado","Reversión trazable si algo no cuadra"], i:"De 1,5 días a minutos"} },
+
+  { n:"Conciliación y pago", s:"banco vs. ERP", hoy:4.0, ia:0.8, bn:true,
+    dHoy:{t:"Cuello de botella · cierre", p:"El cruce entre extracto bancario y ERP se hace en hojas de cálculo, con tres monedas y tasas aplicadas en fechas distintas. Las diferencias se arrastran al mes siguiente.",
+      b:["Partidas conciliatorias que nadie alcanza a depurar","Conversión de moneda resuelta caso por caso","El cierre depende de personas específicas"], i:"4 días y diferencias que se acumulan"},
+    dIA:{t:"Conciliación asistida", p:"El agente cruza ambos lados, aplica la regla de conversión definida, propone el ajuste y escala solo lo que realmente requiere criterio humano.",
+      b:["Cruce automático con reglas de tolerancia por país","Regla de tasa de cierre escrita y auditable","Bitácora completa de cada partida resuelta"], i:"De 4 días a menos de 1"} }
+];
+
+var TOT_HOY = ETAPAS.reduce(function(a,e){return a+e.hoy;},0);
+var TOT_IA  = ETAPAS.reduce(function(a,e){return a+e.ia;},0);
+var modo = 'hoy', sel = 2;
+
+var lanes = $('#lanes');
+ETAPAS.forEach(function(e,i){
+  var b = document.createElement('button');
+  b.className = 'lane'; b.setAttribute('role','tab');
+  b.setAttribute('aria-selected', i===sel ? 'true':'false');
+  b.setAttribute('data-bottleneck', e.bn ? '1':'0');
+  b.innerHTML =
+    '<span class="lane-name">'+e.n+'<span>'+e.s+'</span></span>'+
+    '<span class="track"><i class="ghost" style="width:'+(e.hoy/TOT_HOY*100)+'%"></i><i class="fill" style="width:'+(e.hoy/TOT_HOY*100)+'%"></i></span>'+
+    '<span class="lane-val"><b class="v"></b> <i>d</i></span>';
+  b.addEventListener('click', function(){ sel = i; paintLanes(); paintDiag(); });
+  lanes.appendChild(b);
+});
+
+function paintLanes(){
+  $$('.lane', lanes).forEach(function(b,i){
+    var e = ETAPAS[i], val = modo==='hoy' ? e.hoy : e.ia;
+    b.setAttribute('aria-selected', i===sel ? 'true':'false');
+    b.setAttribute('data-bottleneck', (e.bn && modo==='hoy') ? '1':'0');
+    $('.fill', b).style.width = (val/TOT_HOY*100)+'%';
+    $('.v', b).textContent = nf(val,1);
+  });
+}
+
+function paintDiag(){
+  var e = ETAPAS[sel], d = modo==='hoy' ? e.dHoy : e.dIA;
+  var esFlag = (modo==='hoy' && e.bn);
+  $('#diag').innerHTML =
+    '<span class="tag '+(esFlag?'tag--flag':'tag--ok')+'">'+(esFlag?'Cuello de botella':(modo==='hoy'?'Situación actual':'Con Gadamax IA'))+'</span>'+
+    '<h4>'+d.t+'</h4><p>'+d.p+'</p><ul><li>'+d.b.join('</li><li>')+'</li></ul>'+
+    '<div class="impact">'+d.i+'</div>';
+}
+
+function paintKPI(){
+  var esIA = modo==='ia';
+  countTo($('#kCiclo'), esIA?TOT_HOY:TOT_IA, esIA?TOT_IA:TOT_HOY, 1, '<small>días</small>');
+  countTo($('#kHoras'), esIA?1240:310, esIA?310:1240, 0);
+  countTo($('#kError'), esIA?6.8:0.9, esIA?0.9:6.8, 1, '<small>%</small>');
+  countTo($('#kCosto'), esIA?31:9, esIA?9:31, 0, 'k', '$');
+  var red = Math.round((1-TOT_IA/TOT_HOY)*100);
+  $('#tDelta').textContent = esIA ? ('−'+red+' %') : '—';
+  $('#tDeltaNote').textContent = esIA
+    ? ('de '+nf(TOT_HOY,1)+' a '+nf(TOT_IA,1)+' días · 930 horas-hombre liberadas al mes')
+    : 'active el escenario “Con Gadamax IA”';
+}
+
+function setModo(m){
+  modo = m;
+  $('#btnHoy').setAttribute('aria-pressed', m==='hoy');
+  $('#btnIA').setAttribute('aria-pressed', m==='ia');
+  paintLanes(); paintDiag(); paintKPI();
+}
+$('#btnHoy').addEventListener('click', function(){ setModo('hoy'); });
+$('#btnIA').addEventListener('click', function(){ setModo('ia'); });
+paintLanes(); paintDiag(); paintKPI();
+
+/* ══════════════════════════════════════════════════════════
+   2 · PESTAÑAS DEL LABORATORIO
+   ══════════════════════════════════════════════════════════ */
+$$('.lab-tabs button').forEach(function(b){
+  b.addEventListener('click', function(){
+    $$('.lab-tabs button').forEach(function(x){x.setAttribute('aria-selected','false');});
+    b.setAttribute('aria-selected','true');
+    $$('.panel').forEach(function(p){ p.removeAttribute('data-active'); });
+    $('.panel[data-panel="'+b.dataset.tab+'"]').setAttribute('data-active','1');
+  });
+});
+
+/* Motor de "procesamiento" visible ─ pasos animados */
+function correr(cont, pasos, done){
+  cont.innerHTML = '<div class="thinking"><span class="spin"></span><span id="thk">Procesando…</span></div><div id="steps" style="margin-top:12px"></div>';
+  var box = $('#steps', cont), i = 0;
+  (function next(){
+    if(i >= pasos.length){ setTimeout(done, 260); return; }
+    var d = document.createElement('div');
+    d.className = 'stepline';
+    d.innerHTML = '<b>›</b> ' + pasos[i];
+    box.appendChild(d); i++;
+    setTimeout(next, REDUCED ? 20 : 330);
+  })();
+}
+
+/* ══════════════════════════════════════════════════════════
+   3 · DEMO 1 — Clasificación y ruteo
+   ══════════════════════════════════════════════════════════ */
+var CASOS = [
+  { t:"Proveedor · Colombia",
+    x:"Buenos días,\n\nEscribo de Suministros Andinos S.A.S., NIT 900456789-2, con sede en Bogotá. Nuestra factura electrónica FE-2024-8871 por COP 48.500.000 tenía vencimiento el 12/07/2026 y a la fecha no registramos el pago.\n\nEs la tercera vez que escribimos. Si no recibimos confirmación esta semana debemos suspender los despachos programados y aplicar intereses de mora según lo pactado.\n\nAgradecemos su gestión urgente.\nMartha Reyes — Cartera" },
+  { t:"Aduana · Ecuador",
+    x:"Estimados,\n\nLes informo que el contenedor MSCU-4471209 correspondiente al embarque de repuestos quedó retenido en el puerto de Guayaquil por inconsistencia entre la factura comercial y la declaración aduanera. El agente solicita el comprobante autorizado por el SRI del proveedor con RUC 1791234567001.\n\nCada día de permanencia genera USD 320 de bodegaje. Necesitamos respuesta hoy mismo para no afectar la producción de la planta.\n\nSaludos,\nJorge Salazar — Comercio Exterior" },
+  { t:"Tributos · Venezuela",
+    x:"Buenas tardes,\n\nRevisando la factura N° 00012845 del proveedor Distribuidora Caribe C.A., RIF J-30456789-1, observamos que el IVA fue calculado al 12% cuando debería aplicarse la tarifa vigente del 16%. Adicionalmente no se refleja el IGTF sobre el pago realizado en divisa.\n\nSolicito revisar antes del cierre contable del mes y emitir nota de crédito si corresponde.\n\nGracias,\nAndreína Pérez — Contabilidad Caracas" }
+];
+var CATS = [
+  {n:"Cuentas por pagar", a:"Tesorería regional", kw:["factura","pago","vencid","cobro","saldo","mora","cartera","abono","transferencia","anticipo"]},
+  {n:"Comercio exterior y logística", a:"Logística cluster", kw:["aduana","contenedor","embarque","puerto","despacho","naviera","flete","bodegaje","retenid","importación"]},
+  {n:"Tributos y contabilidad", a:"Contraloría del cluster", kw:["iva","igtf","retención","impuesto","sri","dian","seniat","nota de crédito","cierre contable","tarifa"]},
+  {n:"Compras y contratos", a:"Abastecimiento", kw:["orden de compra","cotización","contrato","licitación","renovación","proveedor nuevo"]}
+];
+var PAISES = [
+  {n:"Ecuador",   kw:["ecuador","sri","guayaquil","quito","cuenca","ruc"],        r:"SRI · RUC 13 dígitos · IVA 15 %"},
+  {n:"Colombia",  kw:["colombia","dian","bogotá","bogota","medellín","cali","nit","cop","s.a.s"], r:"DIAN · NIT con DV · IVA 19 %"},
+  {n:"Venezuela", kw:["venezuela","seniat","caracas","maracaibo","rif","igtf","bolívar","c.a."],  r:"SENIAT · RIF · IVA 16 % + IGTF"}
+];
+var URG = ["urgente","hoy mismo","inmediat","suspend","tercera vez","mora","sanción","sancion","crítico","critico","paraliz","afectar la producción","antes del cierre","no afectar"];
+
+function score(txt, kws){
+  var t = txt.toLowerCase(), s = 0;
+  kws.forEach(function(k){ if(t.indexOf(k) > -1) s++; });
+  return s;
+}
+function pick(txt, arr){
+  var best = arr[0], bs = -1;
+  arr.forEach(function(o){ var s = score(txt, o.kw); if(s > bs){ bs = s; best = o; } });
+  return {o:best, s:bs};
+}
+function extraer(t){
+  var e = [];
+  var m;
+  var reMonto = /(?:US\$|USD|COP|VES|Bs\.?|\$)\s?([\d][\d.,]{2,})/gi;
+  var montos = []; while((m = reMonto.exec(t))){ montos.push(m[0].replace(/\s+/g,' ')); }
+  if(montos.length) e.push(["Montos detectados", montos.join("  ·  ")]);
+  if((m = /\b(?:FE|F|N[°º]|No\.?|factura)\s*[-:# ]?\s*([A-Z0-9][A-Z0-9\-]{3,})/i.exec(t))) e.push(["Documento", m[1]]);
+  if((m = /\b(\d{13})\b/.exec(t))) e.push(["RUC (Ecuador)", m[1]]);
+  if((m = /\b(\d{9}-\d)\b/.exec(t))) e.push(["NIT (Colombia)", m[1]]);
+  if((m = /\b([JGVEP]-?\d{8}-?\d)\b/i.exec(t))) e.push(["RIF (Venezuela)", m[1].toUpperCase()]);
+  if((m = /\b([A-Z]{4}-?\d{7})\b/.exec(t))) e.push(["Contenedor", m[1]]);
+  if((m = /\b(\d{1,2}\/\d{1,2}\/\d{2,4})\b/.exec(t))) e.push(["Fecha referida", m[1]]);
+  var nom = /\n([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+ [A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)\s*[—-]\s*([^\n]+)/.exec(t);
+  if(nom) e.push(["Remitente", nom[1] + " · " + nom[2].trim()]);
+  return e;
+}
+var d1p = $('#d1presets');
+CASOS.forEach(function(c,i){
+  var b = document.createElement('button');
+  b.className = 'pill'; b.textContent = c.t; b.setAttribute('aria-pressed', i===0?'true':'false');
+  b.addEventListener('click', function(){
+    $$('#d1presets .pill').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+    $('#d1in').value = c.x; d1count();
+  });
+  d1p.appendChild(b);
+});
+$('#d1in').value = CASOS[0].x;
+function d1count(){ $('#d1len').textContent = $('#d1in').value.length + ' car.'; }
+$('#d1in').addEventListener('input', d1count); d1count();
+$('#d1clear').addEventListener('click', function(){
+  $('#d1in').value=''; d1count();
+  $$('#d1presets .pill').forEach(function(x){x.setAttribute('aria-pressed','false');});
+});
+
+$('#d1go').addEventListener('click', function(){
+  var t = $('#d1in').value.trim();
+  if(!t){ $('#d1out').innerHTML = '<div class="empty"><span class="dot"></span>No hay texto que analizar. Escriba un mensaje o elija un caso.</div>'; return; }
+  correr($('#d1out'),
+    ["Normalizando texto y detectando idioma","Clasificando intención del mensaje","Identificando filial y marco tributario","Extrayendo entidades: montos, documentos, identificadores","Evaluando urgencia y riesgo comercial","Determinando área responsable y redactando respuesta"],
+    function(){
+      var cat = pick(t, CATS), pais = pick(t, PAISES);
+      var u = score(t, URG);
+      var prio = u >= 3 ? {n:"Alta", c:"b-red", sla:"Respuesta en 4 horas"} :
+                 u >= 1 ? {n:"Media", c:"b-amber", sla:"Respuesta en 24 horas"} :
+                          {n:"Normal", c:"b-blue", sla:"Respuesta en 48 horas"};
+      var conf = Math.min(96, 62 + cat.s*8 + pais.s*5);
+      var ents = extraer(t);
+      var resp = "Estimado/a:\n\nConfirmamos la recepción de su mensaje y le asignamos el número de caso " +
+        (cat.o.n.substring(0,3).toUpperCase()) + "-" + (1000 + Math.floor(t.length % 900)) +
+        ". El requerimiento fue clasificado como “" + cat.o.n.toLowerCase() + "” y escalado a " + cat.o.a +
+        (pais.s > 0 ? " para la operación de " + pais.o.n : "") + ".\n\n" +
+        (prio.n === "Alta"
+          ? "Dado el impacto operativo señalado, el caso quedó marcado con prioridad alta y le confirmaremos una respuesta dentro de las próximas 4 horas hábiles."
+          : "Le confirmaremos avance dentro del plazo de atención correspondiente.") +
+        "\n\nQuedamos atentos.";
+      var out = '';
+      out += '<div class="out-row"><span class="out-k">Categoría</span><span class="out-v">'+cat.o.n+'<div class="conf"><i style="width:0" data-w="'+conf+'"></i></div><span class="small" style="font-family:var(--f-mono);font-size:11px">confianza '+conf+' %</span></span></div>';
+      out += '<div class="out-row"><span class="out-k">Filial / marco</span><span class="out-v">'+(pais.s>0?pais.o.n:'No determinada')+'<span class="small" style="display:block;font-weight:400;margin-top:2px">'+(pais.s>0?pais.o.r:'Se solicitará al remitente')+'</span></span></div>';
+      out += '<div class="out-row"><span class="out-k">Prioridad</span><span class="out-v"><span class="badge '+prio.c+'">'+prio.n+'</span> <span class="small" style="font-weight:400">'+prio.sla+'</span></span></div>';
+      out += '<div class="out-row"><span class="out-k">Área asignada</span><span class="out-v">'+cat.o.a+'</span></div>';
+      ents.forEach(function(e){
+        out += '<div class="out-row"><span class="out-k">'+e[0]+'</span><span class="out-v mono">'+e[1]+'</span></div>';
+      });
+      out += '<div class="out-row" style="flex-direction:column;gap:8px"><span class="out-k" style="flex:none">Respuesta propuesta</span><div class="reply" style="width:100%">'+resp+'</div></div>';
+      $('#d1out').innerHTML = out;
+      setTimeout(function(){ $$('#d1out .conf i').forEach(function(i){ i.style.width = i.dataset.w + '%'; }); }, 60);
+      $('#d1ms').textContent = 'análisis completo';
+    });
+});
+
+/* ══════════════════════════════════════════════════════════
+   4 · DEMO 2 — Lectura de documentos con reglas por país
+   ══════════════════════════════════════════════════════════ */
+var DOCS = {
+  Ecuador:{
+    doc:'<div class="hd"><div><b>Importadora Andes Cía. Ltda.</b><br>RUC 1791234567001<br>Quito · Ecuador</div><div style="text-align:right">FACTURA<br><b>001-002-000045871</b><br>08/07/2026</div></div>'+
+        '<div>Clave de acceso: 0807202601179123456700110010020000458711234567819</div>'+
+        '<table><tr><th>Descripción</th><th style="text-align:right">Valor</th></tr>'+
+        '<tr><td>Repuestos industriales · lote 44</td><td style="text-align:right">14.280,00</td></tr>'+
+        '<tr><td>Servicio de instalación</td><td style="text-align:right">3.150,00</td></tr></table>'+
+        '<div class="tot">Subtotal 15 %: USD 17.430,00<br>IVA 15 %: USD 2.614,50<br><b>Total: USD 20.044,50</b></div>',
+    campos:[["Emisor","Importadora Andes Cía. Ltda.",98],["RUC","1791234567001",99],["Documento","001-002-000045871",97],["Fecha de emisión","08/07/2026",99],["Base imponible","USD 17.430,00",98],["IVA 15 %","USD 2.614,50",97],["Total","USD 20.044,50",99]],
+    val:[["ok","RUC válido: 13 dígitos, termina en 001 (matriz)"],["ok","IVA calculado al 15 %, tarifa vigente en Ecuador"],["ok","Clave de acceso de 49 dígitos, estructura correcta"],["warn","Sin referencia a orden de compra: se requiere para el cruce de tres vías"]],
+    nota:"Antes de contabilizar se consulta la autorización del comprobante en el SRI. Un XML bien formado no garantiza un comprobante válido."
+  },
+  Colombia:{
+    doc:'<div class="hd"><div><b>Suministros Andinos S.A.S.</b><br>NIT 900456789-2<br>Bogotá D.C. · Colombia</div><div style="text-align:right">FACTURA ELECTRÓNICA<br><b>FE-2024-8871</b><br>12/06/2026</div></div>'+
+        '<div>CUFE: 8f3a2c9e14b7d05a6c8e2f19b3d47a05c1e69f28</div>'+
+        '<table><tr><th>Descripción</th><th style="text-align:right">Valor</th></tr>'+
+        '<tr><td>Suministro de insumos · contrato marco 2026</td><td style="text-align:right">40.756.302</td></tr></table>'+
+        '<div class="tot">Subtotal: COP 40.756.302<br>IVA 19 %: COP 7.743.698<br><b>Total: COP 48.500.000</b></div>',
+    campos:[["Emisor","Suministros Andinos S.A.S.",98],["NIT","900456789-2",96],["Documento","FE-2024-8871",97],["Fecha de emisión","12/06/2026",99],["Base imponible","COP 40.756.302",97],["IVA 19 %","COP 7.743.698",98],["Total","COP 48.500.000",99]],
+    val:[["ok","NIT con dígito de verificación consistente"],["ok","IVA calculado al 19 %, tarifa general colombiana"],["ok","CUFE presente: se valida contra la DIAN antes de registrar"],["err","Retenciones no aplicadas: falta ReteFuente 2,5 % y ReteICA municipal. Valor a pagar recalculado: COP 46.909.093"]],
+    nota:"En Colombia el valor facturado y el valor a pagar casi nunca coinciden. Automatizar el pago sin calcular retenciones genera diferencias que aparecen meses después."
+  },
+  Venezuela:{
+    doc:'<div class="hd"><div><b>Distribuidora Caribe C.A.</b><br>RIF J-30456789-1<br>Caracas · Venezuela</div><div style="text-align:right">FACTURA<br><b>N° 00012845</b><br>03/07/2026</div></div>'+
+        '<div>Pago recibido en divisa · Tasa aplicada: 36,80 Bs/USD</div>'+
+        '<table><tr><th>Descripción</th><th style="text-align:right">Valor</th></tr>'+
+        '<tr><td>Distribución y almacenaje · junio</td><td style="text-align:right">Bs 331.200,00</td></tr></table>'+
+        '<div class="tot">Base imponible: Bs 331.200,00<br>IVA 12 %: Bs 39.744,00<br><b>Total: Bs 370.944,00</b></div>',
+    campos:[["Emisor","Distribuidora Caribe C.A.",97],["RIF","J-30456789-1",98],["Documento","N° 00012845",95],["Fecha de emisión","03/07/2026",99],["Base imponible","Bs 331.200,00",97],["IVA declarado","Bs 39.744,00 (12 %)",96],["Total documento","Bs 370.944,00",98]],
+    val:[["ok","RIF con estructura válida para persona jurídica"],["err","Tarifa de IVA incorrecta: se aplicó 12 % en lugar del 16 % vigente. Diferencia estimada: Bs 13.248,00"],["err","IGTF no reflejado sobre el pago en divisa. Se debe solicitar nota de crédito y refacturación"],["warn","Tasa de cambio aplicada difiere de la tasa oficial de la fecha: verificar antes de consolidar"]],
+    nota:"La conversión y la fecha de tasa aplicada son la principal fuente de diferencias al consolidar el cluster. La regla debe estar escrita en el sistema."
+  }
+};
+var d2sel = 'Ecuador';
+Object.keys(DOCS).forEach(function(k,i){
+  var b = document.createElement('button');
+  b.className='pill'; b.textContent = k; b.setAttribute('aria-pressed', i===0?'true':'false');
+  b.addEventListener('click', function(){
+    $$('#d2presets .pill').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true'); d2sel = k; d2paint();
+    $('#d2out').innerHTML = '<div class="empty"><span class="dot"></span>Documento de '+k+' cargado. Presione <b>Extraer y validar</b>.</div>';
+    $('#d2ms').textContent='';
+  });
+  $('#d2presets').appendChild(b);
+});
+function d2paint(){ $('#d2doc').innerHTML = DOCS[d2sel].doc; $('#d2co').textContent = d2sel; }
+d2paint();
+
+$('#d2go').addEventListener('click', function(){
+  var D = DOCS[d2sel];
+  correr($('#d2out'),
+    ["Rasterizando documento y detectando estructura","Reconociendo texto y tablas","Identificando emisor y tipo de comprobante","Extrayendo campos tributarios","Aplicando reglas fiscales de "+d2sel,"Contrastando totales y calculando diferencias"],
+    function(){
+      var out = '';
+      D.campos.forEach(function(c){
+        out += '<div class="out-row"><span class="out-k">'+c[0]+'</span><span class="out-v mono">'+c[1]+'<div class="conf"><i data-w="'+c[2]+'"></i></div></span></div>';
+      });
+      out += '<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--rule)"><span class="out-k" style="display:block;margin-bottom:11px">Validaciones aplicadas</span>';
+      D.val.forEach(function(v){
+        var cls = v[0]==='ok'?'b-green':(v[0]==='warn'?'b-amber':'b-red');
+        var lb  = v[0]==='ok'?'Conforme':(v[0]==='warn'?'Revisar':'Bloqueo');
+        out += '<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--rule-soft)"><span class="badge '+cls+'" style="flex:0 0 auto">'+lb+'</span><span style="font-size:13.2px;color:var(--ink-2);line-height:1.45">'+v[1]+'</span></div>';
+      });
+      out += '</div><p class="small" style="margin-top:14px;line-height:1.5">'+D.nota+'</p>';
+      $('#d2out').innerHTML = out;
+      setTimeout(function(){ $$('#d2out .conf i').forEach(function(i){ i.style.width = i.dataset.w+'%'; }); }, 60);
+      $('#d2ms').textContent = D.campos.length + ' campos extraídos';
+    });
+});
+
+/* ══════════════════════════════════════════════════════════
+   5 · DEMO 3 — Preguntas en lenguaje natural sobre los datos
+   ══════════════════════════════════════════════════════════ */
+function barChart(labels, series, unidad, umbral){
+  var W = 560, H = 250, pl = 46, pr = 12, pt = 14, pb = 40;
+  var max = 0; series.forEach(function(s){ s.v.forEach(function(v){ if(v>max) max=v; }); });
+  if(umbral && umbral>max) max = umbral;
+  max = max * 1.15;
+  var gw = (W-pl-pr)/labels.length, bw = Math.min(46, (gw*0.62)/series.length);
+  var s = '<svg class="chart" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet" role="img">';
+  for(var g=0; g<=4; g++){
+    var y = pt + (H-pt-pb)*g/4, val = max*(1-g/4);
+    s += '<line x1="'+pl+'" y1="'+y+'" x2="'+(W-pr)+'" y2="'+y+'" stroke="#DEE4EE" stroke-width="1"/>';
+    s += '<text x="'+(pl-8)+'" y="'+(y+4)+'" text-anchor="end" font-family="IBM Plex Mono" font-size="9.5" fill="#5C6880">'+nf(val, max<20?1:0)+'</text>';
+  }
+  labels.forEach(function(lb,i){
+    var cx = pl + gw*i + gw/2;
+    series.forEach(function(se,j){
+      var v = se.v[i], h = (H-pt-pb)*(v/max);
+      var x = cx - (bw*series.length)/2 + bw*j;
+      s += '<rect x="'+x+'" y="'+(H-pb-h)+'" width="'+(bw-3)+'" height="'+h+'" fill="'+se.c+'" rx="1"><animate attributeName="height" from="0" to="'+h+'" dur="0.55s" fill="freeze"/><animate attributeName="y" from="'+(H-pb)+'" to="'+(H-pb-h)+'" dur="0.55s" fill="freeze"/></rect>';
+      s += '<text x="'+(x+(bw-3)/2)+'" y="'+(H-pb-h-5)+'" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#0D1321">'+nf(v, max<20?1:0)+'</text>';
+    });
+    s += '<text x="'+cx+'" y="'+(H-pb+16)+'" text-anchor="middle" font-family="Archivo" font-size="10.5" fill="#5C6880">'+lb+'</text>';
+  });
+  if(umbral){
+    var yu = pt + (H-pt-pb)*(1-umbral/max);
+    s += '<line x1="'+pl+'" y1="'+yu+'" x2="'+(W-pr)+'" y2="'+yu+'" stroke="#B23A2E" stroke-width="1.5" stroke-dasharray="5 4"/>';
+    s += '<rect x="'+(pl+3)+'" y="'+(yu-15)+'" width="128" height="13" fill="#FFFFFF" opacity=".9"/>';
+    s += '<text x="'+(pl+6)+'" y="'+(yu-5)+'" text-anchor="start" font-family="IBM Plex Mono" font-size="9.5" fill="#B23A2E">acuerdo interno: '+umbral+' días</text>';
+  }
+  s += '<text x="'+pl+'" y="'+(H-6)+'" font-family="IBM Plex Mono" font-size="9" fill="#8C99B2">'+unidad+'</text></svg>';
+  return s;
+}
+var CO_COLOR = {Ecuador:"#1F3BE0", Colombia:"#B23A2E", Venezuela:"#0E8F76"};
+var PREGUNTAS = [
+  { q:"¿Qué filial tarda más en aprobar una factura?",
+    sql:'<span class="kw">SELECT</span> filial, <span class="kw">AVG</span>(dias_aprobacion) <span class="kw">AS</span> promedio\n<span class="kw">FROM</span> hechos_p2p\n<span class="kw">WHERE</span> periodo <span class="kw">BETWEEN</span> <span class="st">\'2026-02\'</span> <span class="kw">AND</span> <span class="st">\'2026-07\'</span>\n<span class="kw">GROUP BY</span> filial <span class="kw">ORDER BY</span> promedio <span class="kw">DESC</span>;',
+    labels:["Ecuador","Colombia","Venezuela"],
+    series:[{n:"Días de aprobación", v:[4.2,6.8,5.9], c:"#1F3BE0"}],
+    unidad:"días promedio · febrero a julio 2026", umbral:5,
+    txt:"<b>Colombia es la filial más lenta</b>, con 6,8 días promedio de aprobación frente a 4,2 de Ecuador. Las tres superan o rozan el acuerdo interno de 5 días. La diferencia se explica por un nivel adicional de aprobación por monto y por el cálculo manual de retenciones antes de autorizar el pago.<br><br>Si Colombia bajara al nivel de Ecuador, el ciclo regional se acortaría cerca de <b>0,9 días</b> en promedio ponderado." },
+  { q:"¿Cómo evolucionó el costo por transacción?",
+    sql:'<span class="kw">SELECT</span> periodo, <span class="kw">SUM</span>(costo_operativo) / <span class="kw">COUNT</span>(*) <span class="kw">AS</span> costo_unitario\n<span class="kw">FROM</span> hechos_p2p\n<span class="kw">GROUP BY</span> periodo <span class="kw">ORDER BY</span> periodo;',
+    labels:["Feb","Mar","Abr","May","Jun","Jul"],
+    series:[{n:"US$ por transacción", v:[11.4,11.9,12.6,12.4,13.8,14.2], c:"#B23A2E"}],
+    unidad:"US$ por factura procesada · 2026",
+    txt:"El costo unitario <b>subió 25 % en seis meses</b>, de US$ 11,40 a US$ 14,20. El volumen creció menos que el costo, lo que indica que la operación está absorbiendo la carga con horas extra y no con productividad.<br><br>Es el patrón típico de un proceso que llegó a su techo manual: cada factura adicional cuesta más que la anterior." },
+  { q:"¿Dónde se concentran los reprocesos?",
+    sql:'<span class="kw">SELECT</span> etapa, <span class="kw">COUNT</span>(*) <span class="kw">FILTER</span> (<span class="kw">WHERE</span> reproceso) * 100.0 / <span class="kw">COUNT</span>(*) <span class="kw">AS</span> tasa\n<span class="kw">FROM</span> hechos_p2p_etapas\n<span class="kw">GROUP BY</span> etapa <span class="kw">ORDER BY</span> tasa <span class="kw">DESC</span>;',
+    labels:["Validación","Aprobación","Conciliación","Registro","Recepción"],
+    series:[{n:"% con reproceso", v:[18.4,9.1,7.6,4.2,2.1], c:"#1F3BE0"}],
+    unidad:"porcentaje de documentos que vuelven atrás",
+    txt:"<b>La validación concentra el 18,4 % de reprocesos</b>, más del doble que cualquier otra etapa. Casi todo son errores de codificación tributaria y centro de costo — exactamente el tipo de tarea donde un modelo con reglas por país tiene mejor desempeño que una persona haciendo lo mismo 200 veces al día.<br><br>Este es el punto por donde recomendaríamos empezar el piloto." },
+  { q:"¿Qué volumen mueve cada filial al mes?",
+    sql:'<span class="kw">SELECT</span> filial, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> documentos, <span class="kw">SUM</span>(monto_usd) <span class="kw">AS</span> valor\n<span class="kw">FROM</span> hechos_p2p <span class="kw">WHERE</span> periodo = <span class="st">\'2026-07\'</span>\n<span class="kw">GROUP BY</span> filial;',
+    labels:["Ecuador","Colombia","Venezuela"],
+    series:[{n:"Facturas por mes", v:[1840,2610,930], c:"#1F3BE0"}],
+    unidad:"documentos procesados · julio 2026",
+    txt:"El cluster procesa <b>5.380 facturas al mes</b>. Colombia representa casi la mitad del volumen, lo que la convierte en la filial de mayor retorno para automatizar primero, aunque no sea la más compleja.<br><br>Un punto porcentual de mejora en Colombia vale más que diez en Venezuela." }
+];
+var d3sel = 0;
+PREGUNTAS.forEach(function(p,i){
+  var b = document.createElement('button');
+  b.className='pill'; b.textContent = p.q; b.setAttribute('aria-pressed', i===0?'true':'false');
+  b.addEventListener('click', function(){
+    $$('#d3presets .pill').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true'); d3sel = i;
+  });
+  $('#d3presets').appendChild(b);
+});
+$('#d3go').addEventListener('click', function(){
+  var P = PREGUNTAS[d3sel];
+  $('#d3sql').textContent = '-- generando consulta…';
+  correr($('#d3out'),
+    ["Interpretando la pregunta del negocio","Localizando tablas y métricas en el modelo de datos","Generando consulta SQL","Ejecutando sobre el almacén consolidado","Componiendo respuesta y gráfico"],
+    function(){
+      $('#d3sql').innerHTML = P.sql;
+      var leg = '<div class="chart-legend">' + P.series.map(function(s){return '<span><i style="background:'+s.c+'"></i>'+s.n+'</span>';}).join('') + '</div>';
+      $('#d3out').innerHTML =
+        barChart(P.labels, P.series, P.unidad, P.umbral) + leg +
+        '<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-size:14px;line-height:1.6;color:var(--ink-2)"><span class="out-k" style="display:block;margin-bottom:9px">Lectura</span>'+P.txt+'</div>';
+      $('#d3ms').textContent = 'consulta ejecutada';
+    });
+});
+
+/* ══════════════════════════════════════════════════════════
+   6 · DEMO 4 — Agente ejecutando la conciliación
+   ══════════════════════════════════════════════════════════ */
+var PASOS = [
+  {h:"Delimitar el alcance del cierre", tool:"erp.consultar_periodo()", p:"Identifica el período contable abierto y las tres filiales incluidas en el cluster.",
+   r:"Período 2026-07 abierto · Filiales: EC, CO, VE · 5.380 documentos en cuenta puente"},
+  {h:"Traer los movimientos del ERP", tool:"erp.extraer_partidas(cuenta='2105-PUENTE')", p:"Descarga las partidas pendientes de conciliar de las tres sociedades.",
+   r:"1.482 partidas pendientes por USD 3.914.220 equivalente"},
+  {h:"Traer los extractos bancarios", tool:"banco.extracto(bancos=['EC','CO','VE'])", p:"Obtiene movimientos de las cuentas operativas de cada país.",
+   r:"1.455 movimientos bancarios recibidos · 3 monedas"},
+  {h:"Aplicar la regla de conversión", tool:"fx.convertir(regla='tasa_cierre_mensual')", p:"Convierte COP y VES a dólar con la tasa de cierre definida en la política contable, no con la del día del pago.",
+   r:"COP 4.087,50 / USD · VES 36,42 / USD · regla aplicada de forma uniforme"},
+  {h:"Cruzar ambos lados", tool:"conciliar.match(tolerancia=0.5)", p:"Empareja por importe, referencia, proveedor y ventana de fecha, con tolerancia por diferencia cambiaria.",
+   r:"1.409 partidas conciliadas automáticamente (95,1 %) · 73 pendientes"},
+  {h:"Clasificar las diferencias", tool:"conciliar.analizar_excepciones()", p:"Separa las diferencias por causa, para no tratar igual un error de tasa que un pago no registrado.",
+   r:"41 diferencia cambiaria menor · 18 pagos sin documento soporte · 9 duplicados · 5 sin causa identificable"},
+  {h:"Resolver lo que tiene regla clara", tool:"erp.proponer_asiento()", p:"Genera el asiento de ajuste para las diferencias cambiarias dentro de tolerancia y marca los duplicados para anulación.",
+   r:"Asiento de ajuste por USD 2.847,60 preparado · 9 duplicados marcados · queda pendiente la aprobación del contralor"},
+  {h:"Escalar lo que requiere criterio", tool:"notificar.escalar(rol='contralor_cluster')", p:"Envía solo lo que un humano debe decidir, con toda la evidencia adjunta y una recomendación por caso.",
+   r:"23 casos escalados por USD 41.180 · tiempo total de ejecución: 6 min 12 s frente a 4 días del proceso manual"}
+];
+function d4reset(){
+  $('#d4out').innerHTML = '<div class="empty"><span class="dot"></span>Presione <b>Ejecutar agente</b> para ver el proceso completo.</div>';
+  $('#d4ms').textContent = '';
+}
+$('#d4reset').addEventListener('click', d4reset);
+$('#d4go').addEventListener('click', function(){
+  var btn = this; btn.disabled = true;
+  var cont = $('#d4out');
+  cont.innerHTML = '<div class="trace" id="trace"></div>';
+  var tr = $('#trace'), i = 0;
+  $('#d4ms').textContent = 'ejecutando…';
+  PASOS.forEach(function(p,k){
+    var d = document.createElement('div');
+    d.className='tstep'; d.setAttribute('data-state','wait');
+    d.innerHTML = '<span class="tdot">'+(k+1)+'</span><div><h4>'+p.h+'</h4><span class="tool">'+p.tool+'</span><p>'+p.p+'</p><div class="res" style="display:none">'+p.r+'</div></div>';
+    d.style.opacity = '.28';
+    tr.appendChild(d);
+  });
+  (function run(){
+    if(i >= PASOS.length){
+      btn.disabled = false; $('#d4ms').textContent = 'completado';
+      var f = document.createElement('div');
+      f.style.cssText = 'margin-top:6px;padding:13px;background:var(--gain-soft);border:1px solid #B9E0D6;border-radius:3px;font-size:13.4px;color:#0A6B58;line-height:1.5';
+      f.innerHTML = '<b>Cierre conciliado al 95,1 % sin intervención.</b> El contralor revisa 23 casos con evidencia adjunta en vez de 1.482 partidas en una hoja de cálculo. Cada paso quedó en bitácora, con hora, sistema consultado y regla aplicada.';
+      tr.appendChild(f);
+      return;
+    }
+    var el = tr.children[i];
+    el.style.opacity = '1'; el.setAttribute('data-state','run');
+    setTimeout(function(){
+      el.setAttribute('data-state','done');
+      var r = $('.res', el); r.style.display = 'block'; r.style.animation = 'fade .3s';
+      i++; run();
+    }, REDUCED ? 30 : 620);
+  })();
+});
+d4reset();
+
+/* ══════════════════════════════════════════════════════════
+   7 · CALCULADORA DE RETORNO
+   ══════════════════════════════════════════════════════════ */
+function calc(){
+  var P = +$('#r1').value, H = +$('#r2').value, C = +$('#r3').value, A = +$('#r4').value/100, I = +$('#r5').value;
+  $('#v1').textContent = P;
+  $('#v2').textContent = H + ' h';
+  $('#v3').textContent = 'US$ ' + C;
+  $('#v4').textContent = Math.round(A*100) + ' %';
+  $('#v5').textContent = usd(I);
+
+  var horasAnio = P * H * 46;
+  var liberadas = horasAnio * A;
+  var ahorro = liberadas * C;
+  var fte = liberadas / 1840;
+  var roi = ((ahorro - I) / I) * 100;
+  var pay = ahorro > 0 ? I / (ahorro/12) : 0;
+
+  $('#oAhorro').textContent = usd(ahorro);
+  $('#oHoras').textContent = nf(Math.round(liberadas));
+  $('#oFte').textContent = nf(fte,1);
+  $('#oRoi').textContent = (roi>=0?'+':'') + nf(roi) + ' %';
+  $('#oPay').textContent = (pay>0 && pay<120) ? (nf(pay,1) + ' meses') : 'no recupera en 10 años';
+  $('#oRoi').style.color = roi >= 0 ? '#7FD8C4' : '#F0A79C';
+}
+['r1','r2','r3','r4','r5'].forEach(function(id){ $('#'+id).addEventListener('input', calc); });
+calc();
+
+/* ══════════════════════════════════════════════════════════
+   8 · ASISTENTE DE LA PROPUESTA
+   ══════════════════════════════════════════════════════════ */
+var FAQ = [
+  { kw:["precio","costo","cuánto","cuanto","vale","presupuesto","inversión","inversion","tarifa","cobran","honorarios"],
+    a:"Depende del alcance, pero damos rangos desde la primera conversación en vez de esperar al final.\n\n· Diagnóstico y caso de negocio (3 semanas): proyecto acotado y de precio cerrado.\n· Piloto sobre un cuello de botella (3 semanas): precio cerrado, con criterio de éxito acordado antes de empezar.\n· Programa completo hasta producción en los tres países: normalmente entre US$ 60.000 y US$ 180.000 según integraciones y volumen.\n\nLa calculadora de la sección “Caso de negocio” le permite meter sus números y ver si el retorno da. Si no da, se lo decimos." },
+  { kw:["tiempo","plazo","cuándo","cuando","demora","rápido","rapido","semanas","meses","duración","duracion"],
+    a:"El primer proceso en producción toma alrededor de 90 días:\n\n· Semanas 1–3: medir el proceso real y construir el caso de negocio.\n· Semanas 4–6: piloto sobre el cuello de botella de mayor impacto.\n· Semanas 7–11: integración al ERP, reglas por país y controles.\n· Semanas 12–13: despliegue a las otras dos filiales y capacitación.\n\nAl final de la semana 6 hay una decisión formal: si el piloto no da los números, el proyecto se detiene ahí." },
+  { kw:["seguridad","datos","privacidad","confidencial","entrenar","entrenamiento","fuga","nube","servidor","cumplimiento","gdpr","habeas"],
+    a:"Tres compromisos concretos:\n\n· Trabajamos con proveedores empresariales de modelos que no retienen ni entrenan sobre los datos del cliente.\n· Podemos desplegar en la nube del propio cliente si su política lo exige.\n· Todo queda con control de acceso por rol y bitácora de auditoría: quién consultó qué, qué decidió el sistema y con qué nivel de confianza.\n\nEn una multinacional esto se define con su área de seguridad antes de tocar un dato real." },
+  { kw:["erp","sap","oracle","dynamics","integra","integración","integracion","sistema","conecta","api","siigo","softland"],
+    a:"Nos integramos con lo que ya tiene. Hemos trabajado con SAP, Oracle, Dynamics y sistemas locales como Siigo y Softland, por API, base de datos o archivos, según lo que su TI permita.\n\nUn punto importante: no proponemos reemplazar el ERP. La IA se pone alrededor del ERP, en las tareas que hoy hace una persona entre un sistema y otro. Ahí está el desperdicio." },
+  { kw:["equipo","quién","quien","gente","personas","consultores","experiencia","seniority","tamaño"],
+    a:"Gadamax opera como estudio: equipo senior en estrategia y arquitectura, ejecución acelerada por IA, y una red de especialistas por industria en LATAM.\n\nEso significa menos gente facturada que una consultora tradicional y ciclos de entrega más cortos, sin juniors aprendiendo con el presupuesto del cliente. Once plataformas lanzadas en producción respaldan el modelo." },
+  { kw:["países","paises","ecuador","colombia","venezuela","cluster","región","region","regional","idioma","horario"],
+    a:"El cluster es justamente el punto interesante del proyecto.\n\nCada país tiene su marco: SRI en Ecuador con IVA 15 %, DIAN en Colombia con IVA 19 % y retenciones municipales, SENIAT en Venezuela con IVA 16 % más IGTF y el problema de la conversión.\n\nDiseñamos las reglas por país desde el inicio en vez de construir para uno y “adaptar” a los otros dos, que es donde fallan la mayoría de las automatizaciones regionales. Equipo en LATAM, horario del cluster, documentación en español." },
+  { kw:["empezar","empiezo","siguiente","próximo","proximo","reunión","reunion","llamada","agendar","contacto","hablar"],
+    a:"Una sesión de 45 minutos sin costo. Llegamos con preguntas concretas sobre volúmenes, sistemas y dónde duele, y usted sale con una primera lectura de dónde está el mayor retorno — trabaje con nosotros o no.\n\nSi después de esa sesión tiene sentido, el paso natural es el diagnóstico de tres semanas.\n\nPuede escribirnos desde el formulario en gadamax.com/contact o llamar al +52 81 8526 2288." },
+  { kw:["garantía","garantia","riesgo","funciona","falla","seguro","comprometen","precisión","precision","exactitud","alucina"],
+    a:"No prometemos precisión perfecta, porque no existe. Prometemos precisión medida.\n\nAntes del piloto se define el criterio de éxito: por ejemplo, 95 % de exactitud en la extracción de campos con revisión humana bajo cierto umbral de confianza. Al final de la fase 2 se mide contra revisión humana real. Si no se alcanza, se corrige o se detiene el proyecto — y esa decisión queda por escrito desde el principio." },
+  { kw:["modelo","modelos","gpt","claude","llm","tecnología","tecnologia","herramienta","stack","open source"],
+    a:"Somos agnósticos de modelo y lo elegimos por tarea, no por moda: modelos grandes donde hace falta razonamiento sobre documentos ambiguos, modelos pequeños o reglas determinísticas donde una regla basta y es más barata y auditable.\n\nParte del trabajo de diagnóstico es justamente decidir qué NO debe usar un modelo de lenguaje. Poner IA donde bastaba una validación es la forma más cara de resolver un problema simple." },
+  { kw:["empleo","despido","gente pierde","reemplaza","personal","recorte","rrhh"],
+    a:"Es la pregunta correcta y conviene responderla con el equipo desde el inicio, no después.\n\nEn la mayoría de los proyectos el resultado no es recorte sino reasignación: las horas liberadas van a análisis de proveedores, negociación, control y depuración de partidas viejas, que es trabajo que hoy nadie alcanza a hacer. Si el objetivo del cliente sí es reducir plantilla, preferimos que se diga desde la primera reunión para diseñar el proyecto y la comunicación en consecuencia." }
+];
+var SUGS = ["¿Cuánto cuesta?","¿En cuánto tiempo?","¿Y la seguridad de los datos?","¿Se integra con SAP?","¿Cómo empezamos?"];
+var askLog = $('#askLog');
+function say(txt, quien){
+  var d = document.createElement('div');
+  d.className = 'msg ' + quien; d.textContent = txt;
+  askLog.appendChild(d); askLog.scrollTop = askLog.scrollHeight;
+}
+function responder(q){
+  var t = q.toLowerCase(), best = null, bs = 0;
+  FAQ.forEach(function(f){
+    var s = 0;
+    f.kw.forEach(function(k){ if(t.indexOf(k) > -1) s++; });
+    if(s > bs){ bs = s; best = f; }
+  });
+  if(best) return best.a;
+  return "Esa la respondemos mejor en persona que en una página.\n\nEsta propuesta cubre el enfoque, los demos, el caso de negocio y el plan de 90 días. Para algo específico de su operación — volúmenes, sistemas, restricciones internas — lo natural es la sesión de 45 minutos.\n\nEscríbanos desde gadamax.com/contact y respondemos el mismo día.";
+}
+SUGS.forEach(function(s){
+  var b = document.createElement('button'); b.textContent = s;
+  b.addEventListener('click', function(){ enviar(s); });
+  $('#askSug').appendChild(b);
+});
+function enviar(txt){
+  var q = (txt || $('#askIn').value).trim();
+  if(!q) return;
+  say(q,'u'); $('#askIn').value = '';
+  setTimeout(function(){ say(responder(q),'a'); }, REDUCED ? 10 : 420);
+}
+$('#askGo').addEventListener('click', function(){ enviar(); });
+$('#askIn').addEventListener('keydown', function(e){ if(e.key === 'Enter') enviar(); });
+$('#askOpen').addEventListener('click', function(){
+  $('#ask').setAttribute('data-open','1'); $('#askOpen').style.display = 'none';
+  if(!askLog.children.length){
+    say("Buen día. Soy el asistente de esta propuesta de Gadamax.\n\nPuedo responder sobre alcance, precios, plazos, seguridad de datos, integraciones con su ERP o cómo manejamos las diferencias entre Ecuador, Colombia y Venezuela.\n\n¿Qué necesita saber?",'a');
+  }
+  $('#askIn').focus();
+});
+$('#askClose').addEventListener('click', function(){
+  $('#ask').removeAttribute('data-open'); $('#askOpen').style.display = 'flex';
+});
+
+})();
+</script>
+</body>
+</html>
