@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gadamax · Demo — Agente de entrada de pedidos · SAP + ERP Ecuador</title>
+<meta name="description" content="Demo interactivo: un agente de IA toma pedidos que llegan por correo, WhatsApp, Excel y portal, los valida contra maestros y los carga en SAP y en el ERP de Ecuador.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0D1321">
+<link rel="icon" href="https://www.gadamax.com/assets/images/favicon-touch.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   GADAMAX · Sistema de diseño — "sala de control editorial"
+   Demo: agente de entrada de pedidos multicanal → SAP + ERP EC
+   ============================================================ */
+:root{
+  --ink:#0D1321; --ink-2:#182033; --ink-3:#2A3550;
+  --paper:#EDF0F6; --paper-2:#F7F9FC; --paper-3:#FFFFFF;
+  --rule:#C9D2E1; --rule-soft:#DEE4EE;
+  --muted:#5C6880; --muted-dark:#8C99B2;
+  --cobalt:#1F3BE0; --cobalt-ink:#152BA8; --cobalt-soft:#E3E8FF;
+  --flag:#B23A2E; --flag-soft:#F7E4E1;
+  --gain:#0E8F76; --gain-soft:#DFF2ED;
+  --amber:#B07C10; --amber-soft:#FBF0D8;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Source Serif 4",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --max:1240px; --pad:clamp(20px,5vw,64px); --radius:3px;
+  --shadow:0 1px 2px rgba(13,19,33,.06),0 12px 32px -18px rgba(13,19,33,.35);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit}
+a{color:var(--cobalt);text-decoration-thickness:1px;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+
+.eyebrow{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.on-dark .eyebrow{color:var(--muted-dark)}
+h1,h2,h3,h4{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.08}
+h1{font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-.035em}
+h2{font-size:clamp(25px,3.4vw,40px);letter-spacing:-.03em}
+h3{font-size:clamp(17px,2vw,22px)}
+h4{font-size:15px;letter-spacing:-.01em}
+p{margin:0 0 1em}
+.lead{font-family:var(--f-serif);font-size:clamp(16px,1.9vw,20px);line-height:1.5;color:var(--ink-2)}
+.on-dark .lead{color:#CBD4E6}
+.small{font-size:13.5px;color:var(--muted)}
+.on-dark .small{color:var(--muted-dark)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+.band{padding:clamp(52px,7vw,92px) var(--pad);position:relative}
+.band--dark{background:var(--ink);color:var(--paper)}
+.band--paper2{background:var(--paper-2)}
+.wrap{max-width:var(--max);margin:0 auto;width:100%}
+.rule-top{border-top:1px solid var(--rule)}
+.band--dark.rule-top{border-color:#26314A}
+.band-head{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-bottom:clamp(28px,4vw,44px)}
+@media(min-width:900px){.band-head{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:48px;align-items:end}}
+.band-head .eyebrow{display:block;margin-bottom:14px}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:60;background:rgba(13,19,33,.94);backdrop-filter:blur(10px);border-bottom:1px solid #26314A;color:#fff}
+.nav-in{max-width:var(--max);margin:0 auto;padding:12px var(--pad);display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;flex:0 0 auto}
+.brand img{height:26px;width:auto}
+.brand-word{font-family:var(--f-display);font-weight:800;letter-spacing:.14em;font-size:15px;text-transform:uppercase}
+.nav-tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-dark);border-left:1px solid #2E3A54;padding-left:18px;white-space:nowrap}
+@media(max-width:1100px){.nav-tag{display:none}}
+.nav .btn{margin-left:auto;white-space:nowrap}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;gap:9px;justify-content:center;background:var(--cobalt);color:#fff;border:1px solid var(--cobalt);padding:11px 20px;border-radius:var(--radius);cursor:pointer;font-family:var(--f-display);font-weight:600;font-size:14px;letter-spacing:-.01em;text-decoration:none;transition:background .18s,transform .18s,border-color .18s}
+.btn:hover{background:var(--cobalt-ink);border-color:var(--cobalt-ink)}
+.btn:active{transform:translateY(1px)}
+.btn--ghost-d{background:transparent;color:#fff;border-color:#3A4560}
+.btn--ghost-d:hover{background:#1B2436;border-color:#5C6C8E}
+.btn--sm{padding:8px 14px;font-size:13px}
+.btn--gain{background:var(--gain);border-color:var(--gain)}
+.btn--gain:hover{background:#0B7561;border-color:#0B7561}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* Hero */
+.hero{background:var(--ink);color:var(--paper);padding:clamp(44px,6vw,72px) var(--pad) clamp(40px,5vw,58px);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:linear-gradient(#1A2233 1px,transparent 1px),linear-gradient(90deg,#1A2233 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse 90% 70% at 20% 0%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 90% 70% at 20% 0%,#000 20%,transparent 75%)}
+.hero-in{max-width:var(--max);margin:0 auto;position:relative}
+.hero h1{color:#fff;max-width:22ch}
+.hero h1 em{font-style:normal;color:#8FA3FF}
+.hero-sub{margin-top:18px;max-width:52ch}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.chip{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid #303C58;color:#AFBBD4;padding:6px 11px;border-radius:100px}
+.chip strong{color:#fff;font-weight:500}
+.hero-note{margin-top:22px;border-left:3px solid var(--cobalt);padding:4px 0 4px 14px;font-size:13.5px;color:#AEBACF;max-width:60ch}
+
+/* ============ CONSOLA ============ */
+.console{margin-top:clamp(30px,4vw,44px);border:1px solid #2A3550;background:#111827;border-radius:4px;overflow:hidden}
+.console-bar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #2A3550;background:#0F1626}
+.console-title{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8C99B2}
+.console-title b{color:#fff;font-weight:500}
+.console-live{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7FD8C4}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gain);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.console-body{display:grid;grid-template-columns:minmax(0,1fr)}
+@media(min-width:1020px){.console-body{grid-template-columns:340px minmax(0,1fr)}}
+
+/* Bandeja */
+.inbox{border-bottom:1px solid #2A3550;background:#0F1626;display:flex;flex-direction:column}
+@media(min-width:1020px){.inbox{border-bottom:0;border-right:1px solid #2A3550}}
+.inbox-head{padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between}
+.inbox-head .k{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7E8CA8}
+.inbox-count{font-family:var(--f-mono);font-size:10.5px;color:#8FA3FF}
+.inbox-list{display:flex;flex-direction:column;padding:0 10px 12px;gap:6px}
+.mail{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:11px;align-items:center;text-align:left;width:100%;background:#111C30;border:1px solid #232E47;border-radius:3px;padding:11px 12px;cursor:pointer;transition:border-color .18s,background .18s}
+.mail:hover{background:#15213A;border-color:#33405E}
+.mail[aria-selected="true"]{border-color:var(--cobalt);background:#15213A}
+.mail-ico{width:38px;height:38px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:16px;background:#0B1220;border:1px solid #232E47}
+.mail-mid{min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.mail-who,.mail-sub{display:block}
+.mail-who{font-size:13px;font-weight:600;color:#E4EAF6;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mail-sub{font-family:var(--f-mono);font-size:10px;color:#6E7C99;text-transform:uppercase;letter-spacing:.08em;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mail-state{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:100px;white-space:nowrap}
+.st-new{background:rgba(31,59,224,.16);color:#8FA3FF;border:1px solid rgba(31,59,224,.5)}
+.st-ok{background:rgba(14,143,118,.16);color:#7FD8C4;border:1px solid rgba(14,143,118,.4)}
+.st-warn{background:rgba(176,124,16,.16);color:#EFC868;border:1px solid rgba(176,124,16,.45)}
+.st-run{background:rgba(143,163,255,.12);color:#C9D6FF;border:1px solid rgba(143,163,255,.4)}
+.inbox-actions{margin-top:auto;padding:12px 16px 16px;border-top:1px solid #232E47;display:flex;flex-direction:column;gap:8px}
+
+/* Detalle */
+.detail{padding:18px;min-height:560px;display:flex;flex-direction:column;gap:14px}
+.stage{border:1px solid #2A3550;border-radius:3px;background:#0F1626;overflow:hidden}
+.stage-head{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #232E47;background:#0B1220}
+.stage-num{font-family:var(--f-mono);font-size:10px;color:var(--ink);background:#8FA3FF;border-radius:2px;padding:1px 6px;font-weight:600}
+.stage-title{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:#AEBACF}
+.stage-body{padding:14px}
+.placeholder{color:#5C6880;font-size:13.5px;font-family:var(--f-mono);padding:26px 14px;text-align:center}
+
+/* Documento original */
+.doc-mail{background:#F7F9FC;color:var(--ink);border-radius:3px;padding:0;overflow:hidden;font-size:13.5px}
+.doc-mail-head{background:#fff;border-bottom:1px solid var(--rule-soft);padding:10px 14px;font-size:12.5px;color:var(--muted)}
+.doc-mail-head b{color:var(--ink)}
+.doc-mail-body{padding:14px;white-space:pre-wrap;line-height:1.6}
+.doc-wa{background:#0B1220;padding:16px;display:flex;flex-direction:column;gap:8px}
+.wa-bubble{background:#1E2A20;border:1px solid #2E4433;color:#DCEBDD;max-width:48ch;border-radius:8px 8px 8px 2px;padding:10px 13px;font-size:13.5px;line-height:1.55}
+.wa-meta{font-family:var(--f-mono);font-size:10px;color:#6E7C99}
+.doc-xls{overflow-x:auto}
+.doc-xls table{border-collapse:collapse;width:100%;background:#fff;color:var(--ink);font-size:12.5px}
+.doc-xls th{background:#E9EDF5;font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:6px 10px;border:1px solid var(--rule-soft);text-align:left}
+.doc-xls td{padding:6px 10px;border:1px solid var(--rule-soft)}
+mark{background:var(--cobalt-soft);color:var(--cobalt-ink);border-radius:2px;padding:0 3px;font-weight:600}
+mark.m-prod{background:var(--gain-soft);color:#0B6B58}
+mark.m-qty{background:var(--amber-soft);color:#8A600A}
+mark.m-cli{background:var(--cobalt-soft);color:var(--cobalt-ink)}
+
+/* Motor */
+.engine{font-family:var(--f-mono);font-size:12.5px;display:flex;flex-direction:column;gap:7px}
+.step{display:flex;align-items:center;gap:10px;color:#6E7C99;transition:color .2s}
+.step .tick{width:15px;height:15px;border-radius:50%;border:1px solid #33405E;display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex:0 0 auto}
+.step.run{color:#C9D6FF}
+.step.run .tick{border-color:#8FA3FF;animation:pulse 1s infinite}
+.step.done{color:#AEBACF}
+.step.done .tick{background:rgba(14,143,118,.2);border-color:var(--gain);color:#7FD8C4}
+.step.warn .tick{background:rgba(176,124,16,.2);border-color:var(--amber);color:#EFC868}
+.step .ms{margin-left:auto;font-size:10px;color:#46557A}
+
+/* Tabla de extracción */
+.xtable{width:100%;border-collapse:collapse;font-size:12.5px}
+.xtable th{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#7E8CA8;text-align:left;padding:7px 9px;border-bottom:1px solid #2A3550}
+.xtable td{padding:8px 9px;border-bottom:1px solid #1C2740;color:#DCE3F1;vertical-align:top}
+.xtable .orig{color:#8C99B2;font-style:italic;font-size:12px}
+.xtable .sku{font-family:var(--f-mono);font-size:11.5px;color:#C9D6FF}
+.conf{display:flex;align-items:center;gap:8px;min-width:110px}
+.conf-bar{flex:1;height:5px;background:#1C2740;border-radius:2px;overflow:hidden;display:block}
+.conf-fill{height:100%;border-radius:2px;background:var(--gain);transition:width .7s ease;display:block}
+.conf-fill.mid{background:var(--amber)}
+.conf-fill.low{background:var(--flag)}
+.conf-val{font-family:var(--f-mono);font-size:11px;color:#AEBACF;min-width:34px;text-align:right}
+.rowtag{font-family:var(--f-mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:100px;white-space:nowrap}
+
+/* Validaciones */
+.vlist{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.vitem{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid #232E47;border-radius:3px;background:#111C30;color:#C6CFE2}
+.vitem .ic{font-family:var(--f-mono);font-size:11px;flex:0 0 auto;margin-top:1px}
+.v-ok .ic{color:#7FD8C4}.v-warn .ic{color:#EFC868}.v-flag .ic{color:#F0A79C}
+.v-warn{border-color:rgba(176,124,16,.4)}
+.v-flag{border-color:rgba(178,58,46,.45)}
+
+/* ERP write terminal */
+.erps{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:860px){.erps{grid-template-columns:1fr 1fr}}
+.erp{border:1px solid #2A3550;border-radius:3px;background:#0B1220;overflow:hidden}
+.erp-head{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #232E47;background:#0F1626}
+.erp-name{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#DCE3F1}
+.erp-name span{color:#6E7C99}
+.erp-log{font-family:var(--f-mono);font-size:11.5px;line-height:1.7;padding:12px 14px;min-height:120px;color:#8C99B2}
+.erp-log .out{color:#C9D6FF}
+.erp-log .in{color:#7FD8C4}
+.erp-log .warn{color:#EFC868}
+.erp-log .id{color:#fff;font-weight:600}
+.erp-off{opacity:.45}
+
+/* Resultado banner */
+.result-banner{border-radius:3px;padding:13px 16px;font-size:13.5px;display:flex;gap:12px;align-items:flex-start;border:1px solid}
+.rb-ok{background:rgba(14,143,118,.12);border-color:rgba(14,143,118,.45);color:#B9E9DC}
+.rb-warn{background:rgba(176,124,16,.1);border-color:rgba(176,124,16,.45);color:#F3DFAC}
+.result-banner b{color:#fff}
+
+/* ============ TORRE DE CONTROL ============ */
+.kpi-row{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+@media(min-width:900px){.kpi-row{grid-template-columns:repeat(5,1fr)}}
+.kpi-t{background:var(--paper-3);padding:18px 18px 16px}
+.kpi-t .k{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.kpi-t .v{display:block;font-family:var(--f-display);font-weight:800;font-size:clamp(26px,3vw,36px);letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.kpi-t .v small{font-size:13px;font-weight:600;color:var(--muted);margin-left:2px}
+.kpi-t .d{display:block;font-family:var(--f-mono);font-size:10.5px;margin-top:7px;color:var(--gain)}
+.kpi-t .d.neg{color:var(--flag)}
+
+.tower{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;margin-top:22px}
+@media(min-width:980px){.tower{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
+.panel{background:var(--paper-3);border:1px solid var(--rule);border-radius:3px;padding:20px;box-shadow:var(--shadow)}
+.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+.panel-title{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* Bar chart canal (una serie → cobalto, etiquetas directas) */
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:grid;grid-template-columns:110px minmax(0,1fr) 42px;gap:12px;align-items:center}
+.bar-label{font-size:12.5px;color:var(--ink-2);font-weight:600;letter-spacing:-.01em}
+.bar-track{display:block;height:18px;background:#E7EBF3;border-radius:0 4px 4px 0;position:relative}
+.bar-fill{display:block;height:100%;background:var(--cobalt);border-radius:0 4px 4px 0;min-width:2px;transition:width .6s ease;position:relative}
+.bar-fill.auto-part{background:var(--cobalt)}
+.bar-val{font-family:var(--f-mono);font-size:12px;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.chart-note{font-size:12px;color:var(--muted);margin-top:12px;margin-bottom:0}
+
+/* feed */
+.feed{display:flex;flex-direction:column;gap:0;max-height:330px;overflow-y:auto;border:1px solid var(--rule-soft);border-radius:3px}
+.feed-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--rule-soft);font-size:12.5px;background:#fff}
+.feed-row:last-child{border-bottom:0}
+.feed-row .t{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
+.feed-ico{font-size:13px;text-align:center}
+.feed-mid{min-width:0;overflow:hidden}
+.feed-who{font-weight:600;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.feed-sub{font-family:var(--f-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.pill{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.pill-ok{background:var(--gain-soft);color:#0B6B58;border:1px solid rgba(14,143,118,.35)}
+.pill-warn{background:var(--amber-soft);color:#8A600A;border:1px solid rgba(176,124,16,.35)}
+.pill-run{background:var(--cobalt-soft);color:var(--cobalt-ink);border:1px solid rgba(31,59,224,.3)}
+
+/* ============ EXCEPCIONES ============ */
+.exc-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+@media(min-width:960px){.exc-grid{grid-template-columns:1fr 1fr}}
+.exc{background:var(--paper-3);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:3px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.exc.resolved{border-left-color:var(--gain);opacity:.85}
+.exc-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.exc-id{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.exc h4{font-size:16px}
+.exc-body{font-size:13.5px;color:var(--ink-2);margin:0}
+.exc-prop{background:var(--paper-2);border:1px solid var(--rule-soft);border-radius:3px;padding:12px 14px;font-size:13px}
+.exc-prop .k{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt);display:block;margin-bottom:6px}
+.exc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
+.exc-done{font-family:var(--f-mono);font-size:11px;color:var(--gain)}
+.empty-exc{border:1px dashed var(--rule);border-radius:3px;padding:34px;text-align:center;color:var(--muted);font-size:14px;grid-column:1/-1}
+
+/* Contacto */
+.contact-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:32px}
+@media(min-width:900px){.contact-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}}
+.dl{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#AEBACF;line-height:2.3;margin:0}
+.dl b{color:#8FA3FF;font-weight:500;margin-right:8px}
+.footer{background:#0A0F1B;color:#6E7C99;font-size:12.5px;padding:26px var(--pad)}
+.footer-in{max-width:var(--max);margin:0 auto;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.reveal.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+@media print{.nav,.inbox-actions,.btn{display:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="https://www.gadamax.com">
+      <img src="https://www.gadamax.com/assets/images/brand-logo-gadamax.png" alt="Gadamax">
+      <span class="brand-word">Gadamax</span>
+    </a>
+    <span class="nav-tag">Demo · Agente de entrada de pedidos</span>
+    <a class="btn btn--sm" style="margin-left:auto" href="mailto:mvg@gadamax.com?subject=Agente%20de%20pedidos%20%E2%80%94%20SAP%20%2B%20ERP%20Ecuador">Agendar una llamada</a>
+  </div>
+</nav>
+
+<!-- ================= HERO + CONSOLA ================= -->
+<header class="hero on-dark">
+  <div class="hero-in">
+    <span class="eyebrow">Demo interactivo · Entrada de pedidos · Cluster EC · CO · VE</span>
+    <h1 style="margin-top:14px">El pedido llega como llega.<br><em>El ERP lo recibe perfecto.</em></h1>
+    <p class="lead hero-sub">Hoy, cada pedido que entra por correo, WhatsApp o Excel lo digita una persona — dos veces: en SAP y en el ERP de Ecuador. Abajo, un agente de IA hace ese trabajo en segundos, y solo escala a una persona lo que no supera su umbral de confianza.</p>
+    <div class="hero-meta">
+      <span class="chip"><strong>SAP</strong> · Colombia</span>
+      <span class="chip"><strong>ERP local</strong> · Ecuador</span>
+      <span class="chip">Datos simulados · flujo real</span>
+    </div>
+    <p class="hero-note">Cómo usarlo: la bandeja de la izquierda tiene cuatro pedidos reales en su formato original. Toque uno y mire al agente trabajar. Luego pruebe <b style="color:#fff">«Simular un día completo»</b> para ver la operación a volumen.</p>
+
+    <!-- CONSOLA -->
+    <div class="console" id="consola">
+      <div class="console-bar">
+        <span class="console-title"><b>Consola de operación</b> · pedidos multicanal → SAP + ERP Ecuador</span>
+        <span class="console-live"><span class="dot"></span> Agente activo</span>
+      </div>
+      <div class="console-body">
+        <!-- Bandeja -->
+        <aside class="inbox">
+          <div class="inbox-head">
+            <span class="k">Bandeja de entrada</span>
+            <span class="inbox-count" id="inboxCount">4 nuevos</span>
+          </div>
+          <div class="inbox-list" id="inboxList" role="listbox" aria-label="Pedidos entrantes"></div>
+          <div class="inbox-actions">
+            <button class="btn btn--sm" id="btnAll">▶&nbsp; Procesar los 4 pedidos</button>
+            <button class="btn btn--sm btn--ghost-d" id="btnDay">Simular un día completo</button>
+          </div>
+        </aside>
+        <!-- Detalle -->
+        <div class="detail" id="detail">
+          <div class="stage">
+            <div class="stage-head"><span class="stage-num">1</span><span class="stage-title">Documento original · tal como llegó</span></div>
+            <div class="stage-body" id="stDoc"><div class="placeholder">Seleccione un pedido de la bandeja →</div></div>
+          </div>
+          <div class="stage">
+            <div class="stage-head"><span class="stage-num">2</span><span class="stage-title">Motor del agente · extracción y validación</span></div>
+            <div class="stage-body" id="stEngine"><div class="placeholder">En espera</div></div>
+          </div>
+          <div class="stage">
+            <div class="stage-head"><span class="stage-num">3</span><span class="stage-title">Líneas del pedido · cruce contra maestros</span></div>
+            <div class="stage-body" id="stLines"><div class="placeholder">En espera</div></div>
+          </div>
+          <div class="stage">
+            <div class="stage-head"><span class="stage-num">4</span><span class="stage-title">Escritura en los sistemas</span></div>
+            <div class="stage-body" id="stErp"><div class="placeholder">En espera</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:14px;color:#6E7C99">Los clientes, productos y cifras de este demo son inventados; todo corre en su navegador. Lo real es el tipo de tarea — y que la integración se hace contra SAP y el ERP que ustedes definan.</p>
+  </div>
+</header>
+
+<!-- ================= TORRE DE CONTROL ================= -->
+<section class="band" id="torre">
+  <div class="wrap">
+    <div class="band-head">
+      <div>
+        <span class="eyebrow">Torre de control · lo que ve el supervisor</span>
+        <h2>Nadie digita. Todos ven.</h2>
+      </div>
+      <p class="lead">Cada pedido queda registrado con su canal, su confianza y su destino. El equipo deja de escribir en dos sistemas y pasa a supervisar uno.</p>
+    </div>
+    <div class="kpi-row" id="kpis">
+      <div class="kpi-t"><span class="k">Pedidos hoy</span><span class="v" id="kPedidos">0</span><span class="d" id="kPedidosD">esperando actividad</span></div>
+      <div class="kpi-t"><span class="k">Carga automática</span><span class="v"><span id="kAuto">—</span><small>%</small></span><span class="d">objetivo ≥ 85 %</span></div>
+      <div class="kpi-t"><span class="k">En revisión humana</span><span class="v" id="kRev">0</span><span class="d">solo excepciones</span></div>
+      <div class="kpi-t"><span class="k">Tiempo medio por pedido</span><span class="v" id="kTiempo">—</span><span class="d">antes: ~25 min manual</span></div>
+      <div class="kpi-t"><span class="k">Horas ahorradas hoy</span><span class="v" id="kHoras">0<small>h</small></span><span class="d">vs. digitación doble</span></div>
+    </div>
+    <div class="tower">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">Pedidos por canal · hoy</span>
+          <span class="panel-title" id="chartTotal"></span>
+        </div>
+        <div class="bars" id="chartCanal"></div>
+        <p class="chart-note">Una sola serie: volumen por canal. El detalle por pedido está en el registro de actividad.</p>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">Registro de actividad</span>
+          <span class="panel-title" id="feedCount"></span>
+        </div>
+        <div class="feed" id="feed"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EXCEPCIONES ================= -->
+<section class="band band--paper2 rule-top" id="excepciones">
+  <div class="wrap">
+    <div class="band-head">
+      <div>
+        <span class="eyebrow">Cola de excepciones · el humano donde vale</span>
+        <h2>El agente no adivina. Pregunta.</h2>
+      </div>
+      <p class="lead">Todo lo que no supera el umbral de confianza llega aquí con un diagnóstico y una propuesta. Una persona decide en segundos — no re-digita en veinte minutos.</p>
+    </div>
+    <div class="exc-grid" id="excGrid">
+      <div class="empty-exc" id="excEmpty">Sin excepciones pendientes. Procese pedidos en la consola de arriba — los que no superen el umbral aparecerán aquí.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CIERRE ================= -->
+<section class="band band--dark on-dark rule-top" id="contacto">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div>
+        <span class="eyebrow">Siguiente paso</span>
+        <h2 style="color:#fff;margin-top:12px">Esto mismo, con sus pedidos y sus sistemas</h2>
+        <p class="lead" style="margin-top:14px">Este demo corre con datos inventados. Para convertirlo en una propuesta con cifras, necesitamos cuatro datos de su operación — de esa conversación sale un precio de construcción y uno de operación mensual, según el camino que elijan: su entorno Microsoft (Copilot Studio) o la plataforma de Gadamax como servicio.</p>
+        <ul style="margin:6px 0 22px;padding-left:18px;color:#C6CFE2;font-size:14.5px;line-height:1.9">
+          <li>Volumen mensual de pedidos y canales exactos</li>
+          <li>SAP: ¿S/4HANA o ECC? ¿Quién autoriza la integración?</li>
+          <li>ERP de Ecuador: nombre exacto y si expone API</li>
+          <li>Estado de los maestros de clientes y productos</li>
+        </ul>
+        <a class="btn" href="mailto:mvg@gadamax.com?subject=Agente%20de%20pedidos%20%E2%80%94%20sesi%C3%B3n%20de%2045%20minutos">Agendar la sesión de 45 minutos</a>
+        <a class="btn btn--ghost-d" style="margin-left:8px" href="https://www.gadamax.com">Conocer Gadamax</a>
+      </div>
+      <div>
+        <dl class="dl">
+          <div><b>Web</b> www.gadamax.com</div>
+          <div><b>Correo</b> mvg@gadamax.com</div>
+          <div><b>Tel</b> +1 (312) 820 4788</div>
+          <div><b>Tel MX</b> +52 81 8526 2288</div>
+          <div><b>Oficinas</b> Naperville, IL · Monterrey</div>
+          <div><b>Cobertura</b> EE. UU. y LATAM</div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-in">
+    <span>© 2026 Gadamax LLC · Estrategia, marca y software AI-native</span>
+    <span>Demo con datos simulados · La integración real se define con su equipo de TI</span>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   GADAMAX · Demo agente de pedidos — todo corre en el navegador.
+   Datos inventados; el flujo es el real.
+   ============================================================ */
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+const sleep = ms=>new Promise(r=>setTimeout(r,ms));
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Datos: 4 pedidos, 4 situaciones ---------- */
+const ORDERS = [
+{
+  id:'PED-1042', icon:'✉️', canal:'Correo', canalKey:'correo', pais:'Colombia',
+  cliente:'Supermercados La Cosecha S.A.S.', sub:'correo · colombia · adjunto pdf',
+  doc:`<div class="doc-mail">
+    <div class="doc-mail-head"><b>De:</b> compras@lacosecha.com.co &nbsp;·&nbsp; <b>Asunto:</b> Pedido semanal — entrega martes<br><b>Recibido:</b> hoy 08:14</div>
+    <div class="doc-mail-body" id="mailBody-0">Buenos días,
+
+Por favor despachar a bodega Funza el pedido de la semana:
+
+- 120 cajas de galleta surtida familiar x24
+- 80 bultos de harina de trigo premium 50 lb
+- 200 cajas de leche entera UHT 1L x12
+- 60 cajas de atún lomitos en aceite x48
+- 45 cajas de café molido tradicional 500 g x25
+
+Aplicar condiciones del contrato marco. Confirmar recepción.
+
+Cordialmente,
+Dpto. de Compras — La Cosecha S.A.S.
+NIT 900.482.115-7</div></div>`,
+  docMarked:`<div class="doc-mail">
+    <div class="doc-mail-head"><b>De:</b> compras@lacosecha.com.co &nbsp;·&nbsp; <b>Asunto:</b> Pedido semanal — entrega martes<br><b>Recibido:</b> hoy 08:14</div>
+    <div class="doc-mail-body">Buenos días,
+
+Por favor despachar a <mark class="m-cli">bodega Funza</mark> el pedido de la semana:
+
+- <mark class="m-qty">120 cajas</mark> de <mark class="m-prod">galleta surtida familiar x24</mark>
+- <mark class="m-qty">80 bultos</mark> de <mark class="m-prod">harina de trigo premium 50 lb</mark>
+- <mark class="m-qty">200 cajas</mark> de <mark class="m-prod">leche entera UHT 1L x12</mark>
+- <mark class="m-qty">60 cajas</mark> de <mark class="m-prod">atún lomitos en aceite x48</mark>
+- <mark class="m-qty">45 cajas</mark> de <mark class="m-prod">café molido tradicional 500 g x25</mark>
+
+Aplicar condiciones del <mark class="m-cli">contrato marco</mark>. Confirmar recepción.
+
+Cordialmente,
+Dpto. de Compras — La Cosecha S.A.S.
+<mark class="m-cli">NIT 900.482.115-7</mark></div></div>`,
+  steps:[
+    ['Detectando canal, idioma y remitente','ok'],
+    ['Identificando cliente · NIT 900.482.115-7 → maestro SAP 0000102344','ok'],
+    ['Extrayendo 5 líneas: producto, cantidad, unidad','ok'],
+    ['Cruzando SKUs contra maestro de productos','ok'],
+    ['Validando cupo de crédito y lista de precios vigente','ok'],
+    ['Umbral de confianza ≥ 90 % · 5/5 líneas superan','ok'],
+    ['Escribiendo pedido en SAP (Colombia)','ok']
+  ],
+  lines:[
+    {orig:'120 cajas de galleta surtida familiar x24', sku:'GAL-SF24', desc:'Galleta surtida familiar caja x24', qty:'120 CJ', conf:98},
+    {orig:'80 bultos de harina de trigo premium 50 lb', sku:'HAR-TP50', desc:'Harina trigo premium bulto 50 lb', qty:'80 BU', conf:97},
+    {orig:'200 cajas de leche entera UHT 1L x12', sku:'LEC-UHT12', desc:'Leche entera UHT 1L caja x12', qty:'200 CJ', conf:99},
+    {orig:'60 cajas de atún lomitos en aceite x48', sku:'ATU-LA48', desc:'Atún lomitos aceite caja x48', qty:'60 CJ', conf:96},
+    {orig:'45 cajas de café molido tradicional 500 g x25', sku:'CAF-MT25', desc:'Café molido trad. 500 g caja x25', qty:'45 CJ', conf:98}
+  ],
+  validaciones:[
+    ['ok','Cliente activo en SAP · condiciones del contrato marco aplicadas'],
+    ['ok','Cupo de crédito disponible: COP 61,3 M · pedido: COP 18,7 M'],
+    ['ok','Precios según lista vigente ago-2026 · sin desviaciones']
+  ],
+  outcome:'auto', erpTarget:'sap', total:'COP 18.740.500', orderNum:'4500128763',
+  sapLog:[
+    ['out','→ RFC BAPI_SALESORDER_CREATEFROMDAT2'],
+    ['out','→ Cliente 0000102344 · La Cosecha S.A.S. · centro Funza'],
+    ['out','→ 5 posiciones · COP 18.740.500'],
+    ['in','← S · Documento de ventas <span class="id">4500128763</span> creado'],
+    ['in','← Entrega programada 2026-08-18 · confirmación enviada al cliente']
+  ],
+  ecLog:null
+},
+{
+  id:'PED-1043', icon:'💬', canal:'WhatsApp', canalKey:'whatsapp', pais:'Ecuador',
+  cliente:'Distribuidora El Rosal', sub:'whatsapp · ecuador · texto libre',
+  doc:`<div class="doc-wa">
+    <span class="wa-meta">+593 99 512 44xx · Distribuidora El Rosal · hoy 08:22</span>
+    <div class="wa-bubble">Vecino buen día 🙏 me manda porfa 15 cajas del aceite de girasol de litro, 20 quintales de arroz flor y unos 10 six de agua sin gas para el local de la Amazonas. Me factura como siempre nomás</div>
+  </div>`,
+  docMarked:`<div class="doc-wa">
+    <span class="wa-meta">+593 99 512 44xx · Distribuidora El Rosal · hoy 08:22</span>
+    <div class="wa-bubble">Vecino buen día 🙏 me manda porfa <mark class="m-qty">15 cajas</mark> del <mark class="m-prod">aceite de girasol de litro</mark>, <mark class="m-qty">20 quintales</mark> de <mark class="m-prod">arroz flor</mark> y unos <mark class="m-qty">10 six</mark> de <mark class="m-prod">agua sin gas</mark> para el <mark class="m-cli">local de la Amazonas</mark>. Me factura <mark class="m-cli">como siempre</mark> nomás</div>
+  </div>`,
+  steps:[
+    ['Detectando canal, idioma y remitente','ok'],
+    ['Identificando cliente · teléfono → RUC 1790845673001 · sucursal Av. Amazonas','ok'],
+    ['Extrayendo 3 líneas desde texto libre','ok'],
+    ['Cruzando SKUs contra maestro de productos','ok'],
+    ['Validando cupo de crédito y lista de precios','ok'],
+    ['Umbral de confianza ≥ 90 % · 2/3 líneas superan','warn'],
+    ['Pedido retenido → cola de excepciones con propuesta','warn']
+  ],
+  lines:[
+    {orig:'15 cajas del aceite de girasol de litro', sku:'ACE-G1L12', desc:'Aceite girasol 1 L caja x12', qty:'15 CJ', conf:94},
+    {orig:'20 quintales de arroz flor', sku:'ARR-FL45', desc:'Arroz flor saco 45,36 kg (quintal)', qty:'20 SA', conf:91},
+    {orig:'10 six de agua sin gas', sku:'¿AGU-600SG / AGU-500SG?', desc:'Ambiguo: six 600 ml o six 500 ml', qty:'10 SP', conf:64, warn:true}
+  ],
+  validaciones:[
+    ['ok','Cliente activo en ERP Ecuador · "como siempre" → condición 30 días'],
+    ['ok','Cupo de crédito disponible: USD 9.400 · pedido: ~USD 1.130'],
+    ['warn','Línea 3 ambigua: el maestro tiene dos presentaciones de agua sin gas en six']
+  ],
+  outcome:'exception', erpTarget:'ec', total:'USD 1.128,40 (est.)',
+  exception:{
+    id:'EXC-311', title:'SKU ambiguo en pedido por WhatsApp',
+    who:'Distribuidora El Rosal · Ecuador · PED-1043',
+    body:'«10 six de agua sin gas» coincide con dos productos del maestro: AGU-600SG (600 ml) y AGU-500SG (500 ml). Confianza 64 % — bajo el umbral de 90 %. El pedido completo quedó retenido: nada se escribe en el ERP sin resolver la línea.',
+    propK:'Propuesta del agente',
+    prop:'Usar AGU-600SG (600 ml): este cliente lo pidió en 8 de sus últimos 10 pedidos y la sucursal Amazonas no registra compras del de 500 ml.',
+    approveLabel:'Aprobar propuesta y cargar',
+    resolveLog:{target:'ec', orderNum:'PED-EC-08337', total:'USD 1.128,40'}
+  },
+  sapLog:null,
+  ecLog:[
+    ['warn','⏸ Escritura suspendida · 1 línea bajo umbral de confianza'],
+    ['warn','→ Pedido retenido íntegro · nada se carga parcial sin regla que lo permita'],
+    ['out','→ Caso EXC-311 creado · notificado a supervisión comercial EC']
+  ]
+},
+{
+  id:'PED-1044', icon:'📊', canal:'Excel adjunto', canalKey:'excel', pais:'Ecuador',
+  cliente:'Comisariato Andino Cía. Ltda.', sub:'correo + excel · ecuador',
+  doc:`<div class="doc-xls"><table>
+    <tr><th>#</th><th>Código cliente</th><th>Descripción</th><th>Cant.</th><th>Precio unit.</th></tr>
+    <tr><td>1</td><td class="num">AND-0114</td><td>Azúcar blanca funda 2 kg (paca x10)</td><td class="num">90</td><td class="num">10,80</td></tr>
+    <tr><td>2</td><td class="num">AND-0087</td><td>Fideo tallarín 400 g (caja x20)</td><td class="num">60</td><td class="num">14,60</td></tr>
+    <tr><td>3</td><td class="num">AND-0201</td><td>Atún en agua 170 g (caja x48)</td><td class="num">35</td><td class="num">55,20</td></tr>
+    <tr><td>4</td><td class="num">AND-0155</td><td>Aceite palma 900 ml (caja x12)</td><td class="num">50</td><td class="num">21,90</td></tr>
+    <tr><td>5</td><td class="num">AND-0230</td><td>Avena hojuelas 500 g (caja x25)</td><td class="num">40</td><td class="num">19,75</td></tr>
+    <tr><td>6</td><td class="num">AND-0092</td><td>Sal yodada 1 kg (paca x25)</td><td class="num">30</td><td class="num">8,40</td></tr>
+  </table></div>`,
+  docMarked:`<div class="doc-xls"><table>
+    <tr><th>#</th><th>Código cliente</th><th>Descripción</th><th>Cant.</th><th>Precio unit.</th></tr>
+    <tr><td>1</td><td class="num">AND-0114</td><td><mark class="m-prod">Azúcar blanca funda 2 kg (paca x10)</mark></td><td class="num"><mark class="m-qty">90</mark></td><td class="num">10,80</td></tr>
+    <tr><td>2</td><td class="num">AND-0087</td><td><mark class="m-prod">Fideo tallarín 400 g (caja x20)</mark></td><td class="num"><mark class="m-qty">60</mark></td><td class="num">14,60</td></tr>
+    <tr><td>3</td><td class="num">AND-0201</td><td><mark class="m-prod">Atún en agua 170 g (caja x48)</mark></td><td class="num"><mark class="m-qty">35</mark></td><td class="num">55,20</td></tr>
+    <tr><td>4</td><td class="num">AND-0155</td><td><mark class="m-prod">Aceite palma 900 ml (caja x12)</mark></td><td class="num"><mark class="m-qty">50</mark></td><td class="num">21,90</td></tr>
+    <tr><td>5</td><td class="num">AND-0230</td><td><mark class="m-prod">Avena hojuelas 500 g (caja x25)</mark></td><td class="num"><mark class="m-qty">40</mark></td><td class="num"><mark class="m-qty">19,75 ⚠</mark></td></tr>
+    <tr><td>6</td><td class="num">AND-0092</td><td><mark class="m-prod">Sal yodada 1 kg (paca x25)</mark></td><td class="num"><mark class="m-qty">30</mark></td><td class="num">8,40</td></tr>
+  </table></div>`,
+  steps:[
+    ['Detectando canal · correo con adjunto .xlsx','ok'],
+    ['Identificando cliente · RUC 1791523088001 → maestro ERP EC','ok'],
+    ['Leyendo tabla: 6 líneas con códigos propios del cliente','ok'],
+    ['Traduciendo códigos del cliente → SKUs internos (tabla de equivalencias)','ok'],
+    ['Validando precios contra lista vigente · 1 desactualizado, corregido con nota','ok'],
+    ['Umbral de confianza ≥ 90 % · 6/6 líneas superan','ok'],
+    ['Escribiendo pedido en ERP Ecuador','ok']
+  ],
+  lines:[
+    {orig:'AND-0114 · Azúcar blanca 2 kg', sku:'AZU-B2K10', desc:'Azúcar blanca 2 kg paca x10', qty:'90 PA', conf:99},
+    {orig:'AND-0087 · Fideo tallarín 400 g', sku:'FID-T400', desc:'Fideo tallarín 400 g caja x20', qty:'60 CJ', conf:99},
+    {orig:'AND-0201 · Atún en agua 170 g', sku:'ATU-AG48', desc:'Atún agua 170 g caja x48', qty:'35 CJ', conf:98},
+    {orig:'AND-0155 · Aceite palma 900 ml', sku:'ACE-P900', desc:'Aceite palma 900 ml caja x12', qty:'50 CJ', conf:99},
+    {orig:'AND-0230 · Avena 500 g · $19,75', sku:'AVE-H500', desc:'Avena hojuelas 500 g caja x25 · precio ajustado a lista: $20,10', qty:'40 CJ', conf:95},
+    {orig:'AND-0092 · Sal yodada 1 kg', sku:'SAL-Y1K25', desc:'Sal yodada 1 kg paca x25', qty:'30 PA', conf:99}
+  ],
+  validaciones:[
+    ['ok','Códigos del cliente traducidos con la tabla de equivalencias (6/6)'],
+    ['warn','Línea 5: precio del Excel ($19,75) no coincide con lista ago-2026 ($20,10) · se aplicó lista vigente y se anotó en el pedido'],
+    ['ok','Cupo de crédito disponible: USD 12.800 · pedido: USD 3.412,80']
+  ],
+  outcome:'auto', erpTarget:'ec', total:'USD 3.412,80', orderNum:'PED-EC-08341',
+  sapLog:null,
+  ecLog:[
+    ['out','→ POST /api/v1/pedidos · ERP Ecuador'],
+    ['out','→ RUC 1791523088001 · 6 ítems · USD 3.412,80'],
+    ['warn','→ Nota: línea 5 con precio ajustado a lista vigente (19,75 → 20,10)'],
+    ['in','← 201 Created · Pedido <span class="id">PED-EC-08341</span>'],
+    ['in','← Reserva de inventario confirmada · bodega Quito norte']
+  ]
+},
+{
+  id:'PED-1045', icon:'🌐', canal:'Portal B2B', canalKey:'portal', pais:'Colombia',
+  cliente:'Almacenes Rivera S.A.S.', sub:'portal · colombia · 12 líneas',
+  doc:`<div class="doc-xls"><table>
+    <tr><th>#</th><th>SKU</th><th>Descripción</th><th>Cant.</th><th>Subtotal (COP)</th></tr>
+    <tr><td>1</td><td class="num">LEC-UHT12</td><td>Leche entera UHT 1L caja x12</td><td class="num">340</td><td class="num">14.960.000</td></tr>
+    <tr><td>2</td><td class="num">ARR-PR25</td><td>Arroz premium 25 kg</td><td class="num">180</td><td class="num">12.420.000</td></tr>
+    <tr><td>3</td><td class="num">ACE-G1L12</td><td>Aceite girasol 1 L caja x12</td><td class="num">95</td><td class="num">9.310.000</td></tr>
+    <tr><td>4</td><td class="num">CAF-MT25</td><td>Café molido trad. 500 g caja x25</td><td class="num">70</td><td class="num">7.140.000</td></tr>
+    <tr><td colspan="3" style="color:var(--muted)">… 8 líneas más</td><td class="num">—</td><td class="num">4.370.000</td></tr>
+    <tr><td colspan="4" style="font-weight:700">Total pedido</td><td class="num" style="font-weight:700">48.200.000</td></tr>
+  </table></div>`,
+  docMarked:null,
+  steps:[
+    ['Detectando canal · pedido estructurado del portal B2B','ok'],
+    ['Identificando cliente · NIT 830.114.207-1 → maestro SAP 0000104881','ok'],
+    ['Validando 12 líneas · SKUs exactos, sin ambigüedad','ok'],
+    ['Validando lista de precios · conforme','ok'],
+    ['Validando cupo de crédito · COP 48,2 M excede cupo disponible COP 45,0 M','warn'],
+    ['Pedido retenido → cola de excepciones con propuesta','warn']
+  ],
+  lines:[
+    {orig:'12 líneas del portal', sku:'12 SKUs exactos', desc:'Extracción perfecta — el problema no es de lectura', qty:'—', conf:100}
+  ],
+  validaciones:[
+    ['ok','SKUs y precios conformes (12/12) · extracción con confianza 100 %'],
+    ['flag','Crédito: el pedido (COP 48,2 M) excede el cupo disponible (COP 45,0 M) · política corporativa: retener y escalar a cartera'],
+    ['ok','Sin bloqueos de inventario · disponibilidad confirmada en CEDI']
+  ],
+  outcome:'exception', erpTarget:'sap', total:'COP 48.200.000',
+  exception:{
+    id:'EXC-312', title:'Cupo de crédito excedido · pedido del portal',
+    who:'Almacenes Rivera S.A.S. · Colombia · PED-1045',
+    body:'Pedido perfecto en lectura (12/12 líneas, confianza 100 %), pero excede el cupo de crédito disponible en COP 3,2 M. La regla corporativa dice: no se escribe en SAP sin autorización de cartera.',
+    propK:'Propuesta del agente',
+    prop:'Opción A: cargar parcial por COP 44,1 M retirando las 2 líneas no prioritarias (histórico de sustitución del cliente) y dejar el saldo como pedido pendiente. Opción B: solicitar ampliación temporal de cupo a cartera (cliente con 0 días de mora en 24 meses).',
+    approveLabel:'Aprobar opción A y cargar',
+    resolveLog:{target:'sap', orderNum:'4500128771', total:'COP 44.100.000'}
+  },
+  sapLog:[
+    ['warn','⏸ Escritura suspendida · validación de crédito no superada'],
+    ['warn','→ Ningún documento se crea en SAP sin autorización de cartera'],
+    ['out','→ Caso EXC-312 creado · notificado a cartera y al KAM del cliente']
+  ],
+  ecLog:null
+}
+];
+
+/* ---------- Estado global (torre de control) ---------- */
+const S = { pedidos:0, auto:0, rev:0, canal:{correo:0, whatsapp:0, excel:0, portal:0}, procesado:{}, clock:8*60+14, feed:0 };
+const CANAL_LABEL = {correo:'Correo', whatsapp:'WhatsApp', excel:'Excel', portal:'Portal B2B'};
+const fmtClock = ()=>{ const h=Math.floor(S.clock/60), m=S.clock%60; return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0'); };
+
+/* ---------- Bandeja ---------- */
+function renderInbox(){
+  $('#inboxList').innerHTML = ORDERS.map((o,i)=>{
+    const st = S.procesado[o.id];
+    const cls = st==='auto'?'st-ok':st==='exception'?'st-warn':st==='run'?'st-run':'st-new';
+    const lbl = st==='auto'?'✓ cargado':st==='exception'?'⚠ revisión':st==='run'?'procesando':'nuevo';
+    return `<button class="mail" role="option" aria-selected="${sel===i}" data-i="${i}">
+      <span class="mail-ico">${o.icon}</span>
+      <span class="mail-mid"><span class="mail-who">${o.cliente}</span><span class="mail-sub">${o.sub}</span></span>
+      <span class="mail-state ${cls}">${lbl}</span>
+    </button>`;
+  }).join('');
+  const nuevos = ORDERS.filter(o=>!S.procesado[o.id]).length;
+  $('#inboxCount').textContent = nuevos ? nuevos+' nuevos' : 'bandeja al día';
+  $$('#inboxList .mail').forEach(b=>b.addEventListener('click',()=>processOrder(+b.dataset.i)));
+}
+let sel = -1;
+let busy = false;
+
+/* ---------- Procesamiento de un pedido ---------- */
+async function processOrder(i){
+  if(busy) return;
+  busy = true; sel = i;
+  const o = ORDERS[i];
+  const first = !S.procesado[o.id];
+  S.procesado[o.id]='run'; renderInbox();
+  $('#consola').scrollIntoView({behavior:REDUCED?'auto':'smooth', block:'nearest'});
+
+  // 1 · documento original
+  $('#stDoc').innerHTML = o.doc;
+  $('#stEngine').innerHTML = '<div class="engine" id="engineSteps"></div>';
+  $('#stLines').innerHTML = '<div class="placeholder">En espera del motor…</div>';
+  $('#stErp').innerHTML = '<div class="placeholder">En espera del motor…</div>';
+
+  // 2 · pasos del motor
+  const eng = $('#engineSteps');
+  for(let k=0;k<o.steps.length;k++){
+    const [txt,type] = o.steps[k];
+    const el = document.createElement('div');
+    el.className='step run';
+    el.innerHTML = `<span class="tick">·</span><span>${txt}</span><span class="ms"></span>`;
+    eng.appendChild(el);
+    const ms = REDUCED?0:(220+Math.random()*260);
+    await sleep(ms);
+    el.className = 'step done'+(type==='warn'?' warn':'');
+    el.querySelector('.tick').textContent = type==='warn'?'!':'✓';
+    el.querySelector('.ms').textContent = Math.round(80+Math.random()*340)+' ms';
+    // al terminar extracción → resaltar entidades en el documento
+    if(k===2 && o.docMarked) $('#stDoc').innerHTML = o.docMarked;
+    // al cruzar maestros → tabla de líneas
+    if(k===3) renderLines(o);
+  }
+  if(o.steps.length<=4) renderLines(o);
+
+  // 3 · validaciones debajo de la tabla
+  $('#stLines').insertAdjacentHTML('beforeend',
+    `<div class="vlist" style="margin-top:12px">${o.validaciones.map(([t,txt])=>
+      `<div class="vitem v-${t}"><span class="ic">${t==='ok'?'✓':t==='warn'?'⚠':'✕'}</span><span>${txt}</span></div>`).join('')}</div>`);
+
+  // 4 · escritura en ERPs
+  await renderErp(o);
+
+  // resultado + torre
+  S.procesado[o.id] = o.outcome==='auto' ? 'auto' : 'exception';
+  if(first){
+    S.pedidos++; S.canal[o.canalKey]++;
+    if(o.outcome==='auto'){ S.auto++; addFeed(o.icon, o.cliente, CANAL_LABEL[o.canalKey]+' · '+o.pais, 'ok', o.orderNum); }
+    else { S.rev++; addFeed(o.icon, o.cliente, CANAL_LABEL[o.canalKey]+' · '+o.pais, 'warn', o.exception.id); addException(o.exception); }
+    updateTower();
+  }
+  renderInbox();
+  busy = false;
+}
+
+function confClass(c){ return c>=90?'':c>=75?'mid':'low'; }
+function renderLines(o){
+  $('#stLines').innerHTML = `<table class="xtable">
+    <tr><th>Texto original</th><th>SKU</th><th>Descripción · maestro</th><th>Cant.</th><th>Confianza</th></tr>
+    ${o.lines.map(l=>`<tr>
+      <td class="orig">«${l.orig}»</td>
+      <td class="sku">${l.sku}</td>
+      <td>${l.desc}</td>
+      <td class="num">${l.qty}</td>
+      <td><span class="conf"><span class="conf-bar"><span class="conf-fill ${confClass(l.conf)}" style="width:0"></span></span><span class="conf-val">${l.conf} %</span></span></td>
+    </tr>`).join('')}
+  </table>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    $$('#stLines .conf-fill').forEach((f,ix)=>f.style.width = o.lines[ix].conf+'%');
+  }));
+}
+
+async function renderErp(o){
+  const mk = (name,loc,log,off)=>`<div class="erp ${off?'erp-off':''}">
+    <div class="erp-head"><span class="erp-name">${name} <span>· ${loc}</span></span><span class="mail-state ${off?'st-new':(log&&log.some(l=>l[0]==='warn')&&o.outcome==='exception'?'st-warn':'st-ok')}">${off?'sin actividad':(o.outcome==='exception'?'retenido':'escrito')}</span></div>
+    <div class="erp-log" data-erp="${name}"></div></div>`;
+  const sapOff = !o.sapLog, ecOff = !o.ecLog;
+  $('#stErp').innerHTML = `<div class="erps">${mk('SAP','Colombia',o.sapLog,sapOff)}${mk('ERP','Ecuador',o.ecLog,ecOff)}</div>`;
+  const write = async (logEl, lines)=>{
+    for(const [cls,txt] of lines){
+      logEl.insertAdjacentHTML('beforeend',`<div class="${cls}">${txt}</div>`);
+      await sleep(REDUCED?0:170);
+    }
+  };
+  if(o.sapLog) await write($('#stErp [data-erp="SAP"]'), o.sapLog);
+  if(o.ecLog) await write($('#stErp [data-erp="ERP"]'), o.ecLog);
+  const banner = o.outcome==='auto'
+    ? `<div class="result-banner rb-ok" style="margin-top:12px"><span>✓</span><span><b>Pedido ${o.id} cargado sin intervención humana.</b> ${o.total} · documento ${o.orderNum}. Tiempo total del agente: ${Math.round(28+Math.random()*14)} s — el proceso manual promedia 25 minutos y dos digitaciones.</span></div>`
+    : `<div class="result-banner rb-warn" style="margin-top:12px"><span>⚠</span><span><b>Pedido ${o.id} retenido, no descartado.</b> El agente no adivina bajo el umbral de confianza: creó el caso ${o.exception.id} con diagnóstico y propuesta. Revíselo en la <a href="#excepciones" style="color:#fff">cola de excepciones</a>.</span></div>`;
+  $('#stErp').insertAdjacentHTML('beforeend', banner);
+}
+
+/* ---------- Torre de control ---------- */
+function updateTower(){
+  $('#kPedidos').textContent = S.pedidos;
+  $('#kPedidosD').textContent = S.pedidos? 'en '+Object.values(S.canal).filter(v=>v>0).length+' canales' : 'esperando actividad';
+  $('#kAuto').textContent = S.pedidos? Math.round(S.auto/S.pedidos*100) : '—';
+  $('#kRev').textContent = S.rev;
+  $('#kTiempo').textContent = S.pedidos? '38 s' : '—';
+  const horas = (S.pedidos*24)/60; // 24 min ahorrados por pedido (25 manual − ~1 supervisión)
+  $('#kHoras').innerHTML = (horas<10? horas.toFixed(1) : Math.round(horas))+'<small>h</small>';
+  // chart canal — una serie (cobalto), etiquetas directas
+  const max = Math.max(1,...Object.values(S.canal));
+  $('#chartCanal').innerHTML = Object.entries(S.canal).map(([k,v])=>`
+    <div class="bar-row" title="${CANAL_LABEL[k]}: ${v} pedido${v===1?'':'s'}">
+      <span class="bar-label">${CANAL_LABEL[k]}</span>
+      <span class="bar-track"><span class="bar-fill" style="width:${v/max*100}%"></span></span>
+      <span class="bar-val">${v}</span>
+    </div>`).join('');
+  $('#chartTotal').textContent = S.pedidos? S.pedidos+' pedidos' : 'sin actividad aún';
+  $('#feedCount').textContent = S.feed? S.feed+' eventos' : '';
+}
+function addFeed(icon, who, sub, state, ref){
+  S.clock += 1+Math.floor(Math.random()*3); S.feed++;
+  const pill = state==='ok' ? `<span class="pill pill-ok">✓ auto · ${ref}</span>`
+             : state==='warn' ? `<span class="pill pill-warn">⚠ revisión · ${ref}</span>`
+             : `<span class="pill pill-run">${ref}</span>`;
+  $('#feed').insertAdjacentHTML('afterbegin',
+    `<div class="feed-row"><span class="feed-ico">${icon}</span><span class="feed-mid"><span class="feed-who">${who}</span><span class="feed-sub">${sub}</span></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">${pill}<span class="t">${fmtClock()}</span></span></div>`);
+  const rows = $$('#feed .feed-row'); if(rows.length>40) rows[rows.length-1].remove();
+}
+
+/* ---------- Excepciones ---------- */
+function addException(x){
+  $('#excEmpty')?.remove();
+  $('#excGrid').insertAdjacentHTML('beforeend', `
+  <article class="exc" id="${x.id}">
+    <div class="exc-head"><h4>${x.title}</h4><span class="exc-id">${x.id}</span></div>
+    <p class="exc-body" style="font-family:var(--f-mono);font-size:11px;color:var(--muted);margin:-6px 0 0">${x.who}</p>
+    <p class="exc-body">${x.body}</p>
+    <div class="exc-prop"><span class="k">${x.propK}</span>${x.prop}</div>
+    <div class="exc-actions">
+      <button class="btn btn--sm btn--gain" data-approve="${x.id}">✓&nbsp; ${x.approveLabel}</button>
+      <button class="btn btn--sm" style="background:transparent;color:var(--ink);border-color:var(--rule)" data-edit="${x.id}">Corregir manualmente</button>
+    </div>
+  </article>`);
+  $(`[data-approve="${x.id}"]`).addEventListener('click',()=>resolveException(x));
+  $(`[data-edit="${x.id}"]`).addEventListener('click',()=>resolveException(x,true));
+}
+function resolveException(x, manual=false){
+  const card = $('#'+x.id); if(!card || card.classList.contains('resolved')) return;
+  card.classList.add('resolved');
+  card.style.borderLeftColor='var(--gain)';
+  const r = x.resolveLog;
+  card.querySelector('.exc-actions').innerHTML =
+    `<div class="exc-done">✓ ${manual?'Corregido y aprobado':'Propuesta aprobada'} · escrito en ${r.target==='sap'?'SAP (Colombia)':'ERP Ecuador'} · documento <b>${r.orderNum}</b> · ${r.total} · decisión humana: ${Math.round(20+Math.random()*25)} s</div>`;
+  S.rev = Math.max(0,S.rev-1);
+  addFeed('👤','Supervisor · '+x.id,'excepción resuelta → '+(r.target==='sap'?'SAP':'ERP EC'),'ok',r.orderNum);
+  updateTower();
+}
+
+/* ---------- Procesar todos ---------- */
+$('#btnAll').addEventListener('click', async ()=>{
+  if(busy) return;
+  $('#btnAll').disabled = true;
+  for(let i=0;i<ORDERS.length;i++){ await processOrder(i); await sleep(REDUCED?0:400); }
+  $('#btnAll').disabled = false;
+});
+
+/* ---------- Simular un día completo ---------- */
+const DAY_CLIENTS = [
+  ['✉️','correo','Distrib. La Floresta','Ecuador'],['🌐','portal','Cadena Éxito Norte','Colombia'],
+  ['💬','whatsapp','Tienda Doña Mary','Ecuador'],['📊','excel','Mayorista El Cóndor','Colombia'],
+  ['✉️','correo','Supertiendas Bolívar','Colombia'],['💬','whatsapp','Minimarket La 10','Ecuador'],
+  ['🌐','portal','Hipermercado Central','Colombia'],['📊','excel','Distribuidora Costa','Ecuador'],
+  ['✉️','correo','Comercial San Jorge','Colombia'],['💬','whatsapp','Abastos Chimborazo','Ecuador'],
+  ['🌐','portal','Almacenes La Rebaja','Colombia'],['✉️','correo','Grupo Provisiones EC','Ecuador']
+];
+let dayRun = false;
+$('#btnDay').addEventListener('click', async ()=>{
+  if(dayRun||busy) return; dayRun = true;
+  const btn = $('#btnDay'); btn.disabled = true; btn.textContent = 'Simulando…';
+  $('#torre').scrollIntoView({behavior:REDUCED?'auto':'smooth'});
+  const N = 26;
+  for(let k=0;k<N;k++){
+    const [icon,canal,who,pais] = DAY_CLIENTS[k%DAY_CLIENTS.length];
+    const auto = Math.random() < 0.92;
+    S.pedidos++; S.canal[canal]++;
+    if(auto){
+      S.auto++;
+      const ref = pais==='Colombia' ? '45001'+(28800+Math.floor(Math.random()*900)) : 'PED-EC-0'+(8350+Math.floor(Math.random()*400));
+      addFeed(icon, who, CANAL_LABEL[canal]+' · '+pais, 'ok', ref);
+    } else {
+      S.rev++;
+      const reasons = ['SKU ambiguo','precio fuera de lista','cliente nuevo sin maestro'];
+      addFeed(icon, who, CANAL_LABEL[canal]+' · '+pais+' · '+reasons[k%3], 'warn', 'EXC-'+(313+k));
+    }
+    updateTower();
+    await sleep(REDUCED?0:(90+Math.random()*240));
+  }
+  btn.textContent = 'Día simulado · '+N+' pedidos';
+  addFeed('🏁','Fin de la simulación','88 % carga automática · excepciones con diagnóstico','run','resumen');
+});
+
+/* ---------- Reveal on scroll ---------- */
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('on'); io.unobserve(e.target);} }),{threshold:.12});
+$$('.band-head, .panel, .kpi-row').forEach(el=>{ el.classList.add('reveal'); io.observe(el); });
+
+/* init */
+renderInbox();
+updateTower();
+</script>
+</body>
+</html>
