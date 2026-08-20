@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Cuestionario técnico · Automatización de pedidos · Gadamax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1321; --paper:#EDF0F6; --white:#FFFFFF; --rule:#C9D2E1; --rule-soft:#DEE4EE;
+  --muted:#5C6880; --faint:#8C99B2; --panel:#F7F9FC;
+  --cobalt:#1F3BE0; --cobalt-ink:#152BA8; --cobalt-soft:#E3E8FF;
+  --gain:#0E8F76; --gain-soft:#DFF2ED;
+  --amber:#B07C10; --amber-soft:#FBF0D8;
+  --flag:#B23A2E; --flag-soft:#F7E4E1;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Source Serif 4",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --radius:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+header{background:var(--ink);color:#fff;padding:34px 0 30px}
+header h1{font-size:clamp(22px,4vw,30px);font-weight:600;letter-spacing:-.015em;line-height:1.15}
+header .sub{color:#9AA6BF;font-size:15px;margin-top:10px;max-width:56ch;font-family:var(--f-serif)}
+
+.intro{background:var(--white);border-bottom:1px solid var(--rule);padding:22px 0;font-size:15px}
+.intro p{margin-bottom:10px;max-width:64ch}
+.intro p:last-child{margin:0}
+.intro b{font-weight:600}
+
+/* barra de avance */
+.barra{position:sticky;top:0;z-index:10;background:var(--white);border-bottom:1px solid var(--rule);
+  padding:11px 0;font-size:13px}
+.barra .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pista{flex:1;min-width:130px;height:5px;background:var(--rule-soft);border-radius:3px;overflow:hidden}
+.pista i{display:block;height:100%;width:0;background:var(--cobalt);transition:width .3s}
+.barra .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+
+main{padding:26px 0 60px}
+
+fieldset{border:0;background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);
+  margin-bottom:16px;overflow:hidden}
+legend{display:none}
+.cab{display:flex;align-items:center;gap:12px;padding:15px 18px;cursor:pointer;
+  border-bottom:1px solid transparent;width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left}
+.cab:hover{background:var(--panel)}
+fieldset.abierta .cab{border-bottom-color:var(--rule-soft)}
+.cab .letra{font-family:var(--f-mono);font-size:12px;font-weight:500;color:var(--cobalt);
+  background:var(--cobalt-soft);width:26px;height:26px;display:grid;place-items:center;border-radius:2px;flex:0 0 26px}
+.cab .tt{flex:1;min-width:0}
+.cab .tt b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.cab .tt span{font-size:12.5px;color:var(--muted)}
+.cab .est{font-family:var(--f-mono);font-size:11px;color:var(--faint);white-space:nowrap}
+.cab .chev{color:var(--faint);transition:transform .2s;flex:0 0 auto}
+fieldset.abierta .cab .chev{transform:rotate(90deg)}
+.cuerpo{display:none;padding:4px 18px 18px}
+fieldset.abierta .cuerpo{display:block}
+.cuerpo>.nota-sec{font-family:var(--f-serif);font-size:15px;color:var(--muted);
+  padding:12px 0 4px;max-width:60ch}
+
+.q{padding:18px 0;border-top:1px solid var(--rule-soft)}
+.q:first-of-type{border-top:0}
+.q .et{display:flex;gap:9px;align-items:baseline;margin-bottom:3px}
+.q .id{font-family:var(--f-mono);font-size:11px;color:var(--faint);flex:0 0 auto;padding-top:2px}
+.q .tx{font-size:15.5px;font-weight:500;line-height:1.4}
+.q .ay{font-size:13.5px;color:var(--muted);margin:4px 0 10px;padding-left:30px;max-width:58ch}
+.q .ops{padding-left:30px;display:flex;flex-direction:column;gap:2px}
+.marca{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--amber-soft);color:#7A5408;padding:2px 5px;border-radius:2px;margin-left:6px;vertical-align:1px}
+
+label.op{display:flex;align-items:flex-start;gap:9px;padding:7px 9px;border-radius:2px;cursor:pointer;font-size:15px;line-height:1.4}
+label.op:hover{background:var(--panel)}
+label.op input{margin:3px 0 0;flex:0 0 auto;accent-color:var(--cobalt);width:16px;height:16px}
+label.op.marcada{background:var(--cobalt-soft)}
+
+input[type=text],input[type=email],input[type=number],textarea{
+  font-family:var(--f-body);font-size:15px;width:100%;padding:9px 11px;border:1px solid var(--rule);
+  border-radius:var(--radius);background:var(--panel);color:var(--ink)}
+input:focus,textarea:focus{outline:2px solid var(--cobalt);outline-offset:-1px;background:#fff}
+textarea{min-height:74px;resize:vertical;line-height:1.5}
+.reparto{padding-left:30px;display:grid;grid-template-columns:1fr 96px;gap:7px 12px;align-items:center;max-width:470px}
+.reparto label{font-size:14.5px}
+.reparto input{text-align:right;font-family:var(--f-mono);font-size:14px}
+
+.quien{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:18px;margin-bottom:16px}
+.quien h2{font-size:16px;font-weight:600;margin-bottom:4px}
+.quien p{font-size:13.5px;color:var(--muted);margin-bottom:14px;max-width:58ch}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.campos label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px;
+  text-transform:uppercase;letter-spacing:.05em}
+.campos>div:last-child{grid-column:1/-1}
+@media(max-width:560px){.campos{grid-template-columns:1fr}.reparto{grid-template-columns:1fr 84px}}
+
+.pie{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:18px;
+  position:sticky;bottom:0;box-shadow:0 -6px 22px -14px rgba(13,19,33,.4)}
+button.enviar{font-family:var(--f-body);font-size:16px;font-weight:500;padding:13px 24px;width:100%;
+  background:var(--cobalt);color:#fff;border:0;border-radius:var(--radius);cursor:pointer}
+button.enviar:hover:not(:disabled){background:var(--cobalt-ink)}
+button.enviar:disabled{background:var(--faint);cursor:not-allowed}
+.pie p{font-size:12.5px;color:var(--muted);margin-top:9px;text-align:center}
+
+.aviso{padding:13px 15px;border-left:3px solid;font-size:14px;margin-bottom:16px;border-radius:0 2px 2px 0}
+.a-err{background:var(--flag-soft);border-color:var(--flag);color:#8C2D24}
+.a-ok{background:var(--gain-soft);border-color:var(--gain);color:#0A5A4A}
+
+.gracias{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);
+  padding:44px 26px;text-align:center}
+.gracias h2{font-size:23px;font-weight:600;margin-bottom:10px;letter-spacing:-.015em}
+.gracias p{color:var(--muted);max-width:46ch;margin:0 auto 8px;font-family:var(--f-serif);font-size:16px}
+.gracias .mono{font-family:var(--f-mono);font-size:12px;color:var(--faint);margin-top:18px}
+.gracias button{margin-top:20px;font-family:var(--f-body);font-size:14px;padding:9px 18px;
+  background:#fff;border:1px solid var(--rule);border-radius:var(--radius);cursor:pointer}
+.gracias button:hover{background:var(--panel)}
+
+footer{border-top:1px solid var(--rule);padding:20px 0 46px;font-size:12.5px;color:var(--faint)}
+.trampa{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Automatización de pedidos — cuestionario técnico</h1>
+    <p class="sub">Lo que necesitamos saber para armarles una propuesta con números reales y no con supuestos.</p>
+  </div>
+</header>
+
+<div class="intro">
+  <div class="wrap">
+    <p>Son unos <b>doce minutos</b> y casi todo es de opción múltiple. <b>Ninguna pregunta es obligatoria</b>: si no saben algo, sáltenlo — «no sé» también es una respuesta útil para nosotros.</p>
+    <p>Cada sección dice a qué área le corresponde. <b>Pueden llenarla entre varias personas</b>: cada quien abre el enlace, responde su parte y envía. Lo vamos consolidando de este lado.</p>
+    <p>Las preguntas marcadas <span class="marca">clave</span> son las que más mueven el precio. Si solo tienen tiempo para unas pocas, que sean esas.</p>
+  </div>
+</div>
+
+<div class="barra">
+  <div class="wrap">
+    <div class="pista"><i id="pista"></i></div>
+    <span class="n" id="cuenta">0 respondidas</span>
+    <span class="n" id="cuentaClave" style="color:var(--amber)"></span>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="avisos"></div>
+
+  <form id="form" autocomplete="on">
+    <div class="quien">
+      <h2>¿Quién responde?</h2>
+      <p>Para saber a quién preguntarle si algo queda en duda, y para no mezclar respuestas de distintas personas.</p>
+      <div class="campos">
+        <div><label for="q-nombre">Nombre</label><input type="text" id="q-nombre" name="nombre" required></div>
+        <div><label for="q-rol">Área o cargo</label><input type="text" id="q-rol" name="rol" placeholder="Tecnología, comercial, dirección…"></div>
+        <div><label for="q-correo">Correo</label><input type="email" id="q-correo" name="correo"></div>
+      </div>
+    </div>
+
+    <div id="secciones"></div>
+
+    <div class="trampa"><label>No llenar<input type="text" id="sitio_web" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="pie">
+      <button type="submit" class="enviar" id="btn">Enviar respuestas</button>
+      <p id="pieNota">Se guarda lo que respondan, aunque esté incompleto.</p>
+    </div>
+  </form>
+
+  <div id="gracias" style="display:none"></div>
+</main>
+
+<footer><div class="wrap">Gadamax · Este cuestionario es privado y no está indexado. Las respuestas se usan solo para preparar la propuesta.</div></footer>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const BORRADOR = "gadamax-cuestionario-v1";
+let PREGUNTAS = [], SECCIONES = [];
+
+/* ── dibujar ───────────────────────────────────────────── */
+function pintar() {
+  $("#secciones").innerHTML = SECCIONES.map((s, i) => {
+    const qs = PREGUNTAS.filter((p) => p.seccion === s.id);
+    return `<fieldset data-sec="${s.id}" class="${i === 0 ? "abierta" : ""}">
+      <legend>${esc(s.titulo)}</legend>
+      <button type="button" class="cab" data-toggle="${s.id}">
+        <span class="letra">${s.id}</span>
+        <span class="tt"><b>${esc(s.titulo)}</b><span>${esc(s.quien)}</span></span>
+        <span class="est" data-est="${s.id}">0/${qs.length}</span>
+        <span class="chev">›</span>
+      </button>
+      <div class="cuerpo">
+        <p class="nota-sec">${esc(s.intro)}</p>
+        ${qs.map(campo).join("")}
+      </div>
+    </fieldset>`;
+  }).join("");
+
+  document.querySelectorAll("[data-toggle]").forEach((b) => b.onclick = () => {
+    b.closest("fieldset").classList.toggle("abierta");
+  });
+  $("#form").addEventListener("input", () => { marcar(); contar(); guardarBorrador(); });
+  $("#form").addEventListener("change", () => { marcar(); contar(); guardarBorrador(); });
+}
+
+function campo(p) {
+  const clave = p.critica ? '<span class="marca">clave</span>' : "";
+  const cab = `<div class="et"><span class="id">${p.id}</span><span class="tx">${esc(p.pregunta)}${clave}</span></div>
+    ${p.ayuda ? `<p class="ay">${esc(p.ayuda)}</p>` : ""}`;
+
+  if (p.tipo === "radio" || p.tipo === "check") {
+    const t = p.tipo === "radio" ? "radio" : "checkbox";
+    return `<div class="q" data-q="${p.id}" data-sec="${p.seccion}">${cab}
+      <div class="ops">${p.opciones.map((o, i) => `
+        <label class="op"><input type="${t}" name="${p.id}" value="${esc(o)}" id="${p.id}-${i}"><span>${esc(o)}</span></label>`).join("")}
+      </div></div>`;
+  }
+  if (p.tipo === "reparto") {
+    return `<div class="q" data-q="${p.id}" data-sec="${p.seccion}">${cab}
+      <div class="reparto">${p.opciones.map((o, i) => `
+        <label for="${p.id}-${i}">${esc(o)}</label>
+        <input type="number" min="0" id="${p.id}-${i}" name="${p.id}" data-op="${esc(o)}" placeholder="—">`).join("")}
+      </div></div>`;
+  }
+  return `<div class="q" data-q="${p.id}" data-sec="${p.seccion}">${cab}
+    <div class="ops"><textarea name="${p.id}" rows="2"></textarea></div></div>`;
+}
+
+/* ── estado visual ─────────────────────────────────────── */
+function marcar() {
+  document.querySelectorAll("label.op").forEach((l) => {
+    const i = l.querySelector("input");
+    l.classList.toggle("marcada", i && i.checked);
+  });
+}
+
+function valorDe(p) {
+  if (p.tipo === "radio") {
+    const m = document.querySelector(`input[name="${p.id}"]:checked`);
+    return m ? m.value : "";
+  }
+  if (p.tipo === "check") {
+    return [...document.querySelectorAll(`input[name="${p.id}"]:checked`)].map((x) => x.value);
+  }
+  if (p.tipo === "reparto") {
+    const o = {};
+    document.querySelectorAll(`input[name="${p.id}"]`).forEach((x) => {
+      if (String(x.value).trim() !== "") o[x.dataset.op] = x.value;
+    });
+    return o;
+  }
+  const t = document.querySelector(`[name="${p.id}"]`);
+  return t ? t.value.trim() : "";
+}
+
+const lleno = (v) => Array.isArray(v) ? v.length > 0
+  : (v && typeof v === "object") ? Object.keys(v).length > 0
+  : String(v ?? "").trim() !== "";
+
+function contar() {
+  let n = 0, nc = 0, tc = 0;
+  const porSec = {};
+  for (const p of PREGUNTAS) {
+    const ok = lleno(valorDe(p));
+    porSec[p.seccion] = porSec[p.seccion] || { ok: 0, total: 0 };
+    porSec[p.seccion].total++;
+    if (ok) { n++; porSec[p.seccion].ok++; }
+    if (p.critica) { tc++; if (ok) nc++; }
+  }
+  $("#pista").style.width = (n / PREGUNTAS.length * 100).toFixed(1) + "%";
+  $("#cuenta").textContent = `${n} de ${PREGUNTAS.length} respondidas`;
+  $("#cuentaClave").textContent = nc < tc ? `· faltan ${tc - nc} clave` : "· clave completas ✓";
+  if (nc === tc) $("#cuentaClave").style.color = "var(--gain)";
+  for (const [s, v] of Object.entries(porSec)) {
+    const e = document.querySelector(`[data-est="${s}"]`);
+    if (e) e.textContent = `${v.ok}/${v.total}`;
+  }
+  return n;
+}
+
+/* ── borrador local ────────────────────────────────────── */
+function guardarBorrador() {
+  try {
+    const d = { quien: datosQuien(), respuestas: {} };
+    for (const p of PREGUNTAS) { const v = valorDe(p); if (lleno(v)) d.respuestas[p.id] = v; }
+    localStorage.setItem(BORRADOR, JSON.stringify(d));
+  } catch {}
+}
+
+function cargarBorrador() {
+  let d;
+  try { d = JSON.parse(localStorage.getItem(BORRADOR) || "null"); } catch { return; }
+  if (!d) return;
+  if (d.quien) {
+    $("#q-nombre").value = d.quien.nombre || "";
+    $("#q-rol").value = d.quien.rol || "";
+    $("#q-correo").value = d.quien.correo || "";
+  }
+  for (const [id, v] of Object.entries(d.respuestas || {})) {
+    const p = PREGUNTAS.find((x) => x.id === id); if (!p) continue;
+    if (p.tipo === "radio") {
+      const el = [...document.querySelectorAll(`input[name="${id}"]`)].find((x) => x.value === v);
+      if (el) el.checked = true;
+    } else if (p.tipo === "check") {
+      document.querySelectorAll(`input[name="${id}"]`).forEach((x) => { if (v.includes(x.value)) x.checked = true; });
+    } else if (p.tipo === "reparto") {
+      document.querySelectorAll(`input[name="${id}"]`).forEach((x) => { if (v[x.dataset.op] !== undefined) x.value = v[x.dataset.op]; });
+    } else {
+      const t = document.querySelector(`[name="${id}"]`); if (t) t.value = v;
+    }
+  }
+  marcar();
+  if (Object.keys(d.respuestas || {}).length) {
+    $("#avisos").innerHTML = '<div class="aviso a-ok">Recuperamos lo que habían empezado a llenar en este navegador. Pueden seguir donde quedaron.</div>';
+  }
+}
+
+const datosQuien = () => ({
+  nombre: $("#q-nombre").value.trim(),
+  rol: $("#q-rol").value.trim(),
+  correo: $("#q-correo").value.trim()
+});
+
+/* ── envío ─────────────────────────────────────────────── */
+$("#form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const quien = datosQuien();
+  if (!quien.nombre) {
+    $("#avisos").innerHTML = '<div class="aviso a-err">Falta el nombre de quien responde.</div>';
+    $("#q-nombre").focus(); window.scrollTo({ top: 0, behavior: "smooth" }); return;
+  }
+  if (!contar()) {
+    $("#avisos").innerHTML = '<div class="aviso a-err">No hay ninguna respuesta todavía.</div>';
+    return;
+  }
+
+  const respuestas = {};
+  for (const p of PREGUNTAS) { const v = valorDe(p); if (lleno(v)) respuestas[p.id] = v; }
+
+  $("#btn").disabled = true; $("#btn").textContent = "Enviando…";
+  try {
+    const r = await fetch("/api/cuestionario", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ quien, respuestas, sitio_web: $("#sitio_web").value })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
+    try { localStorage.removeItem(BORRADOR); } catch {}
+    $("#form").style.display = "none";
+    $("#avisos").innerHTML = "";
+    document.querySelector(".barra").style.display = "none";
+    $("#gracias").style.display = "";
+    $("#gracias").innerHTML = `<div class="gracias">
+      <h2>Recibido. Gracias.</h2>
+      <p>Nos llegaron ${d.contestadas} respuestas. Con esto armamos la propuesta con opciones de precio y se las enviamos.</p>
+      <p>Si falta que otra persona responda su sección, pueden reenviarle este mismo enlace.</p>
+      <div class="mono">${esc(d.id)}</div>
+      <button type="button" onclick="location.reload()">Responder otra sección</button>
+    </div>`;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (err) {
+    $("#avisos").innerHTML = `<div class="aviso a-err">No se pudo enviar: ${esc(err.message)}. Lo que llenaron quedó guardado en este navegador — pueden reintentar en un momento.</div>`;
+    $("#btn").disabled = false; $("#btn").textContent = "Enviar respuestas";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+});
+
+/* ── arranque ──────────────────────────────────────────── */
+(async () => {
+  try {
+    const d = await (await fetch("/api/cuestionario")).json();
+    SECCIONES = d.secciones; PREGUNTAS = d.preguntas;
+  } catch {
+    $("#avisos").innerHTML = '<div class="aviso a-err">No se pudieron cargar las preguntas. Recarguen la página, por favor.</div>';
+    return;
+  }
+  pintar();
+  cargarBorrador();
+  contar();
+})();
+</script>
+</body>
+</html>
