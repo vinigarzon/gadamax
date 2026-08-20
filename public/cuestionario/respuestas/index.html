@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Respuestas del cuestionario · Gadamax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1321; --paper:#EDF0F6; --white:#FFF; --rule:#C9D2E1; --rule-soft:#DEE4EE;
+  --muted:#5C6880; --faint:#8C99B2; --panel:#F7F9FC;
+  --cobalt:#1F3BE0; --cobalt-ink:#152BA8; --cobalt-soft:#E3E8FF;
+  --gain:#0E8F76; --gain-soft:#DFF2ED;
+  --amber:#B07C10; --amber-soft:#FBF0D8;
+  --flag:#B23A2E; --flag-soft:#F7E4E1;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Source Serif 4",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --radius:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+header{background:var(--ink);color:#fff;padding:20px 0}
+header .hd{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+header img{width:24px;height:24px}
+header b{font-size:16px;font-weight:600}
+header .tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#7C89A5}
+header button{margin-left:auto;font-family:var(--f-body);font-size:12.5px;padding:6px 12px;
+  background:none;border:1px solid #2A3550;color:#A9B4CA;border-radius:var(--radius);cursor:pointer}
+header button:hover{background:#182033}
+
+main{padding:24px 0 60px}
+.puerta{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:26px;max-width:440px;margin:40px auto}
+.puerta h1{font-size:19px;font-weight:600;margin-bottom:6px}
+.puerta p{font-size:13.5px;color:var(--muted);margin-bottom:16px}
+input[type=password],input[type=text]{font-family:var(--f-mono);font-size:14px;width:100%;padding:10px 12px;
+  border:1px solid var(--rule);border-radius:var(--radius);background:var(--panel);color:var(--ink)}
+input:focus{outline:2px solid var(--cobalt);outline-offset:-1px;background:#fff}
+button.pri{font-family:var(--f-body);font-size:15px;font-weight:500;padding:11px 20px;width:100%;margin-top:11px;
+  background:var(--cobalt);color:#fff;border:0;border-radius:var(--radius);cursor:pointer}
+button.pri:hover{background:var(--cobalt-ink)}
+
+.tiras{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin-bottom:18px}
+.tiras div{background:var(--white);padding:14px 16px}
+.tiras .k{font-family:var(--f-mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.tiras .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.tiras .v.al{color:var(--amber)} .tiras .v.ok{color:var(--gain)}
+
+.aviso{padding:14px 16px;border-left:3px solid;margin-bottom:18px;font-size:14px;border-radius:0 2px 2px 0}
+.a-amb{background:var(--amber-soft);border-color:var(--amber);color:#6B4C08}
+.a-err{background:var(--flag-soft);border-color:var(--flag);color:#8C2D24}
+.a-ok{background:var(--gain-soft);border-color:var(--gain);color:#0A5A4A}
+.aviso ul{margin:8px 0 0 18px}
+.aviso li{margin-bottom:3px}
+
+.sec{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);margin-bottom:14px;overflow:hidden}
+.sec>h2{font-size:13px;font-family:var(--f-mono);font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:13px 18px;border-bottom:1px solid var(--rule-soft);display:flex;gap:10px;align-items:center}
+.sec>h2 em{font-style:normal;margin-left:auto;font-size:11px;color:var(--faint)}
+.item{padding:14px 18px;border-bottom:1px solid var(--rule-soft)}
+.item:last-child{border-bottom:0}
+.item.sin{background:#FCFCFD}
+.item .p{font-size:14.5px;font-weight:500;display:flex;gap:8px;align-items:baseline}
+.item .p .id{font-family:var(--f-mono);font-size:10.5px;color:var(--faint);flex:0 0 auto}
+.r{margin:7px 0 0 26px;padding-left:11px;border-left:2px solid var(--cobalt-soft)}
+.r .v{font-size:14.5px}
+.r .v ul{margin:2px 0 0 16px}
+.r .quien{font-family:var(--f-mono);font-size:10.5px;color:var(--faint);margin-top:1px}
+.r .otro{font-family:var(--f-serif);font-size:14px;color:var(--muted);margin-top:3px}
+.vacio{margin:5px 0 0 26px;font-size:13px;color:var(--faint);font-style:italic;font-family:var(--f-serif)}
+.marca{display:inline-block;font-family:var(--f-mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--amber-soft);color:#7A5408;padding:2px 5px;border-radius:2px;vertical-align:1px}
+.dist{margin:6px 0 0 26px;display:flex;flex-wrap:wrap;gap:5px}
+.dist span{font-family:var(--f-mono);font-size:11.5px;background:var(--panel);border:1px solid var(--rule-soft);
+  padding:3px 7px;border-radius:2px}
+footer{border-top:1px solid var(--rule);padding:18px 0 40px;font-size:12px;color:var(--faint)}
+.cargando{text-align:center;padding:50px;color:var(--muted);font-family:var(--f-serif);font-style:italic}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hd">
+    <img src="/assets/images/brand-logo-gadamax.png" alt="">
+    <b>Gadamax</b>
+    <span class="tag">Respuestas · B. Braun</span>
+    <button type="button" id="btnSalir" style="display:none">Salir</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="puerta" class="puerta" style="display:none">
+    <h1>Respuestas del cuestionario</h1>
+    <p>Esta página es solo para el equipo de Gadamax.</p>
+    <form id="fClave">
+      <input type="password" id="clave" placeholder="Clave de lectura" autocomplete="current-password">
+      <button class="pri" type="submit">Entrar</button>
+    </form>
+    <div id="errClave"></div>
+  </div>
+
+  <div id="panel" style="display:none"></div>
+  <div id="cargando" class="cargando">cargando…</div>
+</main>
+
+<footer><div class="wrap">Página interna. Los datos mostrados son respuestas del cliente y no deben compartirse fuera del equipo.</div></footer>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const LLAVE = "gadamax-clave-cuestionario";
+let SEC = [];
+
+async function cargar(clave) {
+  $("#cargando").style.display = "";
+  $("#puerta").style.display = "none";
+  $("#panel").style.display = "none";
+
+  let d;
+  try {
+    const r = await fetch(`/api/cuestionario?ver=${encodeURIComponent(clave)}`);
+    d = await r.json();
+    if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
+  } catch (e) {
+    try { sessionStorage.removeItem(LLAVE); } catch {}
+    $("#cargando").style.display = "none";
+    $("#puerta").style.display = "";
+    $("#errClave").innerHTML = `<div class="aviso a-err" style="margin-top:14px">${esc(e.message)}</div>`;
+    return;
+  }
+
+  try { sessionStorage.setItem(LLAVE, clave); } catch {}
+  const meta = await (await fetch("/api/cuestionario")).json();
+  SEC = meta.secciones;
+
+  pintar(d, meta.preguntas);
+  $("#cargando").style.display = "none";
+  $("#panel").style.display = "";
+  $("#btnSalir").style.display = "";
+}
+
+function valorHTML(r) {
+  let v = "";
+  if (Array.isArray(r.valor)) {
+    v = `<ul>${r.valor.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  } else if (r.valor && typeof r.valor === "object") {
+    v = `<div class="dist" style="margin:4px 0 0">${Object.entries(r.valor)
+      .map(([k, n]) => `<span>${esc(k)}: <b>${esc(n)}</b></span>`).join("")}</div>`;
+  } else {
+    v = esc(r.valor);
+  }
+  const quien = [r.de, r.rol].filter(Boolean).join(" · ");
+  return `<div class="r">
+    <div class="v">${v}</div>
+    ${r.otro ? `<div class="otro">Otro: ${esc(r.otro)}</div>` : ""}
+    ${quien ? `<div class="quien">${esc(quien)}</div>` : ""}
+  </div>`;
+}
+
+function pintar(d, preguntas) {
+  const total = d.consolidado.length;
+  const conts = d.consolidado.filter((c) => c.respuestas.length).length;
+  const clave = d.consolidado.filter((c) => c.critica).length;
+  const claveOk = clave - d.criticas_pendientes.length;
+
+  let html = `<div class="tiras">
+    <div><div class="k">Envíos recibidos</div><div class="v">${d.envios}</div></div>
+    <div><div class="k">Preguntas con respuesta</div><div class="v">${conts}<span style="font-size:14px;color:var(--muted)"> / ${total}</span></div></div>
+    <div><div class="k">Preguntas clave</div><div class="v ${claveOk === clave ? "ok" : "al"}">${claveOk}<span style="font-size:14px;color:var(--muted)"> / ${clave}</span></div></div>
+  </div>`;
+
+  if (!d.envios) {
+    html += '<div class="aviso a-amb">Todavía no llegó ninguna respuesta.</div>';
+  } else if (d.criticas_pendientes.length) {
+    html += `<div class="aviso a-amb"><b>Faltan ${d.criticas_pendientes.length} preguntas clave para poder cotizar:</b>
+      <ul>${d.criticas_pendientes.map((c) => `<li><b>${esc(c.id)}</b> — ${esc(c.pregunta)}</li>`).join("")}</ul></div>`;
+  } else {
+    html += '<div class="aviso a-ok"><b>Están todas las preguntas clave respondidas.</b> Ya hay con qué armar el precio.</div>';
+  }
+
+  for (const s of SEC) {
+    const items = d.consolidado.filter((c) => c.seccion === s.id);
+    const ok = items.filter((c) => c.respuestas.length).length;
+    html += `<div class="sec">
+      <h2>${esc(s.id)} · ${esc(s.titulo)}<em>${ok}/${items.length} respondidas</em></h2>
+      ${items.map((c) => `
+        <div class="item ${c.respuestas.length ? "" : "sin"}">
+          <div class="p"><span class="id">${esc(c.id)}</span>
+            <span>${esc(c.pregunta)} ${c.critica ? '<span class="marca">clave</span>' : ""}</span></div>
+          ${c.respuestas.length
+            ? c.respuestas.map(valorHTML).join("")
+            : '<div class="vacio">sin responder</div>'}
+        </div>`).join("")}
+    </div>`;
+  }
+
+  $("#panel").innerHTML = html;
+}
+
+$("#fClave").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const c = $("#clave").value.trim();
+  if (c) cargar(c);
+});
+
+$("#btnSalir").onclick = () => {
+  try { sessionStorage.removeItem(LLAVE); } catch {}
+  location.reload();
+};
+
+(() => {
+  const url = new URLSearchParams(location.search).get("ver");
+  let guardada = null;
+  try { guardada = sessionStorage.getItem(LLAVE); } catch {}
+  const c = url || guardada;
+  if (c) {
+    /* si la clave venía en la URL, se la saca de la barra de direcciones */
+    if (url) history.replaceState(null, "", location.pathname);
+    cargar(c);
+  } else {
+    $("#cargando").style.display = "none";
+    $("#puerta").style.display = "";
+  }
+})();
+</script>
+</body>
+</html>

@@ -55,6 +55,7 @@ export const PREGUNTAS = [
     id: "A1", seccion: "A", tipo: "reparto", critica: true,
     pregunta: "De los ~1.200 pedidos al mes, ¿cómo se reparten por canal?",
     ayuda: "Aproximado en porcentaje o en cantidad. No tiene que sumar exacto.",
+    otroEn: "Otro",
     opciones: ["Correo con el pedido escrito en el cuerpo", "Correo con Excel o PDF adjunto", "WhatsApp", "Portal o e-commerce propio", "EDI", "Teléfono", "Otro"]
   },
   {
@@ -129,6 +130,32 @@ export const PREGUNTAS = [
     opciones: ["Sí", "Sí, con acuerdo de confidencialidad firmado primero", "Solo una muestra reducida", "No es posible"]
   },
 
+  {
+    id: "B9", seccion: "B", tipo: "radio", critica: true,
+    pregunta: "¿El pedido exige control de lote o número de serie?",
+    ayuda: "Cambia por completo lo que el agente tiene que resolver antes de grabar una línea.",
+    opciones: ["Sí, en todos los productos", "Solo en algunas familias de producto", "No, se asigna después en bodega"]
+  },
+  {
+    id: "B10", seccion: "B", tipo: "radio",
+    pregunta: "¿Hay que validar fecha de caducidad o vida útil mínima al momento del pedido?",
+    ayuda: "Por ejemplo, clientes que exigen por contrato un porcentaje mínimo de vida útil restante.",
+    opciones: ["Sí, algunos clientes lo exigen por contrato", "Se revisa, pero no es una regla formal", "No aplica en este momento"]
+  },
+  {
+    id: "B11", seccion: "B", tipo: "check",
+    pregunta: "¿Qué tipo de clientes emiten estos pedidos?",
+    ayuda: "El formato del pedido cambia mucho entre un hospital público y un distribuidor.",
+    otroEn: "Otro",
+    opciones: ["Hospitales y clínicas privadas", "Hospitales o entidades públicas", "Distribuidores mayoristas", "Farmacias", "Otro"]
+  },
+  {
+    id: "B12", seccion: "B", tipo: "radio", critica: true,
+    pregunta: "¿Hay pedidos que vienen de licitaciones o contratos marco con precios ya fijados?",
+    ayuda: "Si el precio viene de un contrato y no de la lista, la validación de precio es distinta.",
+    opciones: ["Sí, una parte importante", "Sí, pero son pocos", "No, todo sale de lista o de condiciones del cliente", "No sé"]
+  },
+
   /* ── C · Sistemas y conexión ───────────────────────────────────────── */
   {
     id: "C1", seccion: "C", tipo: "texto", critica: true,
@@ -139,7 +166,8 @@ export const PREGUNTAS = [
     id: "C2", seccion: "C", tipo: "check", critica: true,
     pregunta: "¿De qué formas se puede escribir en ese ERP?",
     ayuda: "Marquen todas las que apliquen, aunque no estén seguros.",
-    opciones: ["API REST", "Servicio SOAP / web service", "Acceso directo a base de datos", "Importación de archivos (CSV, Excel, XML)", "Solo por pantalla", "No sabemos todavía"]
+    otroEn: "Otro",
+    opciones: ["API REST", "Servicio SOAP / web service", "Acceso directo a base de datos", "Importación de archivos (CSV, Excel, XML)", "Solo por pantalla", "Otro", "No sabemos todavía"]
   },
   {
     id: "C3", seccion: "C", tipo: "radio",
@@ -150,6 +178,7 @@ export const PREGUNTAS = [
     id: "C4", seccion: "C", tipo: "check", critica: true,
     pregunta: "Nos comentaron que hoy conectarse a SAP no es posible. ¿Cuál es la razón?",
     ayuda: "Entender esto bien es lo que más cambia la propuesta. Marquen todas las que apliquen.",
+    otroEn: "Otra razón",
     opciones: [
       "Política corporativa: no se permiten integraciones externas",
       "No hay quién autorice el acceso desde la región",
@@ -215,7 +244,8 @@ export const PREGUNTAS = [
   {
     id: "C8", seccion: "C", tipo: "check",
     pregunta: "Además del ERP de Ecuador y SAP, ¿qué otros sistemas deberían conectarse más adelante?",
-    opciones: ["CRM", "WMS o gestión de bodega", "Facturación electrónica (SRI / DIAN)", "Business intelligence o reportería", "Compras y abastecimiento", "Recursos humanos", "Transporte y logística", "Todavía no lo tenemos claro"]
+    otroEn: "Otro",
+    opciones: ["CRM", "WMS o gestión de bodega", "Facturación electrónica (SRI / DIAN)", "Business intelligence o reportería", "Compras y abastecimiento", "Recursos humanos", "Transporte y logística", "Otro", "Todavía no lo tenemos claro"]
   },
   {
     id: "C9", seccion: "C", tipo: "radio", critica: true,
@@ -254,7 +284,16 @@ export const PREGUNTAS = [
   {
     id: "D4", seccion: "D", tipo: "check",
     pregunta: "¿Qué exige auditoría o control interno?",
-    opciones: ["Registro de cada decisión del sistema", "Quién aprobó qué y cuándo", "Conservar los documentos originales por X años", "Poder revertir una carga equivocada", "Nada en particular", "No sé"]
+    otroEn: "Otro",
+    opciones: ["Registro de cada decisión del sistema", "Quién aprobó qué y cuándo", "Conservar los documentos originales por X años", "Poder revertir una carga equivocada", "Otro", "Nada en particular", "No sé"]
+  },
+
+  {
+    id: "D5", seccion: "D", tipo: "check", critica: true,
+    pregunta: "¿Este proceso entra en el alcance de alguna certificación o auditoría regulatoria?",
+    ayuda: "En un fabricante de dispositivos médicos esto puede condicionar cómo se valida y documenta el sistema.",
+    otroEn: "Otra",
+    opciones: ["ISO 13485", "Buenas prácticas de manufactura o almacenamiento", "Auditoría corporativa interna", "Requisitos de la autoridad sanitaria local", "Otra", "No aplica", "No sé"]
   },
 
   /* ── E · Alcance y modelo comercial ────────────────────────────────── */
@@ -300,7 +339,8 @@ export const PREGUNTAS = [
   {
     id: "F1", seccion: "F", tipo: "check",
     pregunta: "Además de pedidos, ¿qué procesos duelen más hoy?",
-    opciones: ["Conciliación entre sistemas", "Reportería y consolidación regional", "Cuentas por cobrar y cartera", "Compras y abastecimiento", "Inventarios entre filiales", "Atención al cliente", "Cierre contable"]
+    otroEn: "Otro",
+    opciones: ["Conciliación entre sistemas", "Reportería y consolidación regional", "Cuentas por cobrar y cartera", "Compras y abastecimiento", "Inventarios entre filiales", "Atención al cliente", "Cierre contable", "Otro"]
   },
   {
     id: "F2", seccion: "F", tipo: "radio",

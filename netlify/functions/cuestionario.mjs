@@ -25,6 +25,9 @@ const json = (dato, status = 200) => new Response(JSON.stringify(dato), {
 });
 
 const IDS = new Set(PREGUNTAS.map((p) => p.id));
+/* Las respuestas de tipo «Otro, ¿cuál?» llegan como <id>__otro. */
+const OTROS = new Set(PREGUNTAS.filter((p) => p.otroEn).map((p) => `${p.id}__otro`));
+const aceptada = (k) => IDS.has(k) || OTROS.has(k);
 const limpiar = (s, max = 2000) => String(s ?? "").slice(0, max).trim();
 
 export default async (req) => {
@@ -54,7 +57,12 @@ export default async (req) => {
       respuestas: todas
         .filter((r) => r.respuestas?.[p.id] !== undefined && r.respuestas[p.id] !== "" &&
                        !(Array.isArray(r.respuestas[p.id]) && !r.respuestas[p.id].length))
-        .map((r) => ({ de: r.quien?.nombre || "sin nombre", rol: r.quien?.rol || "", valor: r.respuestas[p.id] }))
+        .map((r) => {
+          const fila = { de: r.quien?.nombre || "", rol: r.quien?.rol || "", valor: r.respuestas[p.id] };
+          const otro = r.respuestas[`${p.id}__otro`];
+          if (otro) fila.otro = otro;
+          return fila;
+        })
     }));
 
     const criticasSinResponder = consolidado.filter((c) => c.critica && !c.respuestas.length);
@@ -80,12 +88,12 @@ export default async (req) => {
     /* trampa para robots: si viene lleno, se descarta en silencio */
     if (limpiar(cuerpo.sitio_web)) return json({ ok: true });
 
+    /* El nombre es opcional: lo que importa es la respuesta, no quién la dio. */
     const nombre = limpiar(cuerpo?.quien?.nombre, 120);
-    if (!nombre) return json({ error: "Falta el nombre de quien responde." }, 400);
 
     const respuestas = {};
     for (const [k, v] of Object.entries(cuerpo.respuestas || {})) {
-      if (!IDS.has(k)) continue;
+      if (!aceptada(k)) continue;
       if (Array.isArray(v)) respuestas[k] = v.slice(0, 30).map((x) => limpiar(x, 300));
       else if (v && typeof v === "object") {
         const o = {};
@@ -94,8 +102,9 @@ export default async (req) => {
       } else respuestas[k] = limpiar(v);
     }
 
-    const contestadas = Object.values(respuestas).filter((v) =>
-      Array.isArray(v) ? v.length : (v && typeof v === "object" ? Object.keys(v).length : String(v).trim())
+    /* El texto de un «Otro» no cuenta como pregunta aparte. */
+    const contestadas = Object.entries(respuestas).filter(([k, v]) =>
+      IDS.has(k) && (Array.isArray(v) ? v.length : (v && typeof v === "object" ? Object.keys(v).length : String(v).trim()))
     ).length;
 
     if (!contestadas) return json({ error: "El formulario llegó vacío." }, 400);
@@ -105,7 +114,7 @@ export default async (req) => {
       id,
       recibido: new Date().toISOString(),
       quien: {
-        nombre,
+        nombre: nombre || "",
         rol: limpiar(cuerpo?.quien?.rol, 120),
         correo: limpiar(cuerpo?.quien?.correo, 160)
       },
