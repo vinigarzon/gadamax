@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Agente de pedidos · Demostración técnica · Gadamax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1321; --paper:#EDF0F6; --white:#FFFFFF; --rule:#C9D2E1; --rule-soft:#DEE4EE;
+  --muted:#5C6880; --muted-dark:#8C99B2; --panel:#F7F9FC;
+  --cobalt:#1F3BE0; --cobalt-ink:#152BA8; --cobalt-soft:#E3E8FF;
+  --flag:#B23A2E; --flag-soft:#F7E4E1;
+  --gain:#0E8F76; --gain-soft:#DFF2ED;
+  --amber:#B07C10; --amber-soft:#FBF0D8;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Source Serif 4",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --radius:3px;
+  --shadow:0 1px 2px rgba(13,19,33,.06),0 12px 32px -18px rgba(13,19,33,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--cobalt)}
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+
+/* ── cabecera ─────────────────────────────────────────── */
+header{background:var(--ink);color:var(--white);padding:22px 0}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.hd h1{font-size:19px;font-weight:600;letter-spacing:-.01em}
+.hd .sub{color:#9AA6BF;font-size:13px;margin-top:2px}
+.badge{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid #2A3550;color:#9AA6BF;padding:5px 10px;border-radius:var(--radius)}
+.badge.on{border-color:var(--gain);color:#63D6BC}
+.badge.alerta{border-color:var(--amber);color:#F0C25A}
+.aviso-respaldo{background:var(--amber-soft);border-left:3px solid var(--amber);padding:11px 14px;font-size:12.5px;color:#6B4C08}
+
+/* ── aviso ────────────────────────────────────────────── */
+.nota{background:var(--amber-soft);border-bottom:1px solid #E8D7A8;padding:11px 0;font-size:13px;color:#6B4C08}
+.nota b{font-weight:600}
+
+/* ── layout ───────────────────────────────────────────── */
+.grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px;padding:24px 0 40px;align-items:start}
+@media(max-width:1000px){.grid{grid-template-columns:1fr}}
+.card{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card>h2{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  padding:13px 16px;border-bottom:1px solid var(--rule-soft)}
+.card .bd{padding:16px}
+
+/* ── entrada ──────────────────────────────────────────── */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{font-size:12px;font-family:var(--f-body);background:var(--panel);border:1px solid var(--rule);
+  color:var(--ink);padding:6px 10px;border-radius:var(--radius);cursor:pointer;text-align:left;line-height:1.3}
+.chip:hover{border-color:var(--cobalt);background:var(--cobalt-soft)}
+.chip.sel{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+.chip small{display:block;font-size:10.5px;opacity:.7;font-weight:400}
+textarea{width:100%;min-height:270px;font-family:var(--f-mono);font-size:12.5px;line-height:1.6;
+  padding:12px;border:1px solid var(--rule);border-radius:var(--radius);resize:vertical;background:var(--panel);color:var(--ink)}
+textarea:focus{outline:2px solid var(--cobalt);outline-offset:-1px;background:#fff}
+.row{display:flex;gap:8px;align-items:center;margin-top:12px}
+button{font-family:var(--f-body);font-size:14px;font-weight:500;padding:10px 18px;border-radius:var(--radius);
+  border:1px solid transparent;cursor:pointer;transition:background .12s}
+.b-main{background:var(--cobalt);color:#fff;flex:1}
+.b-main:hover:not(:disabled){background:var(--cobalt-ink)}
+.b-main:disabled{background:var(--muted-dark);cursor:not-allowed}
+.b-ghost{background:#fff;border-color:var(--rule);color:var(--ink)}
+.b-ghost:hover{background:var(--panel)}
+.b-sm{font-size:12px;padding:6px 11px}
+.hint{font-size:12px;color:var(--muted);margin-top:10px}
+
+/* ── pipeline ─────────────────────────────────────────── */
+.paso{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid var(--rule-soft)}
+.paso:last-child{border-bottom:0}
+.dot{width:19px;height:19px;border-radius:50%;flex:0 0 19px;margin-top:1px;border:2px solid var(--rule);
+  display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--muted-dark);background:#fff}
+.paso.corriendo .dot{border-color:var(--cobalt);animation:pulso 1s ease-in-out infinite}
+.paso.listo .dot{border-color:var(--gain);background:var(--gain);color:#fff}
+.paso.omitido .dot{border-style:dashed}
+.paso.fallo .dot{border-color:var(--flag);background:var(--flag);color:#fff}
+@keyframes pulso{0%,100%{box-shadow:0 0 0 0 rgba(31,59,224,.35)}50%{box-shadow:0 0 0 5px rgba(31,59,224,0)}}
+.paso .t{font-size:13.5px;font-weight:500}
+.paso .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+.paso .ms{font-family:var(--f-mono);font-size:11px;color:var(--muted-dark);margin-left:auto;white-space:nowrap}
+
+/* ── veredicto ────────────────────────────────────────── */
+.ver{padding:14px 16px;border-left:3px solid;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.ver.aprobado{background:var(--gain-soft);border-color:var(--gain)}
+.ver.parcial{background:var(--amber-soft);border-color:var(--amber)}
+.ver.rechazado{background:var(--flag-soft);border-color:var(--flag)}
+.ver .et{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.ver.aprobado .et{color:var(--gain)} .ver.parcial .et{color:var(--amber)} .ver.rechazado .et{color:var(--flag)}
+.ver .rz{font-size:13.5px;margin-top:3px}
+.kpis{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
+.kpi .n{font-family:var(--f-mono);font-size:19px;font-weight:500;line-height:1.1}
+.kpi .l{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+
+/* ── pestañas ─────────────────────────────────────────── */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);overflow-x:auto}
+.tab{font-size:12.5px;font-weight:500;padding:10px 14px;background:none;border:0;border-bottom:2px solid transparent;
+  color:var(--muted);cursor:pointer;white-space:nowrap;border-radius:0}
+.tab:hover{color:var(--ink)}
+.tab.sel{color:var(--cobalt);border-bottom-color:var(--cobalt)}
+.pane{display:none;padding:16px} .pane.sel{display:block}
+
+/* ── tablas ───────────────────────────────────────────── */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  font-weight:600;padding:7px 8px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:8px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.num{font-family:var(--f-mono);text-align:right;white-space:nowrap}
+.mono{font-family:var(--f-mono);font-size:11.5px}
+tr.st-bloqueada{background:#FDF6F5} tr.st-revision{background:#FDFAF1}
+.pill{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+  padding:2px 6px;border-radius:2px;font-weight:500;white-space:nowrap}
+.p-ok{background:var(--gain-soft);color:var(--gain)}
+.p-revision{background:var(--amber-soft);color:var(--amber)}
+.p-bloqueada{background:var(--flag-soft);color:var(--flag)}
+.p-sap{background:var(--cobalt-soft);color:var(--cobalt-ink)}
+.p-erp{background:#E9E4F7;color:#5B3FA8}
+.inc{font-size:11.5px;margin-top:4px;padding-left:11px;border-left:2px solid var(--rule)}
+.inc.bloqueo{border-color:var(--flag);color:#8C2D24}
+.inc.revision{border-color:var(--amber);color:#7A5408}
+.inc.informativo{border-color:var(--rule);color:var(--muted)}
+.inc b{font-family:var(--f-mono);font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.flecha{color:var(--muted-dark);padding:0 3px}
+.score{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
+
+pre{font-family:var(--f-mono);font-size:11.5px;line-height:1.55;background:var(--ink);color:#C9D2E1;
+  padding:14px;border-radius:var(--radius);overflow:auto;max-height:460px}
+pre .k{color:#8FB8FF} pre .s{color:#9FE0C4} pre .n{color:#F3C77B} pre .b{color:#E58B7F}
+.vacio{color:var(--muted);font-size:13px;padding:22px 4px;text-align:center;font-family:var(--f-serif);font-style:italic}
+.err{background:var(--flag-soft);border-left:3px solid var(--flag);padding:12px 14px;font-size:13px;color:#8C2D24}
+.sec-t{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
+.sec-t h2{font-size:15px;font-weight:600}
+.sec-t p{font-size:12.5px;color:var(--muted)}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:900px){.dos{grid-template-columns:1fr}}
+footer{border-top:1px solid var(--rule);padding:20px 0 40px;font-size:12px;color:var(--muted)}
+.sel-mat{font-family:var(--f-body);font-size:12px;padding:5px 7px;border:1px solid var(--rule);border-radius:2px;max-width:100%}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hd">
+    <div>
+      <h1>Agente de pedidos — demostración técnica</h1>
+      <div class="sub">Lectura de pedidos en texto libre, emparejamiento contra maestros y carga a SAP y al ERP de Ecuador</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="badge" id="bModelo">modelo · en espera</span>
+      <span class="badge" id="bAlmacen">almacenamiento</span>
+    </div>
+  </div>
+</header>
+
+<div class="nota">
+  <div class="wrap">
+    <b>Esto es una maqueta funcional.</b> Los maestros de clientes y materiales son inventados y los dos sistemas de destino
+    están simulados. Lo que <b>sí es real</b>: la lectura del pedido la hace un modelo en vivo, las reglas de negocio se
+    ejecutan en código y los documentos generados quedan guardados — recargue la página y siguen ahí.
+  </div>
+</div>
+
+<div class="wrap grid">
+
+  <!-- ── columna izquierda: entrada ── -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <section class="card">
+      <h2>1 · El pedido como llega</h2>
+      <div class="bd">
+        <div class="chips" id="chips"></div>
+        <textarea id="txt" spellcheck="false" placeholder="Pegue aquí un pedido: un correo, un WhatsApp, una tabla de Excel…"></textarea>
+        <div class="row">
+          <button class="b-main" id="btn">Procesar pedido</button>
+          <button class="b-ghost b-sm" id="btnLimpiar">Limpiar</button>
+        </div>
+        <p class="hint" id="hint">Elija un ejemplo o escriba el suyo. Puede editar el texto antes de procesarlo — el resultado cambia de verdad.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Maestros cargados</h2>
+      <div class="bd" id="maestros"><div class="vacio">cargando…</div></div>
+    </section>
+  </div>
+
+  <!-- ── columna derecha: proceso y resultado ── -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <section class="card">
+      <h2>2 · Qué hace el agente</h2>
+      <div class="bd" id="pipeline"><div class="vacio">Sin ejecutar todavía.</div></div>
+    </section>
+
+    <section class="card" id="cardRes" style="display:none">
+      <div id="veredicto"></div>
+      <div class="tabs" id="tabs"></div>
+      <div id="panes"></div>
+    </section>
+  </div>
+</div>
+
+<!-- ── estado de los sistemas ── -->
+<div class="wrap" style="padding-bottom:40px">
+  <div class="sec-t">
+    <div>
+      <h2>3 · Lo que quedó grabado en los sistemas</h2>
+      <p>Esta sección lee del almacenamiento, no de la pantalla. Recargue la página y compruébelo.</p>
+    </div>
+    <button class="b-ghost b-sm" id="btnRef">Actualizar</button>
+  </div>
+  <div class="dos">
+    <section class="card">
+      <h2>Documentos generados</h2>
+      <div class="bd" id="ordenes"><div class="vacio">cargando…</div></div>
+    </section>
+    <section class="card">
+      <h2>Cola de excepciones — lo que espera a una persona</h2>
+      <div class="bd" id="excepciones"><div class="vacio">cargando…</div></div>
+    </section>
+  </div>
+</div>
+
+<footer><div class="wrap">Gadamax · demostración interna. No indexada. Los datos mostrados no corresponden a clientes reales.</div></footer>
+
+<script>
+const API = "/api";
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const fmt = (n, dec = 2) => n === null || n === undefined ? "—" :
+  Number(n).toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+
+let EJEMPLOS = [], ULT = null, MAESTROS = null;
+
+/* ── ejemplos ─────────────────────────────────────────── */
+async function cargarEjemplos() {
+  try {
+    const r = await fetch(`${API}/ejemplos`);
+    EJEMPLOS = (await r.json()).ejemplos || [];
+  } catch { EJEMPLOS = []; }
+  $("#chips").innerHTML = EJEMPLOS.map((e, i) =>
+    `<button class="chip" data-i="${i}">${esc(e.titulo)}<small>${esc(e.subtitulo)}</small></button>`).join("");
+  document.querySelectorAll(".chip").forEach((c) => c.onclick = () => {
+    const e = EJEMPLOS[+c.dataset.i];
+    $("#txt").value = e.texto;
+    document.querySelectorAll(".chip").forEach((x) => x.classList.remove("sel"));
+    c.classList.add("sel");
+    $("#hint").textContent = "Lo que debería pasar: " + e.espera;
+  });
+  if (EJEMPLOS.length) document.querySelector(".chip").click();
+}
+
+/* ── maestros ─────────────────────────────────────────── */
+async function cargarMaestros() {
+  try {
+    const r = await fetch(`${API}/erp?q=maestros`);
+    MAESTROS = await r.json();
+  } catch { $("#maestros").innerHTML = '<div class="err">No se pudo leer el maestro.</div>'; return; }
+  const { materiales: m, clientes: c, parametros: p } = MAESTROS;
+  $("#maestros").innerHTML = `
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">
+      ${c.length} clientes y ${m.length} materiales. Estos son de ejemplo: el día que ustedes entreguen un extracto
+      de sus maestros reales, se reemplaza el archivo y el motor no cambia.
+    </p>
+    <table><thead><tr><th>Cliente</th><th>RUC / NIT</th><th class="num">Cupo libre</th></tr></thead><tbody>
+    ${c.map((x) => `<tr><td>${esc(x.nom)}${x.bloqueado ? ' <span class="pill p-bloqueada">bloqueado</span>' : ""}
+      <div class="score">${esc(x.pais)} · ${esc(x.cond)}</div></td>
+      <td class="mono">${esc(x.id)}</td>
+      <td class="num">${fmt(x.cupo - x.saldo, x.moneda === "COP" ? 0 : 2)} <span class="score">${esc(x.moneda)}</span></td></tr>`).join("")}
+    </tbody></table>
+    <p style="font-size:11.5px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--rule-soft)">
+      <b>Umbrales:</b> carga automática desde ${p.umbral_carga}; revisión humana entre ${p.umbral_revision} y ${p.umbral_carga}.
+      Desvío de precio: avisa al ${(p.desvio_precio_avisa * 100).toFixed(0)} %, bloquea al ${(p.desvio_precio_frena * 100).toFixed(0)} %.
+      Lead time ${p.lead_time_dias} días.
+    </p>`;
+}
+
+/* ── pipeline ─────────────────────────────────────────── */
+const PASOS = {};
+function pintarPipeline() {
+  const ns = Object.keys(PASOS).sort((a, b) => a - b);
+  if (!ns.length) { $("#pipeline").innerHTML = '<div class="vacio">Sin ejecutar todavía.</div>'; return; }
+  $("#pipeline").innerHTML = ns.map((n) => {
+    const p = PASOS[n];
+    const ico = p.estado === "listo" ? "✓" : p.estado === "fallo" ? "!" : p.estado === "omitido" ? "–" : n;
+    return `<div class="paso ${p.estado}">
+      <div class="dot">${ico}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:10px"><span class="t">${esc(p.etiqueta)}</span><span class="ms">${p.ms} ms</span></div>
+        ${p.detalle ? `<div class="d">${esc(p.detalle)}</div>` : ""}
+      </div></div>`;
+  }).join("");
+}
+
+/* ── proceso principal ────────────────────────────────── */
+async function procesar() {
+  const texto = $("#txt").value.trim();
+  if (!texto) return;
+  for (const k in PASOS) delete PASOS[k];
+  pintarPipeline();
+  $("#cardRes").style.display = "none";
+  $("#btn").disabled = true;
+  $("#btn").textContent = "Procesando…";
+
+  try {
+    const r = await fetch(`${API}/agente-pedido`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ texto })
+    });
+
+    if (!r.ok || !r.body) {
+      let m = `El servidor respondió ${r.status}.`;
+      try { m = (await r.json()).error || m; } catch {}
+      throw new Error(m);
+    }
+
+    const lector = r.body.getReader();
+    const dec = new TextDecoder();
+    let buf = "";
+    while (true) {
+      const { done, value } = await lector.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const trozos = buf.split("\n\n");
+      buf = trozos.pop();
+      for (const t of trozos) {
+        const ev = /event: (.+)/.exec(t)?.[1];
+        const dt = /data: (.+)/s.exec(t)?.[1];
+        if (!ev || !dt) continue;
+        manejar(ev, JSON.parse(dt));
+      }
+    }
+  } catch (e) {
+    $("#pipeline").insertAdjacentHTML("beforeend", `<div class="err" style="margin-top:10px">${esc(e.message)}</div>`);
+  } finally {
+    $("#btn").disabled = false;
+    $("#btn").textContent = "Procesar pedido";
+    refrescar();
+  }
+}
+
+function manejar(ev, d) {
+  if (ev === "paso") { PASOS[d.n] = d; pintarPipeline(); return; }
+  if (ev === "extraccion") {
+    ULT = { ...(ULT || {}), ...d };
+    $("#bModelo").className = d.respaldo ? "badge alerta" : "badge on";
+    $("#bModelo").textContent = d.respaldo ? "modo respaldo · API sin responder" : "modelo · " + d.modelo;
+    return;
+  }
+  if (ev === "resolucion") { ULT = { ...(ULT || {}), res: d }; pintarResultado(); return; }
+  if (ev === "fin") {
+    ULT = { ...(ULT || {}), fin: d };
+    $("#bAlmacen").className = "badge on";
+    $("#bAlmacen").textContent = d.almacen === "blobs" ? "almacenamiento · persistente" : "almacenamiento · memoria";
+    pintarResultado();
+    return;
+  }
+  if (ev === "error") {
+    const n = Math.max(0, ...Object.keys(PASOS).map(Number));
+    if (PASOS[n]) { PASOS[n].estado = "fallo"; PASOS[n].detalle = d.mensaje; pintarPipeline(); }
+    $("#pipeline").insertAdjacentHTML("beforeend", `<div class="err" style="margin-top:10px">${esc(d.mensaje)}</div>`);
+  }
+}
+
+/* ── resultado ────────────────────────────────────────── */
+function pintarResultado() {
+  const res = ULT?.res; if (!res) return;
+  const fin = ULT.fin;
+  const dec = res.documento.moneda === "COP" ? 0 : 2;
+  $("#cardRes").style.display = "";
+
+  const et = { aprobado: "Cargado", parcial: "Cargado en parte", rechazado: "Detenido" }[res.decision] || res.decision;
+  $("#veredicto").className = "";
+  $("#veredicto").innerHTML = `<div class="ver ${res.decision}">
+    <div style="min-width:230px;flex:1">
+      <div class="et">${esc(et)}</div>
+      <div class="rz">${esc(res.razon)}</div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="n">${res.conteo.ok}/${res.conteo.lineas}</div><div class="l">líneas grabadas</div></div>
+      <div class="kpi"><div class="n">${fmt(res.total, dec)}</div><div class="l">${esc(res.documento.moneda || "")}</div></div>
+      <div class="kpi"><div class="n">${(res.confianza * 100).toFixed(0)}%</div><div class="l">confianza</div></div>
+      ${fin ? `<div class="kpi"><div class="n">${(fin.ms / 1000).toFixed(1)}s</div><div class="l">total</div></div>` : ""}
+    </div></div>`;
+
+  const tabs = [
+    ["lineas", "Emparejamiento línea por línea"],
+    ["cabecera", "Cabecera y validaciones"],
+    ["docs", "Documentos generados"],
+    ["json", "Lo que leyó el modelo"]
+  ];
+  $("#tabs").innerHTML = tabs.map(([k, l], i) => `<button class="tab ${i === 0 ? "sel" : ""}" data-k="${k}">${l}</button>`).join("");
+  $("#panes").innerHTML = tabs.map(([k], i) => `<div class="pane ${i === 0 ? "sel" : ""}" id="pane-${k}"></div>`).join("");
+  document.querySelectorAll(".tab").forEach((t) => t.onclick = () => {
+    document.querySelectorAll(".tab").forEach((x) => x.classList.remove("sel"));
+    document.querySelectorAll(".pane").forEach((x) => x.classList.remove("sel"));
+    t.classList.add("sel"); $("#pane-" + t.dataset.k).classList.add("sel");
+  });
+
+  /* líneas */
+  $("#pane-lineas").innerHTML = `
+    <table><thead><tr>
+      <th>Lo que escribió el cliente</th><th>Lo que entendió el agente</th>
+      <th class="num">Cant.</th><th class="num">Precio</th><th class="num">Importe</th><th>Estado</th>
+    </tr></thead><tbody>
+    ${res.lineas.map((l) => `<tr class="st-${l.estado}">
+      <td><div class="mono">${esc(l.entrada.codigo || "—")}</div>${esc(l.entrada.descripcion || "")}
+        ${l.entrada.nota ? `<div class="score">nota: ${esc(l.entrada.nota)}</div>` : ""}</td>
+      <td>${l.material
+        ? `<div class="mono">${esc(l.material.cod)}</div>${esc(l.material.desc)}
+           <div class="score">${esc(l.match.motivo)}</div>`
+        : `<span style="color:var(--flag)">sin correspondencia</span>
+           <div class="score">mejor candidato descartado: ${(l.match.score * 100).toFixed(0)} %</div>`}</td>
+      <td class="num">${l.cantidad ?? "—"}<div class="score">${esc(l.material?.um || l.entrada.unidad || "")}</div></td>
+      <td class="num">${fmt(l.precio_aplicado, dec)}${l.desvio_precio !== null
+        ? `<div class="score" style="color:${Math.abs(l.desvio_precio) >= 15 ? "var(--flag)" : "var(--amber)"}">${l.desvio_precio > 0 ? "+" : ""}${l.desvio_precio}%</div>` : ""}</td>
+      <td class="num">${fmt(l.importe, dec)}</td>
+      <td><span class="pill p-${l.estado}">${l.estado}</span>
+        ${l.incidencias.map((i) => `<div class="inc ${i.nivel}"><b>${esc(i.regla)}</b><br>${esc(i.texto)}</div>`).join("")}</td>
+    </tr>`).join("")}
+    </tbody></table>`;
+
+  /* cabecera */
+  const c = res.cliente;
+  $("#pane-cabecera").innerHTML = `
+    <table><tbody>
+      <tr><th style="width:180px">Cliente</th><td>${c ? `${esc(c.nom)} <span class="mono">${esc(c.cod)}</span>
+        <div class="score">${esc(res.match_cliente.motivo)} · confianza ${(res.match_cliente.score * 100).toFixed(0)} %</div>`
+        : '<span style="color:var(--flag)">no identificado en el maestro</span>'}</td></tr>
+      <tr><th>Identificación</th><td class="mono">${esc(c?.id || "—")}</td></tr>
+      <tr><th>País / organización</th><td>${esc(c?.pais || "—")} ${c ? `· <span class="mono">${esc(c.org)}</span>` : ""}</td></tr>
+      <tr><th>Referencia del cliente</th><td class="mono">${esc(res.documento.referencia_cliente || "—")}</td></tr>
+      <tr><th>Fecha solicitada</th><td class="mono">${esc(res.documento.fecha_solicitada || "no indicada")}</td></tr>
+      <tr><th>Lugar de entrega</th><td>${esc(res.documento.lugar_entrega || "—")}</td></tr>
+      <tr><th>Condición de pago</th><td>${esc(res.documento.condicion_pago || "—")}</td></tr>
+      ${res.cupo ? `<tr><th>Cupo de crédito</th><td>
+        Límite ${fmt(res.cupo.limite, dec)} · usado ${fmt(res.cupo.saldo, dec)} ·
+        <b>libre ${fmt(res.cupo.disponible, dec)}</b> ${esc(res.cupo.moneda)}
+        <div class="score">este pedido requiere ${fmt(res.cupo.requerido, dec)}</div></td></tr>` : ""}
+    </tbody></table>
+    <div style="margin-top:14px">
+      ${res.incidencias.length
+        ? res.incidencias.map((i) => `<div class="inc ${i.nivel}" style="margin-bottom:7px"><b>${esc(i.nivel)} · ${esc(i.regla)}</b><br>${esc(i.texto)}</div>`).join("")
+        : '<div class="score">Sin observaciones de cabecera.</div>'}
+    </div>`;
+
+  /* documentos */
+  const docs = fin?.documentos || [];
+  $("#pane-docs").innerHTML = docs.length ? docs.map((d) => `
+    <div style="margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:7px">
+        <span class="pill ${d.sistema === "SAP" ? "p-sap" : "p-erp"}">${esc(d.sistema === "SAP" ? "SAP" : "ERP Ecuador")}</span>
+        <span class="mono" style="font-size:14px;font-weight:500">${esc(d.documento)}</span>
+        <span class="score">${d.lineas} líneas · ${fmt(d.total, dec)} ${esc(res.documento.moneda)}</span>
+      </div>
+      <pre>${colorear(d.payload)}</pre>
+    </div>`).join("")
+    : `<div class="vacio">No se generó ningún documento.${res.decision === "rechazado" ? " El pedido se detuvo antes de grabar." : ""}</div>`;
+
+  /* json del modelo */
+  $("#pane-json").innerHTML = `
+    ${ULT.respaldo ? '<div class="aviso-respaldo" style="margin-bottom:12px"><b>Modo respaldo.</b> La API no respondió en esta corrida, así que lo de abajo es una extracción precalculada de este mismo ejemplo, no una lectura hecha en vivo. Las reglas y el grabado sí corrieron de verdad.</div>' : ""}
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">
+      Esto es lo único que hace el modelo: convertir texto suelto en campos. No elige códigos del ERP,
+      no calcula totales y no decide si el pedido entra — de eso se encarga el código de reglas.
+      ${ULT.uso ? `<br>Consumo real de esta corrida: ${ULT.uso.input_tokens} tokens de entrada, ${ULT.uso.output_tokens} de salida.` : ""}
+    </p>
+    <pre>${colorear(ULT.extraccion)}</pre>`;
+}
+
+function colorear(o) {
+  return esc(JSON.stringify(o, null, 2))
+    .replace(/&quot;([^&]*?)&quot;(\s*:)/g, '<span class="k">"$1"</span>$2')
+    .replace(/:\s*&quot;([^&]*?)&quot;/g, ': <span class="s">"$1"</span>')
+    .replace(/:\s*(-?\d+\.?\d*)/g, ': <span class="n">$1</span>')
+    .replace(/:\s*(true|false|null)/g, ': <span class="b">$1</span>');
+}
+
+/* ── estado de los sistemas ───────────────────────────── */
+async function refrescar() {
+  try {
+    const [o, e] = await Promise.all([
+      fetch(`${API}/erp?q=ordenes`).then((r) => r.json()),
+      fetch(`${API}/erp?q=excepciones`).then((r) => r.json())
+    ]);
+    pintarOrdenes(o); pintarExcepciones(e);
+  } catch {
+    $("#ordenes").innerHTML = '<div class="err">No se pudo leer el almacenamiento.</div>';
+  }
+}
+
+function pintarOrdenes(o) {
+  $("#ordenes").innerHTML = o.ordenes?.length ? `
+    <table><thead><tr><th>Sistema</th><th>Documento</th><th>Cliente</th><th class="num">Líneas</th><th class="num">Total</th></tr></thead><tbody>
+    ${o.ordenes.map((x) => `<tr>
+      <td><span class="pill ${x.sistema === "SAP" ? "p-sap" : "p-erp"}">${x.sistema === "SAP" ? "SAP" : "ERP EC"}</span></td>
+      <td class="mono">${esc(x.documento)}${x.modificado ? '<div class="score">modificado</div>' : ""}</td>
+      <td>${esc(x.cliente?.nom || "—")}<div class="score">${esc(x.referencia || "")}</div></td>
+      <td class="num">${x.lineas}</td>
+      <td class="num">${fmt(x.total, x.moneda === "COP" ? 0 : 2)} <span class="score">${esc(x.moneda || "")}</span></td>
+    </tr>`).join("")}</tbody></table>`
+    : '<div class="vacio">Todavía no se ha grabado ningún documento.</div>';
+}
+
+function pintarExcepciones(e) {
+  const abiertas = (e.excepciones || []).filter((x) => x.estado === "abierta");
+  $("#excepciones").innerHTML = e.excepciones?.length ? `
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">
+      ${abiertas.length} abierta${abiertas.length === 1 ? "" : "s"} de ${e.excepciones.length}.
+      El valor del agente no es acertar siempre: es saber cuándo no está seguro y dejarlo aquí en vez de inventar.</p>
+    ${e.excepciones.map((x) => `
+      <div style="border:1px solid var(--rule);border-radius:var(--radius);padding:11px;margin-bottom:9px;
+        ${x.estado === "resuelta" ? "opacity:.6" : ""}">
+        <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+          <span class="pill ${x.estado === "abierta" ? "p-revision" : "p-ok"}">${x.estado}</span>
+          <b style="font-size:13px">${esc(x.cliente?.nom || "—")}</b>
+          <span class="mono score">${esc(x.referencia || x.id)}</span>
+          ${x.estado === "abierta" ? `<button class="b-ghost b-sm" style="margin-left:auto" onclick="abrirExc('${esc(x.id)}')">Resolver</button>` : ""}
+        </div>
+        <div style="font-size:12.5px;color:var(--muted);margin-top:5px">${esc(x.razon)}</div>
+        <div id="exc-${esc(x.id)}"></div>
+      </div>`).join("")}`
+    : '<div class="vacio">Nada pendiente de revisión.</div>';
+}
+
+/* ── resolver una excepción ───────────────────────────── */
+window.abrirExc = async (id) => {
+  const cont = $("#exc-" + id);
+  if (cont.innerHTML) { cont.innerHTML = ""; return; }
+  cont.innerHTML = '<div class="score" style="margin-top:8px">cargando…</div>';
+  const x = await fetch(`${API}/erp?q=excepcion&id=${encodeURIComponent(id)}`).then((r) => r.json());
+  if (x.error) { cont.innerHTML = `<div class="err">${esc(x.error)}</div>`; return; }
+
+  const opciones = (MAESTROS?.materiales || []).map((m) => `<option value="${esc(m.cod)}">${esc(m.cod)} — ${esc(m.desc)}</option>`).join("");
+  const filas = (x.lineas || []).map((l) => `
+    <tr>
+      <td>${esc(l.entrada.descripcion || l.entrada.codigo || "—")}
+        <div class="score">cant. ${l.entrada.cantidad ?? "no indicada"}</div>
+        ${l.incidencias.map((i) => `<div class="inc ${i.nivel}">${esc(i.texto)}</div>`).join("")}</td>
+      <td>
+        <select class="sel-mat" data-pos="${l.pos}">
+          <option value="">— descartar esta línea —</option>${opciones}
+        </select>
+        <div style="margin-top:5px"><input type="number" min="1" class="sel-mat" style="width:88px"
+          data-cant="${l.pos}" value="${l.entrada.cantidad ?? ""}" placeholder="cantidad"></div>
+      </td>
+    </tr>`).join("");
+
+  cont.innerHTML = `
+    <div style="margin-top:10px;border-top:1px solid var(--rule-soft);padding-top:10px">
+      ${(x.incidencias_cabecera || []).map((i) => `<div class="inc ${i.nivel}" style="margin-bottom:6px"><b>${esc(i.regla)}</b><br>${esc(i.texto)}</div>`).join("")}
+      ${filas ? `<table><thead><tr><th>Línea sin resolver</th><th>Decisión</th></tr></thead><tbody>${filas}</tbody></table>
+        <div class="row"><button class="b-main b-sm" onclick="guardarExc('${esc(id)}')">Aplicar y grabar</button></div>
+        <p class="hint">Lo que apruebe aquí se añade al documento ya generado y se recalcula el total.</p>`
+        : '<p class="hint">Esta excepción es de cabecera: no hay líneas que reasignar.</p>'}
+    </div>`;
+
+  /* preselecciona la sugerencia del motor */
+  (x.lineas || []).forEach((l) => {
+    if (l.sugerencia) {
+      const s = cont.querySelector(`select[data-pos="${l.pos}"]`);
+      if (s) s.value = l.sugerencia.cod;
+    }
+  });
+};
+
+window.guardarExc = async (id) => {
+  const cont = $("#exc-" + id);
+  const decisiones = [...cont.querySelectorAll("select[data-pos]")].map((s) => {
+    const pos = +s.dataset.pos;
+    const cant = cont.querySelector(`input[data-cant="${pos}"]`);
+    return s.value
+      ? { pos, accion: "asignar", material: s.value, cantidad: cant?.value ? +cant.value : null }
+      : { pos, accion: "descartar" };
+  });
+  cont.innerHTML = '<div class="score" style="margin-top:8px">grabando…</div>';
+  const r = await fetch(`${API}/erp`, {
+    method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify({ accion: "resolver-excepcion", id, decisiones })
+  }).then((x) => x.json());
+  if (r.error) { cont.innerHTML = `<div class="err">${esc(r.error)}</div>`; return; }
+  cont.innerHTML = `<div class="inc informativo" style="margin-top:8px">
+    ${r.agregadas} línea(s) añadidas. ${r.documentos.map((d) => `${esc(d.sistema)} ${esc(d.documento)} → ${fmt(d.total)}`).join(" · ")}</div>`;
+  refrescar();
+};
+
+/* ── arranque ─────────────────────────────────────────── */
+$("#btn").onclick = procesar;
+$("#btnRef").onclick = refrescar;
+$("#btnLimpiar").onclick = () => {
+  $("#txt").value = "";
+  document.querySelectorAll(".chip").forEach((x) => x.classList.remove("sel"));
+  $("#txt").focus();
+};
+$("#txt").addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") procesar();
+});
+
+cargarEjemplos();
+cargarMaestros();
+refrescar();
+</script>
+</body>
+</html>
