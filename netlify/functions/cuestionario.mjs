@@ -1,6 +1,8 @@
 /**
  * Gadamax · Cuestionario técnico Cluster Andino
  *
+ * Las respuestas son anónimas: no se pide ni se guarda quién las envió.
+ *
  * GET  /api/cuestionario                 → las preguntas, para dibujar el formulario
  * POST /api/cuestionario                 → guarda una respuesta
  * GET  /api/cuestionario?ver=<clave>     → lee todo lo recibido (solo con la clave)
@@ -47,6 +49,7 @@ export default async (req) => {
     const claves = await listar("respuesta/");
     const todas = (await Promise.all(claves.map((k) => leer(k)))).filter(Boolean);
     todas.sort((a, b) => String(b.recibido).localeCompare(String(a.recibido)));
+    const terminados = todas.filter((r) => r.terminado).length;
 
     /* Consolidado: por cada pregunta, quién contestó qué. */
     const consolidado = PREGUNTAS.map((p) => ({
@@ -58,7 +61,7 @@ export default async (req) => {
         .filter((r) => r.respuestas?.[p.id] !== undefined && r.respuestas[p.id] !== "" &&
                        !(Array.isArray(r.respuestas[p.id]) && !r.respuestas[p.id].length))
         .map((r) => {
-          const fila = { de: r.quien?.nombre || "", rol: r.quien?.rol || "", valor: r.respuestas[p.id] };
+          const fila = { recibido: r.recibido, valor: r.respuestas[p.id] };
           const otro = r.respuestas[`${p.id}__otro`];
           if (otro) fila.otro = otro;
           return fila;
@@ -69,6 +72,7 @@ export default async (req) => {
 
     return json({
       envios: todas.length,
+      terminados,
       criticas_pendientes: criticasSinResponder.map((c) => ({ id: c.id, pregunta: c.pregunta })),
       consolidado,
       crudo: todas
@@ -80,7 +84,13 @@ export default async (req) => {
     return json({ secciones: SECCIONES, preguntas: PREGUNTAS });
   }
 
-  /* ── recepción ──────────────────────────────────────────────────────── */
+  /* ── recepción ──────────────────────────────────────────────────────────
+   * El formulario guarda solo, mientras la persona responde. Para que eso no
+   * genere decenas de registros, cada navegador manda su propio `sid` y acá
+   * se actualiza siempre el mismo registro, fusionando lo que llega con lo
+   * que ya había. Así, si alguien cierra la pestaña a la mitad, lo que
+   * alcanzó a contestar ya está guardado.
+   * ------------------------------------------------------------------- */
   if (req.method === "POST") {
     let cuerpo;
     try { cuerpo = await req.json(); } catch { return json({ error: "No se pudo leer el envío." }, 400); }
@@ -88,42 +98,46 @@ export default async (req) => {
     /* trampa para robots: si viene lleno, se descarta en silencio */
     if (limpiar(cuerpo.sitio_web)) return json({ ok: true });
 
-    /* El nombre es opcional: lo que importa es la respuesta, no quién la dio. */
-    const nombre = limpiar(cuerpo?.quien?.nombre, 120);
+    const sid = /^[A-Za-z0-9_-]{6,40}$/.test(String(cuerpo.sid || "")) ? cuerpo.sid : null;
+    if (!sid) return json({ error: "Falta el identificador de la sesión." }, 400);
 
-    const respuestas = {};
+    const entrantes = {};
     for (const [k, v] of Object.entries(cuerpo.respuestas || {})) {
       if (!aceptada(k)) continue;
-      if (Array.isArray(v)) respuestas[k] = v.slice(0, 30).map((x) => limpiar(x, 300));
+      if (Array.isArray(v)) entrantes[k] = v.slice(0, 30).map((x) => limpiar(x, 300));
       else if (v && typeof v === "object") {
         const o = {};
         for (const [ok, ov] of Object.entries(v).slice(0, 30)) o[limpiar(ok, 120)] = limpiar(ov, 120);
-        respuestas[k] = o;
-      } else respuestas[k] = limpiar(v);
+        entrantes[k] = o;
+      } else entrantes[k] = limpiar(v);
+    }
+
+    const previo = (await leer(`respuesta/${sid}`)) || null;
+    const respuestas = { ...(previo?.respuestas || {}), ...entrantes };
+
+    /* Lo que se borró en el formulario también se borra acá. */
+    for (const k of Object.keys(respuestas)) {
+      const v = respuestas[k];
+      const vacio = Array.isArray(v) ? !v.length
+        : (v && typeof v === "object") ? !Object.keys(v).length
+        : !String(v ?? "").trim();
+      if (vacio) delete respuestas[k];
     }
 
     /* El texto de un «Otro» no cuenta como pregunta aparte. */
-    const contestadas = Object.entries(respuestas).filter(([k, v]) =>
-      IDS.has(k) && (Array.isArray(v) ? v.length : (v && typeof v === "object" ? Object.keys(v).length : String(v).trim()))
-    ).length;
+    const contestadas = Object.entries(respuestas).filter(([k]) => IDS.has(k)).length;
 
-    if (!contestadas) return json({ error: "El formulario llegó vacío." }, 400);
-
-    const id = `${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 5).toUpperCase()}`;
     const registro = {
-      id,
+      id: sid,
+      creado: previo?.creado || new Date().toISOString(),
       recibido: new Date().toISOString(),
-      quien: {
-        nombre: nombre || "",
-        rol: limpiar(cuerpo?.quien?.rol, 120),
-        correo: limpiar(cuerpo?.quien?.correo, 160)
-      },
+      terminado: Boolean(cuerpo.final) || Boolean(previo?.terminado),
       contestadas,
       respuestas
     };
 
-    await guardar(`respuesta/${id}`, registro);
-    return json({ ok: true, id, contestadas });
+    await guardar(`respuesta/${sid}`, registro);
+    return json({ ok: true, id: sid, contestadas, guardado: registro.recibido });
   }
 
   return json({ error: "Método no permitido." }, 405);

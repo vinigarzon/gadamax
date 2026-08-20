@@ -154,11 +154,13 @@ function valorHTML(r) {
   } else {
     v = esc(r.valor);
   }
-  const quien = [r.de, r.rol].filter(Boolean).join(" · ");
+  const cuando = r.recibido
+    ? new Date(r.recibido).toLocaleString("es-EC", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })
+    : "";
   return `<div class="r">
     <div class="v">${v}</div>
     ${r.otro ? `<div class="otro">Otro: ${esc(r.otro)}</div>` : ""}
-    ${quien ? `<div class="quien">${esc(quien)}</div>` : ""}
+    ${cuando ? `<div class="quien">${esc(cuando)}</div>` : ""}
   </div>`;
 }
 

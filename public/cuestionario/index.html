@@ -57,6 +57,11 @@ header .meta i{width:5px;height:5px;border-radius:50%;background:#00A97A;display
 .pista{flex:1;min-width:130px;height:5px;background:var(--rule-soft);border-radius:3px;overflow:hidden}
 .pista i{display:block;height:100%;width:0;background:var(--cobalt);transition:width .3s}
 .barra .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+#estado{display:flex;align-items:center;gap:6px}
+#estado::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--faint)}
+#estado.guardando{color:var(--cobalt)} #estado.guardando::before{background:var(--cobalt)}
+#estado.ok{color:var(--gain)} #estado.ok::before{background:var(--gain)}
+#estado.mal{color:var(--flag)} #estado.mal::before{background:var(--flag)}
 
 main{padding:26px 0 60px}
 
@@ -108,14 +113,7 @@ textarea{min-height:74px;resize:vertical;line-height:1.5}
 .otro-caja.visible{display:block}
 .otro-caja input{font-size:14.5px;padding:8px 10px}
 
-.quien{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:18px;margin-bottom:16px}
-.quien h2{font-size:16px;font-weight:600;margin-bottom:4px}
-.quien p{font-size:13.5px;color:var(--muted);margin-bottom:14px;max-width:58ch}
-.campos{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.campos label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px;
-  text-transform:uppercase;letter-spacing:.05em}
-.campos>div:last-child{grid-column:1/-1}
-@media(max-width:560px){.campos{grid-template-columns:1fr}.reparto{grid-template-columns:1fr 84px}}
+@media(max-width:560px){.reparto{grid-template-columns:1fr 84px}}
 
 .pie{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:18px;
   position:sticky;bottom:0;box-shadow:0 -6px 22px -14px rgba(13,19,33,.4)}
@@ -168,8 +166,8 @@ footer{border-top:1px solid var(--rule);padding:20px 0 46px;font-size:12.5px;col
 
 <div class="intro">
   <div class="wrap">
-    <p><b>Se puede responder entre varios.</b> Cada sección dice a qué área le corresponde. Si una parte le toca a otra persona, pásenle este mismo enlace: puede llenar solo lo suyo y guardar. Todo se va sumando de nuestro lado.</p>
-    <p><b>No hace falta terminarlo de una vez.</b> Pueden guardar lo que lleven y volver después — el navegador recuerda lo que escribieron. Guardar varias veces no es problema.</p>
+    <p><b>Se puede responder entre varios.</b> Cada sección indica a qué área le corresponde. Si una parte le toca a alguien más, basta con pasarle este mismo enlace: llena lo suyo y guarda. Todo se va sumando de nuestro lado.</p>
+    <p><b>Se guarda solo.</b> Cada respuesta queda registrada apenas la marcan; no hace falta apretar nada. Pueden cerrar y volver después, y van a encontrar todo donde lo dejaron.</p>
     <p><b>Ninguna pregunta es obligatoria.</b> Si no saben algo, sáltenlo; «no sé» también nos sirve, porque nos dice qué hay que averiguar antes de cotizar. Las marcadas <span class="marca">clave</span> son las que determinan el precio: si solo tienen diez minutos, respondan esas.</p>
   </div>
 </div>
@@ -179,6 +177,7 @@ footer{border-top:1px solid var(--rule);padding:20px 0 46px;font-size:12.5px;col
     <div class="pista"><i id="pista"></i></div>
     <span class="n" id="cuenta">0 respondidas</span>
     <span class="n" id="cuentaClave" style="color:var(--amber)"></span>
+    <span class="n" id="estado"></span>
   </div>
 </div>
 
@@ -186,23 +185,13 @@ footer{border-top:1px solid var(--rule);padding:20px 0 46px;font-size:12.5px;col
   <div id="avisos"></div>
 
   <form id="form" autocomplete="on">
-    <div class="quien">
-      <h2>Antes de empezar <span style="font-weight:400;color:var(--muted);font-size:14px">— opcional</span></h2>
-      <p>Solo por si tenemos que preguntar algo sobre alguna respuesta. Si lo prefieren en blanco, no pasa nada: pueden enviarlo sin poner nada aquí.</p>
-      <div class="campos">
-        <div><label for="q-nombre">Nombre</label><input type="text" id="q-nombre" name="nombre"></div>
-        <div><label for="q-rol">Área</label><input type="text" id="q-rol" name="rol" placeholder="Tecnología, comercial, dirección…"></div>
-        <div><label for="q-correo">Correo</label><input type="email" id="q-correo" name="correo"></div>
-      </div>
-    </div>
-
     <div id="secciones"></div>
 
     <div class="trampa"><label>No llenar<input type="text" id="sitio_web" tabindex="-1" autocomplete="off"></label></div>
 
     <div class="pie">
-      <button type="submit" class="enviar" id="btn">Guardar lo respondido</button>
-      <p id="pieNota">No hace falta terminarlo. Guarden lo que llevan y, si quieren, vuelvan después o pásenle el enlace a alguien más: todo se va sumando.</p>
+      <button type="submit" class="enviar" id="btn">He terminado</button>
+      <p id="pieNota">Cada respuesta se guarda sola, apenas la marcan. Este botón es solo para avisarnos que ya terminaron.</p>
     </div>
   </form>
 
@@ -218,6 +207,69 @@ footer{border-top:1px solid var(--rule);padding:20px 0 46px;font-size:12.5px;col
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
 const BORRADOR = "gadamax-cuestionario-v1";
+const SID_LLAVE = "gadamax-cuestionario-sid";
+
+/* Un identificador por navegador: permite ir actualizando el mismo registro
+   en vez de crear uno nuevo con cada guardado automático. */
+function sid() {
+  let v = null;
+  try { v = localStorage.getItem(SID_LLAVE); } catch {}
+  if (!v) {
+    v = (crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now()) + Math.random().toString(36).slice(2)).slice(0, 32);
+    try { localStorage.setItem(SID_LLAVE, v); } catch {}
+  }
+  return v;
+}
+
+let reloj = null, enVuelo = false, pendiente = false;
+
+function recogerRespuestas() {
+  const r = {};
+  for (const p of PREGUNTAS) {
+    const v = valorDe(p);
+    r[p.id] = lleno(v) ? v : (p.tipo === "check" ? [] : "");
+    if (p.otroEn) r[`${p.id}__otro`] = otroDe(p);
+  }
+  return r;
+}
+
+function estado(clase, texto) {
+  const e = $("#estado");
+  e.className = "n " + clase;
+  e.textContent = texto;
+}
+
+/* Guarda en el servidor unos segundos después del último cambio. */
+function programarGuardado() {
+  clearTimeout(reloj);
+  estado("guardando", "sin guardar");
+  reloj = setTimeout(guardarEnServidor, 2000);
+}
+
+async function guardarEnServidor(final = false) {
+  if (enVuelo) { pendiente = true; return; }
+  enVuelo = true;
+  estado("guardando", "guardando…");
+  try {
+    const r = await fetch("/api/cuestionario", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ sid: sid(), respuestas: recogerRespuestas(), final, sitio_web: $("#sitio_web").value })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
+    const h = new Date().toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit" });
+    estado("ok", `guardado ${h}`);
+    enVuelo = false;
+    if (pendiente) { pendiente = false; guardarEnServidor(); }
+    return d;
+  } catch (e) {
+    enVuelo = false;
+    estado("mal", "sin conexión — reintentando");
+    clearTimeout(reloj);
+    reloj = setTimeout(guardarEnServidor, 6000);
+    throw e;
+  }
+}
 let PREGUNTAS = [], SECCIONES = [];
 
 /* ── dibujar ───────────────────────────────────────────── */
@@ -242,8 +294,9 @@ function pintar() {
   document.querySelectorAll("[data-toggle]").forEach((b) => b.onclick = () => {
     b.closest("fieldset").classList.toggle("abierta");
   });
-  $("#form").addEventListener("input", () => { marcar(); contar(); guardarBorrador(); });
-  $("#form").addEventListener("change", () => { marcar(); contar(); guardarBorrador(); });
+  const alCambiar = () => { marcar(); contar(); guardarBorrador(); programarGuardado(); };
+  $("#form").addEventListener("input", alCambiar);
+  $("#form").addEventListener("change", alCambiar);
 }
 
 function campo(p) {
@@ -348,7 +401,7 @@ function contar() {
 /* ── borrador local ────────────────────────────────────── */
 function guardarBorrador() {
   try {
-    const d = { quien: datosQuien(), respuestas: {} };
+    const d = { respuestas: {} };
     for (const p of PREGUNTAS) {
       const v = valorDe(p);
       if (lleno(v)) d.respuestas[p.id] = v;
@@ -363,11 +416,6 @@ function cargarBorrador() {
   let d;
   try { d = JSON.parse(localStorage.getItem(BORRADOR) || "null"); } catch { return; }
   if (!d) return;
-  if (d.quien) {
-    $("#q-nombre").value = d.quien.nombre || "";
-    $("#q-rol").value = d.quien.rol || "";
-    $("#q-correo").value = d.quien.correo || "";
-  }
   for (const [id, v] of Object.entries(d.respuestas || {})) {
     if (id.endsWith("__otro")) {
       const t = document.querySelector(`input[name="${id}"]`); if (t) t.value = v;
@@ -386,60 +434,61 @@ function cargarBorrador() {
     }
   }
   marcar();
-  if (Object.keys(d.respuestas || {}).length) {
-    $("#avisos").innerHTML = '<div class="aviso a-ok">Recuperamos lo que habían empezado a llenar en este navegador. Pueden seguir donde quedaron.</div>';
+
+  /* Se abren las secciones que ya tienen algo respondido, para que al volver
+     se vea de inmediato dónde quedaron. */
+  const conAlgo = new Set(PREGUNTAS.filter((p) => lleno(valorDe(p))).map((p) => p.seccion));
+  if (conAlgo.size) {
+    document.querySelectorAll("fieldset[data-sec]").forEach((f) => {
+      f.classList.toggle("abierta", conAlgo.has(f.dataset.sec));
+    });
+    $("#avisos").innerHTML = '<div class="aviso a-ok">Estas son las respuestas que dejaron guardadas. Pueden seguir donde quedaron o corregir lo que quieran.</div>';
   }
 }
-
-const datosQuien = () => ({
-  nombre: $("#q-nombre").value.trim(),
-  rol: $("#q-rol").value.trim(),
-  correo: $("#q-correo").value.trim()
-});
 
 /* ── envío ─────────────────────────────────────────────── */
 $("#form").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const quien = datosQuien();
   if (!contar()) {
     $("#avisos").innerHTML = '<div class="aviso a-err">No hay ninguna respuesta todavía.</div>';
     return;
   }
-
-  const respuestas = {};
-  for (const p of PREGUNTAS) {
-    const v = valorDe(p);
-    if (lleno(v)) respuestas[p.id] = v;
-    const t = otroDe(p);
-    if (t) respuestas[`${p.id}__otro`] = t;
-  }
-
-  $("#btn").disabled = true; $("#btn").textContent = "Enviando…";
+  clearTimeout(reloj);
+  $("#btn").disabled = true; $("#btn").textContent = "Guardando…";
+  let d;
   try {
-    const r = await fetch("/api/cuestionario", {
-      method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ quien, respuestas, sitio_web: $("#sitio_web").value })
-    });
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
-    try { localStorage.removeItem(BORRADOR); } catch {}
-    $("#form").style.display = "none";
-    $("#avisos").innerHTML = "";
-    document.querySelector(".barra").style.display = "none";
-    $("#gracias").style.display = "";
-    $("#gracias").innerHTML = `<div class="gracias">
-      <h2>Guardado. Gracias.</h2>
-      <p>Quedaron registradas ${d.contestadas} respuestas. Con esto avanzamos en la propuesta.</p>
-      <p>Si falta que otra persona conteste su sección, pásenle este mismo enlace. Y si quieren seguir ustedes con el resto, el botón de abajo abre el formulario otra vez, en blanco — lo que ya guardaron no se pierde ni se duplica.</p>
-      <div class="mono">registro ${esc(d.id)}</div>
-      <button type="button" onclick="location.reload()">Seguir con otra sección</button>
-    </div>`;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    d = await guardarEnServidor(true);
   } catch (err) {
-    $("#avisos").innerHTML = `<div class="aviso a-err">No se pudo enviar: ${esc(err.message)}. Lo que llenaron quedó guardado en este navegador — pueden reintentar en un momento.</div>`;
-    $("#btn").disabled = false; $("#btn").textContent = "Enviar respuestas";
+    $("#avisos").innerHTML = `<div class="aviso a-err">No se pudo confirmar: ${esc(err.message)}.
+      Lo que respondieron sigue guardado en este navegador y se reintenta solo.</div>`;
+    $("#btn").disabled = false; $("#btn").textContent = "He terminado";
     window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
   }
+  $("#form").style.display = "none";
+  $("#avisos").innerHTML = "";
+  document.querySelector(".barra").style.display = "none";
+  $("#gracias").style.display = "";
+  $("#gracias").innerHTML = `<div class="gracias">
+    <h2>Listo. Gracias.</h2>
+    <p>Quedaron registradas ${d.contestadas} respuestas. Con esto avanzamos en la propuesta.</p>
+    <p>Si más adelante quieren corregir algo o completar una sección que dejaron pendiente,
+       vuelvan a abrir este mismo enlace: van a encontrar sus respuestas donde las dejaron.</p>
+    <button type="button" onclick="location.reload()">Volver al formulario</button>
+  </div>`;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+/* Si cierran la pestaña con cambios sin mandar, se envía igual. */
+window.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "hidden") return;
+  if ($("#estado").classList.contains("ok")) return;
+  try {
+    navigator.sendBeacon("/api/cuestionario", new Blob(
+      [JSON.stringify({ sid: sid(), respuestas: recogerRespuestas(), sitio_web: "" })],
+      { type: "application/json" }
+    ));
+  } catch {}
 });
 
 /* ── arranque ──────────────────────────────────────────── */
