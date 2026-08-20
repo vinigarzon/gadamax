@@ -33,9 +33,11 @@ header .tag.vivo{color:#63D6BC;display:flex!important;align-items:center;gap:6px
 header .tag.vivo::before{content:"";width:6px;height:6px;border-radius:50%;background:#0E8F76;animation:latido 2s ease-in-out infinite}
 @keyframes latido{0%,100%{opacity:1}50%{opacity:.25}}
 @media (prefers-reduced-motion: reduce){header .tag.vivo::before{animation:none}}
-header button{margin-left:auto;font-family:var(--f-body);font-size:12.5px;padding:6px 12px;
+header button{font-family:var(--f-body);font-size:12.5px;padding:6px 12px;
   background:none;border:1px solid #2A3550;color:#A9B4CA;border-radius:var(--radius);cursor:pointer}
 header button:hover{background:#182033}
+header button.peligro{border-color:#7A2E26;color:#E8998E}
+header button.peligro:hover{background:#3A1512}
 
 main{padding:24px 0 60px}
 .puerta{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:26px;max-width:440px;margin:40px auto}
@@ -94,7 +96,8 @@ footer{border-top:1px solid var(--rule);padding:18px 0 40px;font-size:12px;color
     <b>Gadamax</b>
     <span class="tag">Respuestas · B. Braun</span>
     <span class="tag vivo" id="pulso" style="display:none">en vivo</span>
-    <button type="button" id="btnSalir" style="display:none">Salir</button>
+    <button type="button" id="btnLimpiar" style="display:none;margin-left:auto">Reiniciar</button>
+    <button type="button" id="btnSalir" style="display:none;margin-left:8px">Salir</button>
   </div>
 </header>
 
@@ -119,7 +122,7 @@ footer{border-top:1px solid var(--rule);padding:18px 0 40px;font-size:12px;color
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
 const LLAVE = "gadamax-clave-cuestionario";
-let SEC = [], VERSION = -1, sondeo = null;
+let SEC = [], VERSION = -1, sondeo = null, CLAVE = null, armado = false;
 
 async function cargar(clave) {
   $("#cargando").style.display = "";
@@ -148,6 +151,8 @@ async function cargar(clave) {
   $("#panel").style.display = "";
   $("#btnSalir").style.display = "";
   $("#pulso").style.display = "";
+  $("#btnLimpiar").style.display = "";
+  CLAVE = clave;
 
   /* Se refresca solo, para ver llegar las respuestas sin recargar. */
   if (!sondeo) sondeo = setInterval(() => refrescar(clave), 8000);
@@ -236,6 +241,40 @@ $("#fClave").addEventListener("submit", (e) => {
   const c = $("#clave").value.trim();
   if (c) cargar(c);
 });
+
+/* Reinicio en dos pasos: el primer clic solo arma la confirmación. */
+$("#btnLimpiar").onclick = async () => {
+  const b = $("#btnLimpiar");
+  if (!armado) {
+    armado = true;
+    b.classList.add("peligro");
+    b.textContent = "¿Seguro? Borrar todo";
+    setTimeout(() => { if (armado) { armado = false; b.classList.remove("peligro"); b.textContent = "Reiniciar"; } }, 6000);
+    return;
+  }
+  armado = false;
+  b.classList.remove("peligro");
+  b.textContent = "Borrando…";
+  b.disabled = true;
+  try {
+    const r = await fetch("/api/cuestionario", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ reiniciar: true, clave: CLAVE })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
+    VERSION = -1;
+    await cargar(CLAVE);
+    $("#panel").insertAdjacentHTML("afterbegin",
+      `<div class="aviso a-ok">Cuestionario reiniciado. ${d.respaldadas
+        ? `Se guardó una copia de las ${d.respaldadas} respuestas anteriores.`
+        : "No había nada que respaldar."} Ya se puede enviar el enlace.</div>`);
+  } catch (e) {
+    $("#panel").insertAdjacentHTML("afterbegin", `<div class="aviso a-err">No se pudo reiniciar: ${esc(e.message)}</div>`);
+  }
+  b.disabled = false;
+  b.textContent = "Reiniciar";
+};
 
 $("#btnSalir").onclick = () => {
   try { sessionStorage.removeItem(LLAVE); } catch {}

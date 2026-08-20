@@ -8,6 +8,7 @@
  * GET  /api/cuestionario              → preguntas + respuestas actuales + versión
  * GET  /api/cuestionario?solo=estado  → solo el estado, para consultar cambios
  * POST /api/cuestionario              → aplica un parche y devuelve el estado
+ * POST {reiniciar:true, clave}        → deja el cuestionario en blanco
  * GET  /api/cuestionario?ver=<clave>  → vista de Gadamax, con sellos de tiempo
  *
  * Cada respuesta se guarda sola mientras la persona contesta, y el navegador
@@ -112,6 +113,25 @@ export default async (req) => {
     try { cuerpo = await req.json(); } catch { return json({ error: "No se pudo leer el envío." }, 400); }
 
     if (limpiar(cuerpo.sitio_web)) return json({ ok: true });   // trampa para robots
+
+    /* ── reinicio, solo desde el panel de Gadamax ─────────────────────
+     * Antes de vaciar se guarda una copia con la fecha, por si alguna vez
+     * hace falta recuperar algo que se borró por error. */
+    if (cuerpo.reiniciar === true) {
+      const clave = process.env.CUESTIONARIO_CLAVE;
+      if (!clave) return json({ error: "Falta definir CUESTIONARIO_CLAVE." }, 503);
+      if (cuerpo.clave !== clave) return json({ error: "Clave incorrecta." }, 403);
+
+      const anterior = await cargar();
+      const habia = Object.keys(anterior.respuestas || {}).length;
+      if (habia) {
+        await guardar(`respaldo/${new Date().toISOString().replace(/[:.]/g, "-")}`, anterior);
+      }
+      const limpio = nuevoDoc();
+      limpio.version = (anterior.version || 0) + 1;   // los formularios abiertos lo notan
+      await guardar(CLAVE_DOC, limpio);
+      return json({ ok: true, reiniciado: true, respaldadas: habia, ...paraTodos(limpio) });
+    }
 
     const doc = await cargar();
     const ahora = new Date().toISOString();
