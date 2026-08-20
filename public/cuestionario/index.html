@@ -62,6 +62,11 @@ header .meta i{width:5px;height:5px;border-radius:50%;background:#00A97A;display
 #estado.guardando{color:var(--cobalt)} #estado.guardando::before{background:var(--cobalt)}
 #estado.ok{color:var(--gain)} #estado.ok::before{background:var(--gain)}
 #estado.mal{color:var(--flag)} #estado.mal::before{background:var(--flag)}
+#vivo{color:var(--gain)}
+#vivo::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gain);margin-right:6px;
+  animation:latido 2s ease-in-out infinite}
+@keyframes latido{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion: reduce){#vivo::before,.q.recien{animation:none}}
 
 main{padding:26px 0 60px}
 
@@ -85,7 +90,16 @@ fieldset.abierta .cuerpo{display:block}
 .cuerpo>.nota-sec{font-family:var(--f-serif);font-size:15px;color:var(--muted);
   padding:12px 0 4px;max-width:60ch}
 
-.q{padding:18px 0;border-top:1px solid var(--rule-soft)}
+.q{padding:18px 0;border-top:1px solid var(--rule-soft);position:relative;transition:background .4s}
+.q.hecha{background:linear-gradient(90deg,var(--gain-soft) 0%,transparent 70%)}
+.q.hecha::before{content:"";position:absolute;left:-18px;top:0;bottom:0;width:3px;background:var(--gain)}
+.q .tick{display:none;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--gain-soft);color:var(--gain);padding:2px 6px;border-radius:2px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+.q.hecha .tick{display:inline-block}
+.q.recien{animation:destello 1.4s ease-out}
+@keyframes destello{0%{background:#CFF0E6}100%{background:transparent}}
+.cab .est.completa{color:var(--gain)}
+fieldset.completa .cab .letra{background:var(--gain-soft);color:var(--gain)}
 .q:first-of-type{border-top:0}
 .q .et{display:flex;gap:9px;align-items:baseline;margin-bottom:3px}
 .q .id{font-family:var(--f-mono);font-size:11px;color:var(--faint);flex:0 0 auto;padding-top:2px}
@@ -159,15 +173,15 @@ footer{border-top:1px solid var(--rule);padding:20px 0 46px;font-size:12.5px;col
     <div class="meta">
       <span><i></i>12 minutos</span>
       <span><i></i>6 secciones por área</span>
-      <span><i></i>Nada es obligatorio</span>
+      <span><i></i>Se guarda solo</span>
     </div>
   </div>
 </header>
 
 <div class="intro">
   <div class="wrap">
-    <p><b>Se puede responder entre varios.</b> Cada sección indica a qué área le corresponde. Si una parte le toca a alguien más, basta con pasarle este mismo enlace: llena lo suyo y guarda. Todo se va sumando de nuestro lado.</p>
-    <p><b>Se guarda solo.</b> Cada respuesta queda registrada apenas la marcan; no hace falta apretar nada. Pueden cerrar y volver después, y van a encontrar todo donde lo dejaron.</p>
+    <p><b>Es un solo formulario para todos.</b> Cada sección indica a qué área le corresponde. Si una parte le toca a alguien más, basta con pasarle este mismo enlace: todos trabajan sobre el mismo documento y nadie pisa lo que puso otro.</p>
+    <p><b>Se guarda solo y se trabaja en conjunto.</b> Cada respuesta queda registrada apenas la marcan, sin apretar nada. Lo ya respondido aparece <b style="color:var(--gain)">en verde</b>, así que quien entre después ve de un vistazo qué falta y completa solo eso. Si dos personas lo abren a la vez, cada una ve aparecer lo que responde la otra.</p>
     <p><b>Ninguna pregunta es obligatoria.</b> Si no saben algo, sáltenlo; «no sé» también nos sirve, porque nos dice qué hay que averiguar antes de cotizar. Las marcadas <span class="marca">clave</span> son las que determinan el precio: si solo tienen diez minutos, respondan esas.</p>
   </div>
 </div>
@@ -178,6 +192,7 @@ footer{border-top:1px solid var(--rule);padding:20px 0 46px;font-size:12.5px;col
     <span class="n" id="cuenta">0 respondidas</span>
     <span class="n" id="cuentaClave" style="color:var(--amber)"></span>
     <span class="n" id="estado"></span>
+    <span class="n" id="vivo" style="display:none">en vivo</span>
   </div>
 </div>
 
@@ -190,8 +205,8 @@ footer{border-top:1px solid var(--rule);padding:20px 0 46px;font-size:12.5px;col
     <div class="trampa"><label>No llenar<input type="text" id="sitio_web" tabindex="-1" autocomplete="off"></label></div>
 
     <div class="pie">
-      <button type="submit" class="enviar" id="btn">He terminado</button>
-      <p id="pieNota">Cada respuesta se guarda sola, apenas la marcan. Este botón es solo para avisarnos que ya terminaron.</p>
+      <button type="submit" class="enviar" id="btn">Ya terminamos</button>
+      <p id="pieNota">No hace falta apretarlo para que se guarde: todo queda registrado solo. Es únicamente para avisarnos que dan por cerrado el cuestionario.</p>
     </div>
   </form>
 
@@ -204,149 +219,29 @@ footer{border-top:1px solid var(--rule);padding:20px 0 46px;font-size:12.5px;col
 </div></footer>
 
 <script>
+/* ───────────────────────────────────────────────────────────────────────
+ * Formulario colaborativo.
+ * Todas las personas con el enlace trabajan sobre el mismo documento. Cada
+ * respuesta se guarda sola y el navegador consulta cada pocos segundos si
+ * alguien más contestó algo. Solo se envía lo que cambió, así que dos
+ * personas pueden estar respondiendo secciones distintas sin pisarse.
+ * ─────────────────────────────────────────────────────────────────────── */
+
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
-const BORRADOR = "gadamax-cuestionario-v1";
-const SID_LLAVE = "gadamax-cuestionario-sid";
 
-/* Un identificador por navegador: permite ir actualizando el mismo registro
-   en vez de crear uno nuevo con cada guardado automático. */
-function sid() {
-  let v = null;
-  try { v = localStorage.getItem(SID_LLAVE); } catch {}
-  if (!v) {
-    v = (crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : String(Date.now()) + Math.random().toString(36).slice(2)).slice(0, 32);
-    try { localStorage.setItem(SID_LLAVE, v); } catch {}
-  }
-  return v;
-}
-
-let reloj = null, enVuelo = false, pendiente = false;
-
-function recogerRespuestas() {
-  const r = {};
-  for (const p of PREGUNTAS) {
-    const v = valorDe(p);
-    r[p.id] = lleno(v) ? v : (p.tipo === "check" ? [] : "");
-    if (p.otroEn) r[`${p.id}__otro`] = otroDe(p);
-  }
-  return r;
-}
-
-function estado(clase, texto) {
-  const e = $("#estado");
-  e.className = "n " + clase;
-  e.textContent = texto;
-}
-
-/* Guarda en el servidor unos segundos después del último cambio. */
-function programarGuardado() {
-  clearTimeout(reloj);
-  estado("guardando", "sin guardar");
-  reloj = setTimeout(guardarEnServidor, 2000);
-}
-
-async function guardarEnServidor(final = false) {
-  if (enVuelo) { pendiente = true; return; }
-  enVuelo = true;
-  estado("guardando", "guardando…");
-  try {
-    const r = await fetch("/api/cuestionario", {
-      method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ sid: sid(), respuestas: recogerRespuestas(), final, sitio_web: $("#sitio_web").value })
-    });
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
-    const h = new Date().toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit" });
-    estado("ok", `guardado ${h}`);
-    enVuelo = false;
-    if (pendiente) { pendiente = false; guardarEnServidor(); }
-    return d;
-  } catch (e) {
-    enVuelo = false;
-    estado("mal", "sin conexión — reintentando");
-    clearTimeout(reloj);
-    reloj = setTimeout(guardarEnServidor, 6000);
-    throw e;
-  }
-}
 let PREGUNTAS = [], SECCIONES = [];
+let SERVIDOR = {};        // última foto conocida del documento compartido
+let VERSION = -1;
+let reloj = null, enVuelo = false, pendiente = false, sondeo = null;
 
-/* ── dibujar ───────────────────────────────────────────── */
-function pintar() {
-  $("#secciones").innerHTML = SECCIONES.map((s, i) => {
-    const qs = PREGUNTAS.filter((p) => p.seccion === s.id);
-    return `<fieldset data-sec="${s.id}" class="${i === 0 ? "abierta" : ""}">
-      <legend>${esc(s.titulo)}</legend>
-      <button type="button" class="cab" data-toggle="${s.id}">
-        <span class="letra">${s.id}</span>
-        <span class="tt"><b>${esc(s.titulo)}</b><span>${esc(s.quien)}</span></span>
-        <span class="est" data-est="${s.id}">0/${qs.length}</span>
-        <span class="chev">›</span>
-      </button>
-      <div class="cuerpo">
-        <p class="nota-sec">${esc(s.intro)}</p>
-        ${qs.map(campo).join("")}
-      </div>
-    </fieldset>`;
-  }).join("");
+/* ── utilidades ─────────────────────────────────────────────────────── */
+const lleno = (v) => Array.isArray(v) ? v.length > 0
+  : (v && typeof v === "object") ? Object.keys(v).length > 0
+  : String(v ?? "").trim() !== "";
 
-  document.querySelectorAll("[data-toggle]").forEach((b) => b.onclick = () => {
-    b.closest("fieldset").classList.toggle("abierta");
-  });
-  const alCambiar = () => { marcar(); contar(); guardarBorrador(); programarGuardado(); };
-  $("#form").addEventListener("input", alCambiar);
-  $("#form").addEventListener("change", alCambiar);
-}
-
-function campo(p) {
-  const clave = p.critica ? '<span class="marca">clave</span>' : "";
-  const cab = `<div class="et"><span class="id">${p.id}</span><span class="tx">${esc(p.pregunta)}${clave}</span></div>
-    ${p.ayuda ? `<p class="ay">${esc(p.ayuda)}</p>` : ""}`;
-
-  /* Si la pregunta tiene una opción tipo «Otro», se le agrega un campo de
-     texto que aparece solo cuando esa opción queda marcada. */
-  const cajaOtro = p.otroEn
-    ? `<div class="otro-caja" data-otro-de="${p.id}">
-         <input type="text" name="${p.id}__otro" maxlength="200" placeholder="¿Cuál? Descríbanlo en pocas palabras">
-       </div>` : "";
-
-  if (p.tipo === "radio" || p.tipo === "check") {
-    const t = p.tipo === "radio" ? "radio" : "checkbox";
-    return `<div class="q" data-q="${p.id}" data-sec="${p.seccion}">${cab}
-      <div class="ops">${p.opciones.map((o, i) => `
-        <label class="op"><input type="${t}" name="${p.id}" value="${esc(o)}" id="${p.id}-${i}"
-          ${o === p.otroEn ? `data-abre-otro="${p.id}"` : ""}><span>${esc(o)}</span></label>`).join("")}
-      </div>${cajaOtro}</div>`;
-  }
-  if (p.tipo === "reparto") {
-    return `<div class="q" data-q="${p.id}" data-sec="${p.seccion}">${cab}
-      <div class="reparto">${p.opciones.map((o, i) => `
-        <label for="${p.id}-${i}">${esc(o)}</label>
-        <input type="number" min="0" id="${p.id}-${i}" name="${p.id}" data-op="${esc(o)}" placeholder="—"
-          ${o === p.otroEn ? `data-abre-otro="${p.id}"` : ""}>
-        ${o === p.otroEn ? `<input type="text" class="otro-txt" name="${p.id}__otro" maxlength="200" placeholder="¿Qué otro canal? Descríbanlo">` : ""}`).join("")}
-      </div></div>`;
-  }
-  return `<div class="q" data-q="${p.id}" data-sec="${p.seccion}">${cab}
-    <div class="ops"><textarea name="${p.id}" rows="2"></textarea></div></div>`;
-}
-
-/* ── estado visual ─────────────────────────────────────── */
-function marcar() {
-  document.querySelectorAll("label.op").forEach((l) => {
-    const i = l.querySelector("input");
-    l.classList.toggle("marcada", i && i.checked);
-  });
-  /* la caja de «otro» solo se ve si esa opción está marcada */
-  document.querySelectorAll(".otro-caja").forEach((caja) => {
-    const id = caja.dataset.otroDe;
-    const disparo = document.querySelector(`input[name="${id}"][data-abre-otro]`);
-    const visible = Boolean(disparo && disparo.checked);
-    caja.classList.toggle("visible", visible);
-    if (!visible) { const t = caja.querySelector("input"); if (t) t.value = ""; }
-  });
-}
+const igual = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+const normal = (v) => lleno(v) ? v : null;
 
 function valorDe(p) {
   if (p.tipo === "radio") {
@@ -373,15 +268,87 @@ function otroDe(p) {
   return t ? t.value.trim() : "";
 }
 
-const lleno = (v) => Array.isArray(v) ? v.length > 0
-  : (v && typeof v === "object") ? Object.keys(v).length > 0
-  : String(v ?? "").trim() !== "";
+/* ── dibujar ────────────────────────────────────────────────────────── */
+function pintar() {
+  $("#secciones").innerHTML = SECCIONES.map((s, i) => {
+    const qs = PREGUNTAS.filter((p) => p.seccion === s.id);
+    return `<fieldset data-sec="${s.id}" class="${i === 0 ? "abierta" : ""}">
+      <legend>${esc(s.titulo)}</legend>
+      <button type="button" class="cab" data-toggle="${s.id}">
+        <span class="letra">${s.id}</span>
+        <span class="tt"><b>${esc(s.titulo)}</b><span>${esc(s.quien)}</span></span>
+        <span class="est" data-est="${s.id}">0/${qs.length}</span>
+        <span class="chev">›</span>
+      </button>
+      <div class="cuerpo">
+        <p class="nota-sec">${esc(s.intro)}</p>
+        ${qs.map(campo).join("")}
+      </div>
+    </fieldset>`;
+  }).join("");
+
+  document.querySelectorAll("[data-toggle]").forEach((b) => b.onclick = () => {
+    b.closest("fieldset").classList.toggle("abierta");
+  });
+
+  const alCambiar = () => { marcar(); contar(); programarGuardado(); };
+  $("#form").addEventListener("input", alCambiar);
+  $("#form").addEventListener("change", alCambiar);
+}
+
+function campo(p) {
+  const clave = p.critica ? '<span class="marca">clave</span>' : "";
+  const cab = `<div class="et"><span class="id">${p.id}</span>
+      <span class="tx">${esc(p.pregunta)}${clave}<span class="tick">respondida</span></span></div>
+    ${p.ayuda ? `<p class="ay">${esc(p.ayuda)}</p>` : ""}`;
+
+  const cajaOtro = p.otroEn
+    ? `<div class="otro-caja" data-otro-de="${p.id}">
+         <input type="text" name="${p.id}__otro" maxlength="200" placeholder="¿Cuál? Descríbanlo en pocas palabras">
+       </div>` : "";
+
+  if (p.tipo === "radio" || p.tipo === "check") {
+    const t = p.tipo === "radio" ? "radio" : "checkbox";
+    return `<div class="q" data-q="${p.id}" data-sec="${p.seccion}">${cab}
+      <div class="ops">${p.opciones.map((o, i) => `
+        <label class="op"><input type="${t}" name="${p.id}" value="${esc(o)}" id="${p.id}-${i}"
+          ${o === p.otroEn ? `data-abre-otro="${p.id}"` : ""}><span>${esc(o)}</span></label>`).join("")}
+      </div>${cajaOtro}</div>`;
+  }
+  if (p.tipo === "reparto") {
+    return `<div class="q" data-q="${p.id}" data-sec="${p.seccion}">${cab}
+      <div class="reparto">${p.opciones.map((o, i) => `
+        <label for="${p.id}-${i}">${esc(o)}</label>
+        <input type="number" min="0" id="${p.id}-${i}" name="${p.id}" data-op="${esc(o)}" placeholder="—">
+        ${o === p.otroEn ? `<input type="text" class="otro-txt" name="${p.id}__otro" maxlength="200" placeholder="¿Qué otro canal? Descríbanlo">` : ""}`).join("")}
+      </div></div>`;
+  }
+  return `<div class="q" data-q="${p.id}" data-sec="${p.seccion}">${cab}
+    <div class="ops"><textarea name="${p.id}" rows="2"></textarea></div></div>`;
+}
+
+/* ── estado visual ──────────────────────────────────────────────────── */
+function marcar() {
+  document.querySelectorAll("label.op").forEach((l) => {
+    const i = l.querySelector("input");
+    l.classList.toggle("marcada", i && i.checked);
+  });
+  document.querySelectorAll(".otro-caja").forEach((caja) => {
+    const id = caja.dataset.otroDe;
+    const disparo = document.querySelector(`input[name="${id}"][data-abre-otro]`);
+    const visible = Boolean(disparo && disparo.checked);
+    caja.classList.toggle("visible", visible);
+    if (!visible) { const t = caja.querySelector("input"); if (t) t.value = ""; }
+  });
+}
 
 function contar() {
   let n = 0, nc = 0, tc = 0;
   const porSec = {};
   for (const p of PREGUNTAS) {
     const ok = lleno(valorDe(p));
+    const caja = document.querySelector(`.q[data-q="${p.id}"]`);
+    if (caja) caja.classList.toggle("hecha", ok);
     porSec[p.seccion] = porSec[p.seccion] || { ok: 0, total: 0 };
     porSec[p.seccion].total++;
     if (ok) { n++; porSec[p.seccion].ok++; }
@@ -390,63 +357,125 @@ function contar() {
   $("#pista").style.width = (n / PREGUNTAS.length * 100).toFixed(1) + "%";
   $("#cuenta").textContent = `${n} de ${PREGUNTAS.length} respondidas`;
   $("#cuentaClave").textContent = nc < tc ? `· faltan ${tc - nc} clave` : "· clave completas ✓";
-  if (nc === tc) $("#cuentaClave").style.color = "var(--gain)";
-  for (const [s, v] of Object.entries(porSec)) {
-    const e = document.querySelector(`[data-est="${s}"]`);
-    if (e) e.textContent = `${v.ok}/${v.total}`;
+  $("#cuentaClave").style.color = nc < tc ? "var(--amber)" : "var(--gain)";
+  for (const [sid, v] of Object.entries(porSec)) {
+    const e = document.querySelector(`[data-est="${sid}"]`);
+    if (e) { e.textContent = `${v.ok}/${v.total}`; e.classList.toggle("completa", v.ok === v.total); }
+    const f = document.querySelector(`fieldset[data-sec="${sid}"]`);
+    if (f) f.classList.toggle("completa", v.ok === v.total);
   }
   return n;
 }
 
-/* ── borrador local ────────────────────────────────────── */
-function guardarBorrador() {
-  try {
-    const d = { respuestas: {} };
-    for (const p of PREGUNTAS) {
-      const v = valorDe(p);
-      if (lleno(v)) d.respuestas[p.id] = v;
-      const t = otroDe(p);
-      if (t) d.respuestas[`${p.id}__otro`] = t;
+function estado(clase, texto) {
+  const e = $("#estado");
+  e.className = "n " + clase;
+  e.textContent = texto;
+}
+
+/* ── volcar el documento compartido al formulario ───────────────────── */
+function aplicar(respuestas, destacar = false) {
+  const activo = document.activeElement;
+  for (const p of PREGUNTAS) {
+    const remoto = respuestas[p.id];
+    const local = valorDe(p);
+    /* Si esta persona tiene un cambio propio sin enviar, se respeta el suyo. */
+    if (!igual(normal(local), normal(SERVIDOR[p.id])) ) continue;
+    if (igual(normal(local), normal(remoto))) continue;
+
+    const caja = document.querySelector(`.q[data-q="${p.id}"]`);
+    if (p.tipo === "radio") {
+      document.querySelectorAll(`input[name="${p.id}"]`).forEach((x) => { x.checked = x.value === remoto; });
+    } else if (p.tipo === "check") {
+      const v = Array.isArray(remoto) ? remoto : [];
+      document.querySelectorAll(`input[name="${p.id}"]`).forEach((x) => { x.checked = v.includes(x.value); });
+    } else if (p.tipo === "reparto") {
+      const v = remoto && typeof remoto === "object" ? remoto : {};
+      document.querySelectorAll(`input[name="${p.id}"]`).forEach((x) => {
+        if (x !== activo) x.value = v[x.dataset.op] ?? "";
+      });
+    } else {
+      const t = document.querySelector(`[name="${p.id}"]`);
+      if (t && t !== activo) t.value = remoto ?? "";
     }
-    localStorage.setItem(BORRADOR, JSON.stringify(d));
+    if (destacar && caja) {
+      caja.classList.add("recien");
+      setTimeout(() => caja.classList.remove("recien"), 1500);
+    }
+  }
+  /* textos de «otro» */
+  for (const p of PREGUNTAS.filter((x) => x.otroEn)) {
+    const t = document.querySelector(`input[name="${p.id}__otro"]`);
+    const remoto = respuestas[`${p.id}__otro`] ?? "";
+    if (t && t !== activo && otroDe(p) === (SERVIDOR[`${p.id}__otro`] ?? "")) t.value = remoto;
+  }
+  SERVIDOR = { ...respuestas };
+  marcar(); contar();
+}
+
+/* ── enviar solo lo que cambió ──────────────────────────────────────── */
+function calcularParche() {
+  const parche = {};
+  for (const p of PREGUNTAS) {
+    const v = normal(valorDe(p));
+    if (!igual(v, normal(SERVIDOR[p.id]))) parche[p.id] = v ?? "";
+    if (p.otroEn) {
+      const t = otroDe(p);
+      if (t !== (SERVIDOR[`${p.id}__otro`] ?? "")) parche[`${p.id}__otro`] = t;
+    }
+  }
+  return parche;
+}
+
+function programarGuardado() {
+  clearTimeout(reloj);
+  estado("guardando", "sin guardar");
+  reloj = setTimeout(guardar, 1500);
+}
+
+async function guardar(terminado) {
+  if (enVuelo) { pendiente = true; return; }
+  const parche = calcularParche();
+  if (!Object.keys(parche).length && terminado === undefined) { estado("ok", "todo guardado"); return; }
+
+  enVuelo = true;
+  estado("guardando", "guardando…");
+  try {
+    const r = await fetch("/api/cuestionario", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ parche, terminado, sitio_web: $("#sitio_web").value })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
+    VERSION = d.version;
+    aplicar(d.respuestas);
+    const h = new Date().toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit" });
+    estado("ok", `guardado ${h}`);
+    enVuelo = false;
+    if (pendiente) { pendiente = false; guardar(); }
+    return d;
+  } catch (e) {
+    enVuelo = false;
+    estado("mal", "sin conexión — reintentando");
+    clearTimeout(reloj);
+    reloj = setTimeout(guardar, 5000);
+    throw e;
+  }
+}
+
+/* ── mirar si alguien más respondió ─────────────────────────────────── */
+async function mirar() {
+  if (enVuelo || document.visibilityState === "hidden") return;
+  try {
+    const d = await (await fetch("/api/cuestionario?solo=estado")).json();
+    if (d.version === VERSION) return;
+    VERSION = d.version;
+    aplicar(d.respuestas, true);
+    $("#vivo").style.display = "";
   } catch {}
 }
 
-function cargarBorrador() {
-  let d;
-  try { d = JSON.parse(localStorage.getItem(BORRADOR) || "null"); } catch { return; }
-  if (!d) return;
-  for (const [id, v] of Object.entries(d.respuestas || {})) {
-    if (id.endsWith("__otro")) {
-      const t = document.querySelector(`input[name="${id}"]`); if (t) t.value = v;
-      continue;
-    }
-    const p = PREGUNTAS.find((x) => x.id === id); if (!p) continue;
-    if (p.tipo === "radio") {
-      const el = [...document.querySelectorAll(`input[name="${id}"]`)].find((x) => x.value === v);
-      if (el) el.checked = true;
-    } else if (p.tipo === "check") {
-      document.querySelectorAll(`input[name="${id}"]`).forEach((x) => { if (v.includes(x.value)) x.checked = true; });
-    } else if (p.tipo === "reparto") {
-      document.querySelectorAll(`input[name="${id}"]`).forEach((x) => { if (v[x.dataset.op] !== undefined) x.value = v[x.dataset.op]; });
-    } else {
-      const t = document.querySelector(`[name="${id}"]`); if (t) t.value = v;
-    }
-  }
-  marcar();
-
-  /* Se abren las secciones que ya tienen algo respondido, para que al volver
-     se vea de inmediato dónde quedaron. */
-  const conAlgo = new Set(PREGUNTAS.filter((p) => lleno(valorDe(p))).map((p) => p.seccion));
-  if (conAlgo.size) {
-    document.querySelectorAll("fieldset[data-sec]").forEach((f) => {
-      f.classList.toggle("abierta", conAlgo.has(f.dataset.sec));
-    });
-    $("#avisos").innerHTML = '<div class="aviso a-ok">Estas son las respuestas que dejaron guardadas. Pueden seguir donde quedaron o corregir lo que quieran.</div>';
-  }
-}
-
-/* ── envío ─────────────────────────────────────────────── */
+/* ── terminar ───────────────────────────────────────────────────────── */
 $("#form").addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!contar()) {
@@ -456,53 +485,65 @@ $("#form").addEventListener("submit", async (e) => {
   clearTimeout(reloj);
   $("#btn").disabled = true; $("#btn").textContent = "Guardando…";
   let d;
-  try {
-    d = await guardarEnServidor(true);
-  } catch (err) {
-    $("#avisos").innerHTML = `<div class="aviso a-err">No se pudo confirmar: ${esc(err.message)}.
-      Lo que respondieron sigue guardado en este navegador y se reintenta solo.</div>`;
-    $("#btn").disabled = false; $("#btn").textContent = "He terminado";
+  try { d = await guardar(true); }
+  catch (err) {
+    $("#avisos").innerHTML = `<div class="aviso a-err">No se pudo confirmar: ${esc(err.message)}. Lo respondido sigue guardado; se reintenta solo.</div>`;
+    $("#btn").disabled = false; $("#btn").textContent = "Ya terminamos";
     window.scrollTo({ top: 0, behavior: "smooth" });
     return;
   }
+  const n = PREGUNTAS.filter((p) => lleno(valorDe(p))).length;
   $("#form").style.display = "none";
   $("#avisos").innerHTML = "";
   document.querySelector(".barra").style.display = "none";
   $("#gracias").style.display = "";
   $("#gracias").innerHTML = `<div class="gracias">
     <h2>Listo. Gracias.</h2>
-    <p>Quedaron registradas ${d.contestadas} respuestas. Con esto avanzamos en la propuesta.</p>
-    <p>Si más adelante quieren corregir algo o completar una sección que dejaron pendiente,
-       vuelvan a abrir este mismo enlace: van a encontrar sus respuestas donde las dejaron.</p>
+    <p>Quedaron ${n} de ${PREGUNTAS.length} preguntas respondidas. Con esto avanzamos en la propuesta.</p>
+    <p>Si más adelante quieren corregir algo o completar lo que falta, vuelvan a abrir este mismo enlace:
+       van a encontrar todo tal como lo dejaron.</p>
     <button type="button" onclick="location.reload()">Volver al formulario</button>
   </div>`;
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-/* Si cierran la pestaña con cambios sin mandar, se envía igual. */
+/* Si cierran la pestaña con algo sin mandar, se despacha igual. */
 window.addEventListener("visibilitychange", () => {
   if (document.visibilityState !== "hidden") return;
-  if ($("#estado").classList.contains("ok")) return;
+  const parche = calcularParche();
+  if (!Object.keys(parche).length) return;
   try {
-    navigator.sendBeacon("/api/cuestionario", new Blob(
-      [JSON.stringify({ sid: sid(), respuestas: recogerRespuestas(), sitio_web: "" })],
-      { type: "application/json" }
-    ));
+    navigator.sendBeacon("/api/cuestionario",
+      new Blob([JSON.stringify({ parche })], { type: "application/json" }));
   } catch {}
 });
 
-/* ── arranque ──────────────────────────────────────────── */
+/* ── arranque ───────────────────────────────────────────────────────── */
 (async () => {
+  let d;
   try {
-    const d = await (await fetch("/api/cuestionario")).json();
-    SECCIONES = d.secciones; PREGUNTAS = d.preguntas;
+    d = await (await fetch("/api/cuestionario")).json();
   } catch {
     $("#avisos").innerHTML = '<div class="aviso a-err">No se pudieron cargar las preguntas. Recarguen la página, por favor.</div>';
     return;
   }
+  SECCIONES = d.secciones; PREGUNTAS = d.preguntas; VERSION = d.version;
   pintar();
-  cargarBorrador();
-  contar();
+  aplicar(d.respuestas || {});
+  estado("ok", d.actualizado ? "todo guardado" : "sin respuestas todavía");
+
+  const yaHay = PREGUNTAS.filter((p) => lleno(valorDe(p)));
+  if (yaHay.length) {
+    const conAlgo = new Set(yaHay.map((p) => p.seccion));
+    document.querySelectorAll("fieldset[data-sec]").forEach((f) => {
+      f.classList.toggle("abierta", conAlgo.has(f.dataset.sec));
+    });
+    $("#avisos").innerHTML = `<div class="aviso a-ok">Ya hay ${yaHay.length} preguntas respondidas, marcadas en verde.
+      Pueden completar lo que falta o corregir cualquier cosa: se guarda solo.</div>`;
+  }
+
+  sondeo = setInterval(mirar, 7000);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") mirar(); });
 })();
 </script>
 </body>
