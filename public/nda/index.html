@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Acuerdo de Confidencialidad · B. Braun × Gadamax</title>
+<meta name="description" content="Acuerdo mutuo de confidencialidad entre Gadamax LLC y B. Braun, con firma electrónica.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1321; --paper:#EDF0F6; --white:#FFFFFF; --rule:#C9D2E1; --rule-soft:#DEE4EE;
+  --muted:#5C6880; --faint:#8C99B2; --panel:#F7F9FC;
+  --cobalt:#1F3BE0; --cobalt-ink:#152BA8; --cobalt-soft:#E3E8FF;
+  --gain:#0E8F76; --gain-soft:#DFF2ED;
+  --amber:#B07C10; --amber-soft:#FBF0D8;
+  --flag:#B23A2E; --flag-soft:#F7E4E1;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Source Serif 4",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --f-firma:"Caveat","Segoe Script",cursive;
+  --radius:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+header{background:var(--ink);color:#fff;padding:0 0 30px}
+.marcas{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #212B40;flex-wrap:wrap}
+.marca-g{display:flex;align-items:center;gap:9px;text-decoration:none;color:#fff}
+.marca-g img{width:26px;height:26px;display:block}
+.marca-g b{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.marcas .para{font-size:12px;color:#6E7B96;font-family:var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.marcas .cliente img{height:22px;width:auto;display:block}
+header h1{font-size:clamp(22px,4vw,30px);font-weight:600;letter-spacing:-.02em;line-height:1.15;margin-top:28px;text-wrap:balance}
+header .sub{color:#A9B4CA;font-size:15.5px;margin-top:10px;max-width:56ch;font-family:var(--f-serif)}
+header .meta{font-family:var(--f-mono);font-size:11.5px;color:#6E7B96;letter-spacing:.05em;text-transform:uppercase;margin-top:16px}
+
+main{padding:26px 0 70px}
+.estado-caja{padding:13px 16px;border-left:3px solid;margin-bottom:18px;font-size:14.5px;border-radius:0 2px 2px 0}
+.e-ok{background:var(--gain-soft);border-color:var(--gain);color:#0A5A4A}
+.e-err{background:var(--flag-soft);border-color:var(--flag);color:#8C2D24}
+
+.doc{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:clamp(22px,5vw,44px)}
+.doc h2{font-family:var(--f-serif);font-size:22px;font-weight:600;letter-spacing:-.01em;text-align:center;margin-bottom:4px}
+.doc .vv{font-family:var(--f-mono);font-size:11px;color:var(--faint);text-align:center;letter-spacing:.06em;margin-bottom:26px}
+.doc p{font-family:var(--f-serif);font-size:15.5px;line-height:1.65;margin-bottom:14px;text-align:justify;hyphens:auto}
+.doc h3{font-size:14px;font-weight:600;margin:20px 0 6px;letter-spacing:-.005em}
+.huella{font-family:var(--f-mono);font-size:10.5px;color:var(--faint);word-break:break-all;
+  border-top:1px solid var(--rule-soft);margin-top:24px;padding-top:12px}
+
+/* ── firma ── */
+.firmas{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:640px){.firmas{grid-template-columns:1fr}}
+.bloque{border:1px solid var(--rule);border-radius:var(--radius);padding:16px;background:var(--panel)}
+.bloque .quien{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.bloque .linea{font-family:var(--f-firma);font-size:30px;line-height:1.1;min-height:40px;color:var(--cobalt-ink);
+  border-bottom:1.5px solid var(--ink);padding:2px 4px 4px;margin-bottom:8px}
+.bloque .datos{font-size:13px;line-height:1.5}
+.bloque .datos b{font-weight:600}
+.bloque .datos .mono{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.bloque.pendiente .linea{color:var(--faint);font-family:var(--f-serif);font-style:italic;font-size:14px;display:flex;align-items:flex-end}
+
+.tarjeta{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:22px;margin-top:18px}
+.tarjeta h3{font-size:16px;font-weight:600;margin-bottom:4px}
+.tarjeta .ay{font-size:13.5px;color:var(--muted);margin-bottom:16px;max-width:60ch}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.campos .full{grid-column:1/-1}
+.campos label{display:block;font-size:11.5px;font-weight:500;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+input[type=text],input[type=email]{font-family:var(--f-body);font-size:15px;width:100%;padding:10px 12px;
+  border:1px solid var(--rule);border-radius:var(--radius);background:var(--panel);color:var(--ink)}
+input:focus{outline:2px solid var(--cobalt);outline-offset:-1px;background:#fff}
+@media(max-width:560px){.campos{grid-template-columns:1fr}}
+
+.previa{margin-top:14px;border:1px dashed var(--rule);border-radius:var(--radius);padding:12px 16px;background:var(--panel)}
+.previa .et{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.previa .tinta{font-family:var(--f-firma);font-size:34px;line-height:1.15;color:var(--cobalt-ink);min-height:42px}
+.previa .tinta.vacia{font-family:var(--f-serif);font-style:italic;font-size:14px;color:var(--faint);display:flex;align-items:center;min-height:42px}
+
+.acepto{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:13px;background:var(--cobalt-soft);
+  border-radius:var(--radius);font-size:13.5px;line-height:1.5;cursor:pointer}
+.acepto input{margin-top:3px;width:17px;height:17px;flex:0 0 auto;accent-color:var(--cobalt)}
+button.firmar{font-family:var(--f-body);font-size:16px;font-weight:500;padding:13px 24px;width:100%;margin-top:14px;
+  background:var(--cobalt);color:#fff;border:0;border-radius:var(--radius);cursor:pointer}
+button.firmar:hover:not(:disabled){background:var(--cobalt-ink)}
+button.firmar:disabled{background:var(--faint);cursor:not-allowed}
+.pieAy{font-size:12px;color:var(--muted);margin-top:9px;text-align:center}
+
+.sello{display:flex;gap:12px;align-items:center;background:var(--gain-soft);border:1px solid #BFE5D8;
+  border-radius:var(--radius);padding:14px 16px;margin-top:18px}
+.sello .ic{width:34px;height:34px;border-radius:50%;background:var(--gain);color:#fff;display:grid;place-items:center;font-size:17px;flex:0 0 34px}
+.sello .tx{font-size:13.5px;line-height:1.45;color:#0A5A4A}
+.sello .tx b{font-weight:600}
+.acciones{display:flex;gap:10px;margin-top:14px}
+.acciones button{font-family:var(--f-body);font-size:13.5px;padding:9px 16px;background:#fff;
+  border:1px solid var(--rule);border-radius:var(--radius);cursor:pointer;color:var(--ink)}
+.acciones button:hover{background:var(--panel)}
+
+footer{border-top:1px solid var(--rule);padding:18px 0 46px;font-size:12px;color:var(--faint)}
+.trampa{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.cargando{text-align:center;padding:60px;color:var(--muted);font-family:var(--f-serif);font-style:italic}
+
+@media print{
+  header,.tarjeta,.acciones,footer,.estado-caja{display:none!important}
+  body{background:#fff}
+  .doc{border:0;padding:0}
+  .wrap{max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="marcas">
+      <a class="marca-g" href="https://www.gadamax.com" target="_blank" rel="noopener">
+        <img src="/assets/images/brand-logo-gadamax.png" alt="" width="26" height="26"><b>Gadamax</b>
+      </a>
+      <span class="para">acuerdo con</span>
+      <span class="cliente"><img src="/assets/images/bbraun-logo-full.svg" alt="B. Braun" height="22"></span>
+    </div>
+    <h1>Acuerdo de Confidencialidad</h1>
+    <p class="sub">Protege la información que van a compartirnos —pedidos, maestros, datos de sistemas— para dimensionar el proyecto. Se firma electrónicamente en esta misma página.</p>
+    <p class="meta" id="metaDoc"></p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="avisos"></div>
+  <div id="cuerpo" class="cargando">cargando el acuerdo…</div>
+</main>
+
+<footer><div class="wrap">Página privada, no indexada. Consultas sobre este acuerdo: mvg@gadamax.com</div></footer>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const fFecha = (iso) => new Date(iso).toLocaleString("es-EC", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
+let DOC = null;
+
+function bloqueFirmado(quien, r) {
+  return `<div class="bloque">
+    <div class="quien">${quien}</div>
+    <div class="linea">${esc(r.nombre ?? r.firmante)}</div>
+    <div class="datos">
+      <b>${esc(r.nombre ?? r.firmante)}</b> · ${esc(r.cargo)}<br>
+      ${esc(r.empresa ?? r.razon)}${r.identificacion ? ` · ${esc(r.identificacion)}` : ""}<br>
+      <span class="mono">firmado electrónicamente · ${esc(fFecha(r.firmado_el))}</span>
+    </div></div>`;
+}
+
+function pintarDoc(d, firma) {
+  DOC = d.documento;
+  $("#metaDoc").textContent = `Versión ${DOC.version} · ${DOC.fecha_version} · Huella ${DOC.hash.slice(0, 16)}…`;
+
+  const g = DOC.gadamax;
+  const clausulas = DOC.clausulas.map((c) => `<h3>${esc(c.t)}</h3><p>${esc(c.c)}</p>`).join("");
+
+  const firmas = firma
+    ? `${bloqueFirmado("La Contraparte", { ...firma.contraparte, firmado_el: firma.firmado_el })}
+       ${bloqueFirmado("Gadamax", { ...firma.gadamax, empresa: firma.gadamax.razon, nombre: firma.gadamax.firmante })}`
+    : `<div class="bloque pendiente">
+        <div class="quien">La Contraparte</div>
+        <div class="linea">pendiente de firma — complete el bloque de abajo</div>
+        <div class="datos"><span class="mono">razón social, firmante y cargo se completan al firmar</span></div>
+      </div>
+      <div class="bloque">
+        <div class="quien">Gadamax</div>
+        <div class="linea">${esc(g.firmante)}</div>
+        <div class="datos"><b>${esc(g.firmante)}</b> · ${esc(g.cargo)}<br>${esc(g.razon)}<br>
+        <span class="mono">suscribe electrónicamente al momento de la firma de la Contraparte</span></div>
+      </div>`;
+
+  const cierre = firma ? `
+    <div class="sello">
+      <div class="ic">✓</div>
+      <div class="tx"><b>Acuerdo suscrito por ambas Partes.</b> Registro ${esc(firma.id)} ·
+        firmado el ${esc(fFecha(firma.firmado_el))}. La huella del documento quedó sellada en el registro de firma.</div>
+    </div>
+    <div class="acciones">
+      <button type="button" onclick="window.print()">Imprimir o guardar en PDF</button>
+    </div>`
+    : `
+    <div class="tarjeta" id="zonaFirma">
+      <h3>Firma de la Contraparte</h3>
+      <p class="ay">Complete los datos de la persona con facultad para suscribir este acuerdo en nombre de su empresa. Escribir su nombre y marcar la aceptación constituye su firma electrónica.</p>
+      <form id="fFirma" autocomplete="on">
+        <div class="campos">
+          <div class="full"><label for="c-empresa">Razón social de la empresa</label>
+            <input type="text" id="c-empresa" placeholder="p. ej. B. Braun Medical S.A." required></div>
+          <div><label for="c-id">RUC / NIT (opcional)</label><input type="text" id="c-id"></div>
+          <div><label for="c-correo">Correo corporativo</label><input type="email" id="c-correo" required></div>
+          <div><label for="c-nombre">Nombre completo de quien firma</label><input type="text" id="c-nombre" required></div>
+          <div><label for="c-cargo">Cargo</label><input type="text" id="c-cargo" required></div>
+        </div>
+        <div class="previa">
+          <span class="et">Así queda su firma</span>
+          <div class="tinta vacia" id="tinta">escriba su nombre arriba para verla</div>
+        </div>
+        <label class="acepto">
+          <input type="checkbox" id="c-acepta">
+          <span>Declaro que tengo facultades para suscribir este acuerdo en nombre de la empresa indicada, que lo he leído y lo acepto, y consiento firmarlo por medios electrónicos conforme a la cláusula 10 (E-SIGN Act / UETA). Entiendo que escribir mi nombre constituye mi firma electrónica vinculante.</span>
+        </label>
+        <div class="trampa"><label>No llenar<input type="text" id="sitio_web" tabindex="-1" autocomplete="off"></label></div>
+        <button type="submit" class="firmar" id="btnFirmar" disabled>Firmar el acuerdo</button>
+        <p class="pieAy">Al firmar, ambas Partes quedan vinculadas y esta página mostrará el acuerdo ejecutado.</p>
+      </form>
+    </div>`;
+
+  $("#cuerpo").className = "";
+  $("#cuerpo").innerHTML = `
+    <div class="doc">
+      <h2>${esc(DOC.titulo)}</h2>
+      <div class="vv">versión ${esc(DOC.version)} · ${esc(DOC.fecha_version)}</div>
+      <p>${esc(DOC.preambulo)}</p>
+      ${clausulas}
+      <div class="firmas">${firmas}</div>
+      <div class="huella">Huella SHA-256 del documento: ${esc(DOC.hash)}</div>
+    </div>
+    ${cierre}`;
+
+  if (!firma) engancharFirma();
+}
+
+function engancharFirma() {
+  const nombre = $("#c-nombre"), tinta = $("#tinta"), acepta = $("#c-acepta"), btn = $("#btnFirmar");
+  const refrescar = () => {
+    const n = nombre.value.trim();
+    tinta.textContent = n || "escriba su nombre arriba para verla";
+    tinta.className = "tinta" + (n ? "" : " vacia");
+    btn.disabled = !(n && acepta.checked && $("#c-empresa").value.trim() && $("#c-cargo").value.trim() && $("#c-correo").value.trim());
+  };
+  ["input", "change"].forEach((ev) => $("#fFirma").addEventListener(ev, refrescar));
+
+  $("#fFirma").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btn.disabled = true; btn.textContent = "Firmando…";
+    try {
+      const r = await fetch("/api/nda", {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          empresa: $("#c-empresa").value.trim(),
+          identificacion: $("#c-id").value.trim(),
+          nombre: nombre.value.trim(),
+          cargo: $("#c-cargo").value.trim(),
+          correo: $("#c-correo").value.trim(),
+          acepta: acepta.checked,
+          hash: DOC.hash,
+          sitio_web: $("#sitio_web").value
+        })
+      });
+      const d = await r.json();
+      if (r.status === 409 && d.firma) { pintarDoc({ documento: DOC }, d.firma); aviso("ok", "Este acuerdo ya había sido firmado. Abajo está el ejecutado."); return; }
+      if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
+      pintarDoc({ documento: DOC }, d.firma);
+      aviso("ok", "Acuerdo firmado por ambas Partes. Pueden imprimirlo o guardarlo en PDF; nosotros conservamos el registro electrónico.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      aviso("err", "No se pudo registrar la firma: " + err.message + ". Vuelvan a intentar en un momento.");
+      btn.disabled = false; btn.textContent = "Firmar el acuerdo";
+    }
+  });
+}
+
+function aviso(tipo, texto) {
+  $("#avisos").innerHTML = `<div class="estado-caja e-${tipo}">${esc(texto)}</div>`;
+}
+
+(async () => {
+  let d;
+  try { d = await (await fetch("/api/nda")).json(); }
+  catch { $("#cuerpo").innerHTML = '<div class="estado-caja e-err">No se pudo cargar el acuerdo. Recarguen la página.</div>'; return; }
+  pintarDoc(d, d.firmado ? d.firma : null);
+  if (d.firmado) aviso("ok", "Este acuerdo ya está firmado por ambas Partes. Abajo está el documento ejecutado.");
+})();
+</script>
+</body>
+</html>
