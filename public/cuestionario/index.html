@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Automatización de entrada de pedidos — Levantamiento técnico · B. Braun × Gadamax</title>
-<meta name="description" content="Levantamiento técnico para dimensionar la automatización de entrada de pedidos de B. Braun en el cluster andino. Preparado por Gadamax.">
+<title>Levantamiento técnico · Gadamax</title>
+<meta name="description" content="Levantamiento técnico para dimensionar un proyecto de automatización. Preparado por Gadamax.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
@@ -468,6 +468,7 @@ async function mirar() {
   if (enVuelo || document.visibilityState === "hidden") return;
   try {
     const d = await (await fetch("/api/cuestionario?solo=estado")).json();
+    if (d.archivado) { location.reload(); return; }
     if (d.version === VERSION) return;
     VERSION = d.version;
     aplicar(d.respuestas, true);
@@ -525,6 +526,25 @@ window.addEventListener("visibilitychange", () => {
     d = await (await fetch("/api/cuestionario")).json();
   } catch {
     $("#avisos").innerHTML = '<div class="aviso a-err">No se pudieron cargar las preguntas. Recarguen la página, por favor.</div>';
+    return;
+  }
+  if (d.archivado) {
+    document.querySelector(".marcas .para")?.remove();
+    document.querySelector(".marcas .cliente")?.remove();
+    const sub = document.querySelector("header .sub");
+    if (sub) sub.textContent = "Este enlace correspondió a un levantamiento ya contestado y cerrado.";
+    document.querySelector("header .meta")?.remove();
+    document.querySelector(".barra").style.display = "none";
+    document.querySelector(".intro").style.display = "none";
+    const pie = document.querySelector("footer .wrap");
+    if (pie) pie.textContent = "Gadamax · Página privada, no indexada.";
+    $("#form").style.display = "none";
+    $("#gracias").style.display = "";
+    $("#gracias").innerHTML = `<div class="gracias">
+      <h2>Cuestionario cerrado</h2>
+      <p>Este cuestionario fue contestado y cerrado${d.fecha ? " el " + esc(new Date(d.fecha).toLocaleDateString("es-EC", { day: "numeric", month: "long", year: "numeric" })) : ""}.</p>
+      <p>Su contenido y sus respuestas ya no están disponibles en este enlace.</p>
+    </div>`;
     return;
   }
   SECCIONES = d.secciones; PREGUNTAS = d.preguntas; VERSION = d.version;

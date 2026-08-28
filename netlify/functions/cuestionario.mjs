@@ -88,6 +88,7 @@ export default async (req) => {
     return json({
       version: doc.version,
       creado: doc.creado,
+      archivado: Boolean(doc.archivado),
       actualizado: doc.actualizado,
       terminado: doc.terminado,
       total: PREGUNTAS.length,
@@ -101,6 +102,10 @@ export default async (req) => {
   /* ── estado para el formulario ──────────────────────────────────────── */
   if (req.method === "GET") {
     const doc = await cargar();
+    /* Dado de baja: el enlace ya no muestra preguntas ni respuestas. */
+    if (doc.archivado) {
+      return json({ archivado: true, fecha: doc.actualizado || doc.creado, version: doc.version });
+    }
     /* Con ?solo=estado se consulta si hubo cambios sin volver a bajar las
        preguntas, que no cambian nunca. */
     if (url.searchParams.get("solo") === "estado") return json(paraTodos(doc));
@@ -134,6 +139,22 @@ export default async (req) => {
     }
 
     const doc = await cargar();
+
+    /* Dar de baja o reabrir, solo desde el panel de Gadamax. */
+    if (typeof cuerpo.archivar === "boolean") {
+      const clave = process.env.CUESTIONARIO_CLAVE;
+      if (!clave || cuerpo.clave !== clave) return json({ error: "Clave incorrecta." }, 403);
+      doc.archivado = cuerpo.archivar;
+      doc.version = (doc.version || 0) + 1;
+      await guardar(CLAVE_DOC, doc);
+      return json({ ok: true, archivado: doc.archivado });
+    }
+
+    /* Dado de baja, el formulario ya no acepta cambios. */
+    if (doc.archivado) {
+      return json({ archivado: true, error: "El cuestionario fue cerrado y ya no acepta cambios." }, 409);
+    }
+
     const ahora = new Date().toISOString();
     let cambios = 0;
 

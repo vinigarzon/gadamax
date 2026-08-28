@@ -60,6 +60,10 @@ export default async (req) => {
 
   /* ── documento + estado ─────────────────────────────────────────────── */
   if (req.method === "GET") {
+    /* Cerrado por seguridad: el enlace ya no revela contenido ni partes. */
+    if (firma?.archivado) {
+      return json({ archivado: true, firmado: true, fecha: firma.firmado_el });
+    }
     return json({
       documento: documento(),
       firmado: Boolean(firma),
@@ -84,7 +88,26 @@ export default async (req) => {
       return json({ ok: true, reiniciado: true });
     }
 
+    /* Cerrar la página: oculta el contenido para cualquiera con el enlace.
+       Ocultar es seguro, así que no exige clave. Reabrir sí la exige. */
+    if (cuerpo.cerrar === true) {
+      if (!firma) return json({ error: "No hay un acuerdo firmado que cerrar." }, 400);
+      firma.archivado = true;
+      firma.cerrado_el = new Date().toISOString();
+      await guardar(CLAVE_DOC, firma);
+      return json({ ok: true, archivado: true, fecha: firma.firmado_el });
+    }
+    if (cuerpo.cerrar === false) {
+      const clave = process.env.CUESTIONARIO_CLAVE;
+      if (!clave || cuerpo.clave !== clave) return json({ error: "Clave incorrecta." }, 403);
+      if (!firma) return json({ error: "No hay acuerdo." }, 400);
+      firma.archivado = false;
+      await guardar(CLAVE_DOC, firma);
+      return json({ ok: true, archivado: false });
+    }
+
     if (firma) {
+      if (firma.archivado) return json({ archivado: true, firmado: true, fecha: firma.firmado_el }, 409);
       return json({ error: "El acuerdo ya fue firmado.", firmado: true, firma: publica(firma) }, 409);
     }
 

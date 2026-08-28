@@ -96,7 +96,8 @@ footer{border-top:1px solid var(--rule);padding:18px 0 40px;font-size:12px;color
     <b>Gadamax</b>
     <span class="tag">Respuestas · B. Braun</span>
     <span class="tag vivo" id="pulso" style="display:none">en vivo</span>
-    <button type="button" id="btnLimpiar" style="display:none;margin-left:auto">Reiniciar</button>
+    <button type="button" id="btnBaja" style="display:none;margin-left:auto">Dar de baja</button>
+    <button type="button" id="btnLimpiar" style="display:none;margin-left:8px">Reiniciar</button>
     <button type="button" id="btnSalir" style="display:none;margin-left:8px">Salir</button>
   </div>
 </header>
@@ -122,7 +123,7 @@ footer{border-top:1px solid var(--rule);padding:18px 0 40px;font-size:12px;color
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
 const LLAVE = "gadamax-clave-cuestionario";
-let SEC = [], VERSION = -1, sondeo = null, CLAVE = null, armado = false;
+let SEC = [], VERSION = -1, sondeo = null, CLAVE = null, armado = false, ARCHIVADO = false;
 
 async function cargar(clave) {
   $("#cargando").style.display = "";
@@ -152,6 +153,9 @@ async function cargar(clave) {
   $("#btnSalir").style.display = "";
   $("#pulso").style.display = "";
   $("#btnLimpiar").style.display = "";
+  $("#btnBaja").style.display = "";
+  $("#btnBaja").textContent = d.archivado ? "Reabrir el formulario" : "Dar de baja";
+  ARCHIVADO = Boolean(d.archivado);
   CLAVE = clave;
 
   /* Se refresca solo, para ver llegar las respuestas sin recargar. */
@@ -218,6 +222,9 @@ function pintar(d) {
   if (d.terminado) {
     html += '<div class="aviso a-ok">El cliente marcó el cuestionario como terminado.</div>';
   }
+  if (d.archivado) {
+    html += '<div class="aviso a-amb"><b>Dado de baja.</b> El enlace público solo dice que fue contestado y cerrado; este panel sigue viendo todo.</div>';
+  }
 
   for (const s of SEC) {
     const items = d.consolidado.filter((c) => c.seccion === s.id);
@@ -241,6 +248,29 @@ $("#fClave").addEventListener("submit", (e) => {
   const c = $("#clave").value.trim();
   if (c) cargar(c);
 });
+
+/* Dar de baja: el enlace público deja de mostrar preguntas y respuestas,
+   y solo dice que un cuestionario fue contestado y cerrado. Reversible. */
+$("#btnBaja").onclick = async () => {
+  const b = $("#btnBaja");
+  const accion = ARCHIVADO ? false : true;
+  if (accion && !confirm("¿Dar de baja el formulario? El enlace público dejará de mostrar el contenido y las respuestas. Este panel sigue viendo todo, y se puede reabrir.")) return;
+  b.disabled = true;
+  try {
+    const r = await fetch("/api/cuestionario", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ archivar: accion, clave: CLAVE }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
+    ARCHIVADO = d.archivado;
+    b.textContent = ARCHIVADO ? "Reabrir el formulario" : "Dar de baja";
+    $("#panel").insertAdjacentHTML("afterbegin", `<div class="aviso a-ok">${ARCHIVADO
+      ? "Formulario dado de baja. El enlace público ya solo dice que fue contestado y cerrado."
+      : "Formulario reabierto. El enlace público vuelve a funcionar."}</div>`);
+  } catch (e) {
+    $("#panel").insertAdjacentHTML("afterbegin", `<div class="aviso a-err">${esc(e.message)}</div>`);
+  }
+  b.disabled = false;
+};
 
 /* Reinicio en dos pasos: el primer clic solo arma la confirmación. */
 $("#btnLimpiar").onclick = async () => {
