@@ -95,6 +95,8 @@ tbody tr:last-child td{border-bottom:0}
 .precio .tt span{font-size:13.5px;color:#A9B4CA;font-family:var(--f-serif)}
 .precio .cifra{font-family:var(--f-mono);font-size:30px;font-weight:500;white-space:nowrap}
 .precio .cifra small{font-size:13px;color:#7C89A5;display:block;text-align:right;margin-top:2px;font-family:var(--f-body)}
+.precio.verde{background:var(--gain)}
+.precio.verde .tt span,.precio.verde .cifra small{color:rgba(255,255,255,.78)}
 
 footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;color:var(--faint)}
 .acciones{margin:26px 0 0}
@@ -126,7 +128,7 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
       <span class="para">propuesta para</span>
       <span class="cliente"><img src="/assets/images/bbraun-logo-full.svg" alt="B. Braun" height="22"></span>
     </div>
-    <p class="ey">Propuesta de servicios profesionales · Confidencial</p>
+    <p class="ey">Propuesta comercial · Plataforma como servicio · Confidencial</p>
     <h1>Automatización de la entrada de pedidos</h1>
     <p class="sub">Un agente que lee los pedidos como llegan —correo, Excel, WhatsApp, fotografía—, los valida contra las reglas del negocio y los deja listos en los sistemas. Construido para sobrevivir a la migración a S/4HANA.</p>
     <div class="meta">
@@ -193,29 +195,29 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
 
 <section>
   <h2>Plan de trabajo</h2>
-  <p class="lede">Cuatro fases. La primera tiene alcance y precio en firme; las siguientes se cotizan con lo que la primera mide.</p>
+  <p class="lede">Un solo pago de puesta en marcha lo cubre todo hasta que el sistema demuestra su tasa de acierto. El servicio mensual empieza a facturarse recién entonces.</p>
 
   <div class="tcaja">
   <table>
-    <thead><tr><th>Fase</th><th>Qué se hace</th><th>Qué entrega</th></tr></thead>
+    <thead><tr><th>Etapa</th><th>Qué se hace</th><th>Qué entrega</th></tr></thead>
     <tbody>
       <tr>
-        <td><strong>0 · Diagnóstico</strong><br><span class="pill p-v">3 semanas · en firme</span></td>
-        <td>El agente se calibra y corre contra su muestra real completa, con maestros de trabajo construidos desde sus propias órdenes. Sesión técnica con IT para confirmar el mecanismo y la frecuencia de carga a SAP ECC y el formato de importación de INSOFT.</td>
-        <td>Tasa de acierto <em>medida</em> por canal y tipología; arquitectura y plan definitivo; <strong>precio en firme del programa en los tres modelos</strong>.</td>
+        <td><strong>1 · Puesta en marcha</strong><br><span class="pill p-v">cubierta por el setup</span></td>
+        <td>El agente se calibra con su muestra real completa; maestros de trabajo y equivalencias de códigos construidos desde sus propias órdenes. Los cuatro canales conectados; validación con condiciones por cliente, contratos, lote y vida útil; cola de excepciones con su analista. Usuarios y perfiles —analista, supervisor, consulta, administrador— autenticados con su directorio corporativo de Microsoft. Sesión técnica con IT: mecanismo y frecuencia de carga a SAP ECC, formato de importación de INSOFT.</td>
+        <td>La plataforma operando con sus pedidos reales: portal, base de datos, bitácora de auditoría y archivos de carga para los dos sistemas.</td>
       </tr>
       <tr>
-        <td><strong>1 · Agente en operación asistida</strong><br><span class="pill p-c">se cotiza en fase 0</span></td>
-        <td>Los cuatro canales conectados; validación con condiciones por cliente, contratos, lote y vida útil; cola de excepciones operando con su analista. Acceso con usuarios y perfiles —analista, supervisor, consulta, administrador— autenticados con su propio directorio corporativo de Microsoft, con registro de quién aprobó qué.</td>
-        <td>Archivos de carga validados para INSOFT y SAP; el equipo deja de digitar y pasa a revisar.</td>
+        <td><strong>2 · Acompañamiento hasta el 90 %</strong><br><span class="pill p-c">el mensual aún no se factura</span></td>
+        <td>El sistema corre en paralelo con su operación diaria y la tasa de acierto se mide por canal y por tipología, sobre pedidos reales. Nuestro equipo ajusta reglas, maestros y modelo con dedicación total hasta que la medición supera el 90 %. Si no llega, seguimos ajustando — sin costo adicional y sin facturar el mensual.</td>
+        <td>Tasa de acierto <em>medida</em> y verificable ≥ 90 %. Solo entonces arranca la suscripción.</td>
       </tr>
       <tr>
-        <td><strong>2 · Entrega automática</strong><br><span class="pill p-c">se cotiza en fase 0</span></td>
-        <td>Importación automatizada a INSOFT contra su ambiente de pruebas primero; carga a SAP según lo acordado con IT; validación de cupo activada con regla acordada.</td>
-        <td>Flujo de punta a punta sin intervención manual para los pedidos limpios.</td>
+        <td><strong>3 · Crucero</strong><br><span class="pill p-v">USD 1.900 / mes</span></td>
+        <td>Importación automatizada a INSOFT —contra su ambiente de pruebas primero— y carga a SAP según lo acordado con IT; validación de cupo activada. Su equipo revisa excepciones en lugar de digitar; el mensual incluye operación, soporte y 10 horas de mejoras cada mes.</td>
+        <td>Flujo de punta a punta sin intervención manual para los pedidos limpios, en evolución continua.</td>
       </tr>
       <tr>
-        <td><strong>3 · Continuidad S/4HANA</strong><br><span class="pill p-a">cuando migren</span></td>
+        <td><strong>4 · Continuidad S/4HANA</strong><br><span class="pill p-a">cuando migren · dentro del mensual</span></td>
         <td>Sustitución de los adaptadores de archivo por el conector estándar de S/4HANA, sin tocar plataforma, reglas ni historia.</td>
         <td>La inversión sobrevive al cambio de ERP — en los dos países.</td>
       </tr>
@@ -225,22 +227,40 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
 </section>
 
 <section>
-  <h2>Modelos comerciales</h2>
-  <p class="lede">Los tres que nos pidieron comparar. Las cifras de cada uno salen del diagnóstico — cualquier número que pusiéramos hoy sería inventado, y preferimos no empezar así.</p>
+  <h2>La inversión</h2>
+  <p class="lede">Dos números. Sin letra pequeña.</p>
 
-  <div class="tcaja">
-  <table>
-    <thead><tr><th>Modelo</th><th>Estructura</th><th>Para quién tiene sentido</th></tr></thead>
-    <tbody>
-      <tr><td><strong>A · Proyecto</strong></td><td>Pago único de desarrollo más un mantenimiento mensual.</td><td>Si prefieren activo propio e inversión de capital.</td></tr>
-      <tr><td><strong>B · Suscripción</strong></td><td>Sin inversión inicial; mensualidad todo incluido: plataforma, modelo de IA, monitoreo, soporte en horario hábil con niveles de servicio acordados, y evolución continua — incluida la adaptación a S/4HANA cuando llegue.</td><td>El que mejor absorbe la migración de ERP: los dos cambios de conector quedan dentro de la mensualidad.</td></tr>
-      <tr><td><strong>C · Por pedido</strong></td><td>Base menor de implementación más un variable por pedido procesado.</td><td>Si quieren que el costo siga al uso; con 1.200 pedidos al mes es fácil de proyectar y de auditar.</td></tr>
-    </tbody>
-  </table>
+  <div class="precio">
+    <div class="tt">
+      <b>Puesta en marcha · pago único</b>
+      <span>Todo lo de la etapa 1: calibración con sus pedidos reales, maestros y equivalencias, los cuatro canales, usuarios y perfiles con su directorio de Microsoft, formatos de carga para SAP ECC e INSOFT, capacitación de su equipo.</span>
+    </div>
+    <div class="cifra">USD 7.000<small>100 % al inicio</small></div>
   </div>
 
+  <div class="precio verde">
+    <div class="tt">
+      <b>Servicio mensual · suscripción</b>
+      <span>Empieza a facturarse solo cuando la tasa de acierto medida sobre su operación real alcanza el 90 %. Hasta entonces, todo el acompañamiento corre por nuestra cuenta.</span>
+    </div>
+    <div class="cifra">USD 1.900<small>/ mes · sin permanencia forzada</small></div>
+  </div>
+
+  <div class="nota n-verde">
+    <span class="et">Prepago anual · −20 %</span>
+    <p>Pagando el año por adelantado, el servicio mensual queda en <strong>USD 18.240 / año — equivalente a USD 1.520 al mes</strong>.</p>
+  </div>
+
+  <h3>Qué paga el mensual, exactamente</h3>
+  <ul class="limpia">
+    <li><strong>Toda la operación variable.</strong> Infraestructura en la nube, procesamiento de sus ~1.200 pedidos mensuales con el modelo de inteligencia artificial, almacenamiento y respaldo de la base de datos, monitoreo permanente de la plataforma y seguridad.</li>
+    <li><strong>Soporte de Gadamax.</strong> Hasta alcanzar el 90 % de acierto, dedicación total de nuestro equipo. Después, soporte continuo en horario hábil de Ecuador y Colombia, con respuesta a incidentes técnicos y niveles de servicio acordados.</li>
+    <li><strong>Hasta 10 horas al mes de mejoras y desarrollo.</strong> Reportes nuevos, ajustes de reglas y de usabilidad, cambios de formato o de interfaz, el formato nuevo que un cliente suyo invente, afinamiento del modelo. Se piden, se hacen, quedan — también la adaptación a S/4HANA cuando llegue.</li>
+  </ul>
+  <p class="serif" style="font-size:14.5px;color:var(--muted)">Fuera del mensual: módulos nuevos completos o migraciones mayores. Esos se cotizan aparte, siempre antes de hacerse, nunca por sorpresa.</p>
+
   <h3>El contexto de mercado</h3>
-  <p>Para que evalúen cualquier número nuestro con referencias sobre la mesa:</p>
+  <p>Para que evalúen estos números con referencias sobre la mesa:</p>
   <div class="tcaja">
   <table>
     <thead><tr><th>Referencia</th><th>Orden de magnitud</th><th>Nota</th></tr></thead>
@@ -248,51 +268,36 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
       <tr><td>Plataformas enterprise de automatización de pedidos (Esker, Conexiom)</td><td class="serif">USD 50.000+ <span style="color:var(--muted)">/ año</span></td><td>Más implementación, que suele costar otro tanto. No procesan manuscritos ni canales como su CRM.</td></tr>
       <tr><td>Soluciones intermedias de captura de documentos (Rossum y similares)</td><td class="serif">desde USD 10.000 <span style="color:var(--muted)">/ año</span></td><td>Capturan el documento; las reglas de negocio y la integración van aparte.</td></tr>
       <tr><td><strong>Su costo operativo actual de digitación</strong></td><td class="serif">≈ USD 50.000 <span style="color:var(--muted)">/ año</span></td><td>~400 horas al mes de su equipo, con el costo de error incluido.</td></tr>
+      <tr><td><strong>Esta propuesta, primer año completo</strong></td><td class="serif">USD 29.800 <span style="color:var(--muted)">· 25.240 prepago</span></td><td>Setup más doce meses de servicio. Menos de lo que hoy cuesta digitar — y el mensual solo corre desde el 90 % de acierto.</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="serif" style="font-size:14.5px;color:var(--muted)">Nuestro compromiso al cotizar tras el diagnóstico: los tres modelos quedarán por debajo de su costo operativo actual — el proyecto debe pagarse solo desde el primer año.</p>
-</section>
 
-<section>
-  <h2>El diagnóstico, en firme</h2>
-  <p class="lede">Lo único que cotizamos hoy, porque es lo único cuyo alcance ya se conoce por completo.</p>
-
-  <p><strong>Semana 1 —</strong> Calibración con su muestra: los 25 casos de Ecuador y las órdenes de Colombia, más las que quieran sumar. Construcción de los maestros de trabajo y de las equivalencias de códigos a partir de sus propias órdenes.</p>
-  <p><strong>Semana 2 —</strong> Medición: el agente corre contra todo el corpus y se mide la tasa de acierto por canal, por tipología y por tipo de línea. Sesión técnica con su equipo de IT: mecanismo y frecuencia de carga a SAP ECC, formato de importación de INSOFT, accesos al ambiente de pruebas.</p>
-  <p><strong>Semana 3 —</strong> Diseño y número: arquitectura definitiva, plan de implementación por fases, y el precio en firme del programa completo en los tres modelos, calculado sobre lo medido — no sobre estimaciones.</p>
-
-  <div class="precio">
-    <div class="tt">
-      <b>Diagnóstico · 3 semanas</b>
-      <span>Alcance cerrado, entregables definidos, sin compromiso de continuar.</span>
-    </div>
-    <div class="cifra">USD 7.500<small>50 % al inicio · 50 % contra entrega</small></div>
-  </div>
-
-  <div class="nota n-verde">
-    <span class="et">Dos compromisos que asumimos nosotros</span>
-    <p><strong>Garantía de resultado.</strong> Si la tasa de acierto medida sobre su muestra no supera el 90 %, el segundo pago no se factura y el informe completo queda en sus manos.</p>
-    <p><strong>Acreditación total.</strong> Si al término del diagnóstico deciden continuar con Gadamax en cualquiera de los tres modelos, los USD 7.500 se acreditan íntegros al programa: el diagnóstico les termina saliendo gratis.</p>
-  </div>
+  <h3>Las preguntas que seguramente vienen</h3>
+  <ul class="limpia">
+    <li><strong>¿Esto es un SaaS?</strong> Sí: plataforma como servicio. Ustedes la operan con sus propios usuarios y perfiles; nosotros la mantenemos viva, segura y en evolución.</li>
+    <li><strong>¿Qué pasa si un mes no pagamos?</strong> Los datos son suyos y se exportan completos en cualquier momento. El procesamiento, el soporte y las mejoras se pausan hasta regularizar — nada se borra.</li>
+    <li><strong>¿Podemos comprarla llave en mano?</strong> Sí: licencia perpetua con despliegue en su tenant de Microsoft. Es otro valor y se cotiza a pedido — la suscripción no los ata.</li>
+    <li><strong>¿La migración a S/4HANA?</strong> Incluida en el mensual, en los dos países. Se cambia el conector; su plataforma, sus reglas y su historia no se tocan.</li>
+  </ul>
 </section>
 
 <section>
   <h2>Supuestos y condiciones</h2>
   <ul class="limpia">
-    <li>La escritura en SAP ECC se realiza mediante archivo de carga masiva importado por su equipo, según el mecanismo que se confirme con IT en el diagnóstico. La integración directa a SAP queda fuera del alcance mientras la política corporativa no la habilite.</li>
-    <li>La escritura en INSOFT se realiza por importación de archivos contra su ambiente de pruebas primero; los formatos exactos se confirman en el diagnóstico.</li>
-    <li>B. Braun facilita durante el diagnóstico: las muestras adicionales que decida sumar, una sesión con IT (2 horas son suficientes) y una persona de Administración de Ventas como contraparte funcional.</li>
+    <li>La escritura en SAP ECC se realiza mediante archivo de carga masiva importado por su equipo, según el mecanismo que se confirme con IT en la puesta en marcha. La integración directa a SAP queda fuera del alcance mientras la política corporativa no la habilite.</li>
+    <li>La escritura en INSOFT se realiza por importación de archivos contra su ambiente de pruebas primero; los formatos exactos se confirman en la puesta en marcha.</li>
+    <li>B. Braun facilita durante la puesta en marcha: las muestras adicionales que decida sumar, una sesión con IT (2 horas son suficientes) y una persona de Administración de Ventas como contraparte funcional.</li>
     <li>Todo el material se trata bajo el acuerdo de confidencialidad suscrito. Los datos personales presentes en los documentos se anonimizan en cualquier material de trabajo o demostración.</li>
-    <li>La operación diaria queda en manos del equipo de B. Braun, con sus propios usuarios y perfiles; Gadamax monitorea la plataforma, responde incidentes técnicos en horario hábil de Ecuador y Colombia y mantiene el sistema en evolución. Los niveles de servicio se formalizan en el diagnóstico y quedan incluidos en la mensualidad.</li>
-    <li>La plataforma puede operar como servicio de Gadamax o desplegarse en el tenant de Microsoft de B. Braun; la decisión se toma con el diseño de la fase 0 y no cambia la arquitectura.</li>
+    <li>La operación diaria queda en manos del equipo de B. Braun, con sus propios usuarios y perfiles; Gadamax monitorea la plataforma, responde incidentes técnicos en horario hábil de Ecuador y Colombia y mantiene el sistema en evolución. Los niveles de servicio se formalizan en la puesta en marcha y quedan incluidos en la mensualidad.</li>
+    <li>La plataforma puede operar como servicio de Gadamax o desplegarse en el tenant de Microsoft de B. Braun; la decisión se toma en la puesta en marcha y no cambia la arquitectura.</li>
   </ul>
 </section>
 
 <section>
   <h2>Siguiente paso</h2>
-  <p class="lede">Uno solo: agendar el arranque del diagnóstico.</p>
-  <p>Con la orden de inicio, en tres semanas tienen sobre la mesa la tasa de acierto medida con sus propios pedidos y el precio en firme del programa en los tres modelos — con nuestra garantía de resultado de por medio. La demostración del agente leyendo sus órdenes reales puede verse en la misma reunión de arranque.</p>
+  <p class="lede">Uno solo: dar la orden de inicio.</p>
+  <p>Con la orden de inicio y el pago del setup, la puesta en marcha arranca de inmediato: la plataforma queda leyendo sus pedidos reales en semanas, no en meses. El servicio mensual no se factura hasta que la tasa de acierto medida sobre su operación supere el 90 % — hasta entonces, el riesgo es nuestro. La demostración del agente leyendo sus órdenes reales puede verse en la misma reunión de arranque.</p>
   <div class="acciones">
     <button type="button" onclick="window.print()">Guardar esta propuesta en PDF</button>
   </div>
