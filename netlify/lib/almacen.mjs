@@ -68,14 +68,14 @@ export async function borrar(clave) {
  */
 export async function siguienteNumero(sistema) {
   const clave = "_secuencias";
-  const sec = (await leer(clave)) || { SAP: 4500000000, ERP_EC: 0 };
+  const sec = (await leer(clave)) || { SAP: 4500000000, INSOFT: 0 };
   let doc;
   if (sistema === "SAP") {
     sec.SAP += 1;
     doc = String(sec.SAP);
   } else {
-    sec.ERP_EC += 1;
-    doc = `PED-EC-${new Date().getFullYear()}-${String(sec.ERP_EC).padStart(5, "0")}`;
+    sec.INSOFT = (sec.INSOFT ?? sec.ERP_EC ?? 0) + 1;
+    doc = `INS-${new Date().getFullYear()}-${String(sec.INSOFT).padStart(5, "0")}`;
   }
   await guardar(clave, sec);
   return doc;

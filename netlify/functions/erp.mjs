@@ -155,7 +155,7 @@ export default async (req) => {
         pedidos_procesados: intakes.size,
         documentos: ordenes.length,
         documentos_sap: ordenes.filter((o) => o.sistema === "SAP").length,
-        documentos_erp_ec: ordenes.filter((o) => o.sistema === "ERP_EC").length,
+        documentos_erp_ec: ordenes.filter((o) => o.sistema === "INSOFT" || o.sistema === "ERP_EC").length,
         lineas: ordenes.reduce((s, o) => s + o.lineas.length, 0),
         excepciones_abiertas: excs.filter((e) => e.estado === "abierta").length,
         excepciones_resueltas: excs.filter((e) => e.estado === "resuelta").length

@@ -8,7 +8,7 @@
  * ve exactamente en qué punto está y qué decidió el sistema en cada paso.
  */
 
-import { resolver, destinos, payloadSAP, payloadERP } from "../lib/motor.mjs";
+import { resolver, destinos, payloadSAP, payloadERP, archivoINSOFT, archivoSAP } from "../lib/motor.mjs";
 import { guardar, leer, listar, siguienteNumero, modoAlmacen } from "../lib/almacen.mjs";
 import { MATERIALES, CLIENTES } from "../lib/maestros.mjs";
 import { EJEMPLOS, RESPALDOS } from "../lib/ejemplos.mjs";
@@ -19,9 +19,9 @@ const MODELO = "claude-sonnet-5";
 const ESQUEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["canal", "idioma", "cliente", "documento", "lineas", "observaciones", "campos_ausentes", "confianza_global"],
+  required: ["canal", "idioma", "cliente", "documento", "lineas", "exigencias", "cirugia", "observaciones", "campos_ausentes", "confianza_global"],
   properties: {
-    canal: { type: "string", description: "correo, whatsapp, portal, excel o desconocido" },
+    canal: { type: "string", description: "correo, whatsapp, portal, excel, foto_crm o desconocido" },
     idioma: { type: "string", description: "código ISO del idioma del texto, ej. es" },
     cliente: {
       type: "object", additionalProperties: false,
@@ -48,15 +48,32 @@ const ESQUEMA = {
       description: "una entrada por producto pedido, en el orden del texto",
       items: {
         type: "object", additionalProperties: false,
-        required: ["codigo_detectado", "descripcion_detectada", "cantidad", "unidad", "precio_unitario", "nota"],
+        required: ["codigo_detectado", "descripcion_detectada", "cantidad", "unidad", "precio_unitario", "lote_detectado", "fecha_entrega", "nota"],
         properties: {
-          codigo_detectado: { type: ["string", "null"], description: "código tal como lo escribió el cliente; null si no puso" },
+          codigo_detectado: { type: ["string", "null"], description: "código tal como lo escribió el cliente (código propio, referencia B. Braun o CUM); null si no puso" },
           descripcion_detectada: { type: "string", description: "texto del producto tal como aparece" },
           cantidad: { type: ["number", "null"] },
-          unidad: { type: ["string", "null"], description: "cajas, sacos, unidades, pacas… tal como lo dijo el cliente" },
+          unidad: { type: ["string", "null"], description: "cajas, unidades, frascos, sobres… tal como lo dijo el cliente" },
           precio_unitario: { type: ["number", "null"], description: "solo si el cliente indicó un precio" },
+          lote_detectado: { type: ["string", "null"], description: "número de lote si el documento lo reporta (etiquetas LOT, tarjetas de cirugía)" },
+          fecha_entrega: { type: ["string", "null"], description: "fecha de entrega propia de ESTA línea en AAAA-MM-DD, solo si difiere o viene por ítem" },
           nota: { type: ["string", "null"], description: "condición o salvedad que el cliente escribió sobre esta línea" }
         }
+      }
+    },
+    exigencias: {
+      type: "array", items: { type: "string" },
+      description: "condiciones de recepción que el cliente impone en el documento: caducidad mínima, máximo de lotes, certificados, concordancia OC-factura…"
+    },
+    cirugia: {
+      type: ["object", "null"], additionalProperties: false,
+      description: "solo para tarjetas de control de cirugías; null en los demás canales",
+      required: ["procedimiento", "fecha", "hospital", "paciente_iniciales"],
+      properties: {
+        procedimiento: { type: ["string", "null"] },
+        fecha: { type: ["string", "null"], description: "AAAA-MM-DD" },
+        hospital: { type: ["string", "null"] },
+        paciente_iniciales: { type: ["string", "null"], description: "SOLO las iniciales del paciente. NUNCA transcribas el nombre completo ni la cédula: son datos personales protegidos." }
       }
     },
     observaciones: { type: "array", items: { type: "string" }, description: "instrucciones generales del pedido" },
@@ -65,18 +82,22 @@ const ESQUEMA = {
   }
 };
 
-const SISTEMA = `Eres el componente de lectura de un agente de pedidos para una distribuidora que opera en Ecuador y Colombia.
+const SISTEMA = `Eres el componente de lectura de un agente de pedidos de dispositivos médicos que opera en Ecuador y Colombia.
 
-Recibes el texto crudo de un pedido tal como llegó: un correo, un WhatsApp, una tabla pegada de Excel, a veces con faltas de ortografía, sin tildes, en mayúsculas o con el formato roto.
+Recibes un pedido tal como llegó: un correo, un WhatsApp, una orden de compra en PDF, una tabla de Excel, o la FOTOGRAFÍA de una tarjeta de control de cirugías escrita a mano — a veces con faltas de ortografía, sin tildes, en mayúsculas, torcida o con el formato roto.
 
 Tu único trabajo es LEER y ESTRUCTURAR. Reglas:
-- No inventes nada. Si un dato no está en el texto, pon null y anótalo en campos_ausentes.
-- NUNCA adivines códigos de material del ERP. Copia el código tal como lo escribió el cliente, o null. Otro componente hace el emparejamiento contra el maestro.
+- No inventes nada. Si un dato no está en el documento, pon null y anótalo en campos_ausentes.
+- NUNCA adivines códigos de material. Copia el código tal como lo escribió el cliente (su código propio, una referencia B. Braun, un CUM), o null. Otro componente hace el emparejamiento contra el maestro.
 - Transcribe cantidades y precios exactamente como están. No conviertas unidades ni calcules totales.
-- Formato numérico de Ecuador y Colombia: el punto separa los miles y la coma los decimales. "$171.800" son ciento setenta y un mil ochocientos, no 171,8. "1.250,50" son mil doscientos cincuenta con cincuenta. Devuelve siempre el número real.
-- Si una línea trae una condición ("confirmar precio", "solo si hay stock", "el resto la próxima semana"), ponla en nota.
+- Formato numérico de Ecuador y Colombia: el punto separa los miles y la coma los decimales. "$171.800" son ciento setenta y un mil ochocientos, no 171,8. Devuelve siempre el número real.
+- Si una línea trae lote (LOT en una etiqueta, "lote:" manuscrito), ponlo en lote_detectado.
+- Si el documento impone condiciones de recepción (caducidad mínima, máximo de lotes, certificados por lote, concordancia OC-factura), lístalas en exigencias.
+- Si una línea trae una condición propia ("confirmar precio", "solo si hay stock"), ponla en nota; una fecha de entrega por ítem va en fecha_entrega de esa línea.
 - Si el cliente pide algo que no es un producto (una pregunta, un reclamo), no lo conviertas en línea: ponlo en observaciones.
-- Separa correctamente cuando el cliente junta varios productos en un renglón.`;
+- Separa correctamente cuando el cliente junta varios productos en un renglón.
+
+Tarjetas de control de cirugías (fotografía): son reposición de consumo en comodato. Cada componente usado es una línea, con cantidad 1 salvo que se indique otra cosa; toma REF y LOT de las etiquetas impresas y del manuscrito. El hospital/clínica de la tarjeta es el cliente. PROTECCIÓN DE DATOS PERSONALES: del paciente devuelve SOLO iniciales en cirugia.paciente_iniciales — nunca el nombre completo, nunca la cédula, ni en observaciones ni en ningún campo. Los nombres de cirujano e instrumentista tampoco se transcriben.`;
 
 /* ── utilidades SSE ─────────────────────────────────────────────────────── */
 const enc = new TextEncoder();
@@ -84,8 +105,18 @@ const sse = (ctrl, evento, dato) =>
   ctrl.enqueue(enc.encode(`event: ${evento}\ndata: ${JSON.stringify(dato)}\n\n`));
 
 /* ── llamada al modelo ──────────────────────────────────────────────────── */
-async function extraer(texto, apiKey) {
+async function extraer(texto, apiKey, imagen = null) {
   const hoy = new Date().toISOString().slice(0, 10);
+
+  /* El contenido puede ser texto, o una fotografía con un texto de contexto
+     (el canal CRM: tarjetas de cirugía). El modelo lee la imagen directamente. */
+  const contenido = imagen
+    ? [
+        { type: "image", source: { type: "base64", media_type: imagen.media_type, data: imagen.b64 } },
+        { type: "text", text: `<pedido canal="foto_crm">\n${texto || "Fotografía de tarjeta de control de cirugías publicada en el CRM. Extrae el pedido de reposición."}\n</pedido>` }
+      ]
+    : `<pedido>\n${texto}\n</pedido>`;
+
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -98,7 +129,7 @@ async function extraer(texto, apiKey) {
       max_tokens: 4000,
       thinking: { type: "disabled" },
       system: `${SISTEMA}\n\nHoy es ${hoy}.`,
-      messages: [{ role: "user", content: `<pedido>\n${texto}\n</pedido>` }],
+      messages: [{ role: "user", content: contenido }],
       output_config: { format: { type: "json_schema", schema: ESQUEMA } }
     })
   });
@@ -130,8 +161,23 @@ export default async (req) => {
   const texto = String(cuerpo.texto ?? "").trim();
   const canalDeclarado = cuerpo.canal ?? null;
 
-  if (!texto) {
-    return new Response(JSON.stringify({ error: "No llegó texto del pedido." }),
+  /* Canal fotografía: llega la imagen en base64 desde el navegador. */
+  let imagen = null;
+  if (cuerpo.imagen && typeof cuerpo.imagen.b64 === "string") {
+    const mt = String(cuerpo.imagen.media_type || "image/jpeg");
+    if (!/^image\/(jpeg|png|webp)$/.test(mt)) {
+      return new Response(JSON.stringify({ error: "Formato de imagen no admitido." }),
+        { status: 400, headers: { ...cors(), "content-type": "application/json" } });
+    }
+    if (cuerpo.imagen.b64.length > 2_800_000) {
+      return new Response(JSON.stringify({ error: "La imagen excede el tamaño máximo (2 MB)." }),
+        { status: 400, headers: { ...cors(), "content-type": "application/json" } });
+    }
+    imagen = { b64: cuerpo.imagen.b64.replace(/^data:[^,]+,/, ""), media_type: mt };
+  }
+
+  if (!texto && !imagen) {
+    return new Response(JSON.stringify({ error: "No llegó texto ni imagen del pedido." }),
       { status: 400, headers: { ...cors(), "content-type": "application/json" } });
   }
   if (texto.length > 20000) {
@@ -150,23 +196,26 @@ export default async (req) => {
       try {
         /* 1 · recepción */
         paso(1, "Pedido recibido", "listo", {
-          detalle: `${texto.length} caracteres, ${texto.split("\n").length} líneas de texto crudo`,
+          detalle: imagen
+            ? `Fotografía (${imagen.media_type}, ${Math.round(imagen.b64.length * 3 / 4 / 1024)} KB)${texto ? " + nota de contexto" : ""}`
+            : `${texto.length} caracteres, ${texto.split("\n").length} líneas de texto crudo`,
           id: idIntake
         });
 
         /* 2 · lectura con modelo */
-        paso(2, "Leyendo el pedido con el modelo", "corriendo", {
-          detalle: `${MODELO} · salida estructurada contra esquema de ${Object.keys(ESQUEMA.properties).length} campos`
+        paso(2, imagen ? "Leyendo la fotografía con el modelo" : "Leyendo el pedido con el modelo", "corriendo", {
+          detalle: `${MODELO} · ${imagen ? "visión + " : ""}salida estructurada contra esquema de ${Object.keys(ESQUEMA.properties).length} campos`
         });
 
         let extraccion, uso = null, modelo = MODELO, respaldo = false;
         try {
-          ({ extraccion, uso, modelo } = await extraer(texto, apiKey));
+          ({ extraccion, uso, modelo } = await extraer(texto, apiKey, imagen));
         } catch (fallo) {
           /* Red de seguridad para una demostración en vivo: si la API no
              responde, seguimos con la extracción precalculada del ejemplo —
              declarándolo en pantalla, nunca haciéndolo pasar por real. */
-          const ej = EJEMPLOS.find((e) => e.texto.trim() === texto);
+          const ej = EJEMPLOS.find((e) => e.id === cuerpo.ejemplo) ||
+                     EJEMPLOS.find((e) => e.texto && e.texto.trim() === texto);
           if (!ej || !RESPALDOS[ej.id]) throw fallo;
           extraccion = JSON.parse(JSON.stringify(RESPALDOS[ej.id]));
           respaldo = true;
@@ -213,6 +262,7 @@ export default async (req) => {
           for (const sistema of dest) {
             const doc = await siguienteNumero(sistema);
             const payload = sistema === "SAP" ? payloadSAP(res, doc) : payloadERP(res, doc);
+            const archivo = sistema === "SAP" ? archivoSAP(res, doc) : archivoINSOFT(res, doc);
             const registro = {
               documento: doc,
               sistema,
@@ -224,12 +274,14 @@ export default async (req) => {
               total: res.total,
               lineas: res.lineas.filter((l) => l.estado === "ok").map((l) => ({
                 pos: l.pos, material: l.material.cod, desc: l.material.desc,
-                cantidad: l.cantidad, um: l.material.um, precio: l.precio_aplicado, importe: l.importe
+                cantidad: l.cantidad, um: l.material.um, precio: l.precio_aplicado,
+                iva: l.iva, lote: l.material.lote?.num ?? null, importe: l.importe
               })),
-              payload
+              cirugia: extraccion.cirugia ?? null,
+              payload, archivo
             };
             await guardar(`orden/${sistema}/${doc}`, registro);
-            documentos.push({ sistema, documento: doc, lineas: registro.lineas.length, total: registro.total, payload });
+            documentos.push({ sistema, documento: doc, lineas: registro.lineas.length, total: registro.total, payload, archivo });
           }
 
           paso(4, "Grabando en los sistemas", "listo", {
@@ -257,7 +309,7 @@ export default async (req) => {
               alternativas: l.match.alternativas, incidencias: l.incidencias
             })),
             documentos_generados: documentos.map((d) => ({ sistema: d.sistema, documento: d.documento })),
-            texto_original: texto
+            texto_original: imagen ? "(fotografía del canal CRM)" : texto
           };
           await guardar(`excepcion/${idIntake}`, excepcion);
           paso(5, "Cola de excepciones", "listo", {
@@ -270,7 +322,8 @@ export default async (req) => {
         /* registro de la recepción, para trazabilidad */
         await guardar(`intake/${idIntake}`, {
           id: idIntake, creado: new Date().toISOString(), canal: extraccion.canal,
-          texto, extraccion, resolucion: res, respaldo,
+          texto: imagen ? "(fotografía del canal CRM — el archivo original queda en el repositorio documental)" : texto,
+          extraccion, resolucion: res, respaldo,
           documentos: documentos.map((d) => ({ sistema: d.sistema, documento: d.documento })),
           excepcion: excepcion ? excepcion.id : null,
           ms: Date.now() - t0, modelo

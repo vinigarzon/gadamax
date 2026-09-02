@@ -8,7 +8,7 @@
  * auditable y repetible. Es la parte que se puede mostrar línea por línea.
  */
 
-import { MATERIALES, CLIENTES, PARAMETROS, precioEn, DECIMALES } from "./maestros.mjs";
+import { MATERIALES, CLIENTES, PARAMETROS, precioEn, DECIMALES, mesesVidaUtil } from "./maestros.mjs";
 
 /* ───────────────────────── normalización ───────────────────────── */
 
@@ -72,14 +72,32 @@ export function emparejarCliente(nombre, identificacion) {
 
 /* ───────────────────────── materiales ───────────────────────── */
 
-export function emparejarMaterial(codigo, descripcion) {
+export function emparejarMaterial(codigo, descripcion, cliente = null) {
   const codNorm = normalizar(codigo);
-  const candidatos = MATERIALES.map((m) => {
-    // 1. Código exacto del maestro.
-    if (codNorm && normalizar(m.cod) === codNorm) {
-      return { material: m, score: 1, motivo: `código de material exacto (${m.cod})` };
+
+  // 0. Tabla código-del-cliente → referencia B. Braun (existe y está poblada,
+  //    según respuesta del levantamiento). Es el camino más corto y más seguro.
+  if (codNorm && cliente?.codigos) {
+    for (const [propio, ref] of Object.entries(cliente.codigos)) {
+      if (normalizar(propio) === codNorm) {
+        const m = MATERIALES.find((x) => x.cod === ref);
+        if (m) {
+          return {
+            material: m, score: 1, ambiguo: false,
+            motivo: `código propio del cliente (${propio} → ${m.cod}) según su tabla de equivalencias`,
+            alternativas: []
+          };
+        }
+      }
     }
-    // 2. Código propio del cliente, ya mapeado en la tabla de alias.
+  }
+
+  const candidatos = MATERIALES.map((m) => {
+    // 1. Referencia B. Braun exacta.
+    if (codNorm && normalizar(m.cod) === codNorm) {
+      return { material: m, score: 1, motivo: `referencia B. Braun exacta (${m.cod})` };
+    }
+    // 2. Alias conocido del producto.
     if (codNorm && m.alias.some((a) => normalizar(a) === codNorm)) {
       return { material: m, score: 0.95, motivo: `código del cliente "${codigo}" mapeado a ${m.cod}` };
     }
@@ -145,7 +163,7 @@ export function resolver(extraccion, opciones = {}) {
     const inc = [];
     const anotaL = (nivel, regla, texto) => inc.push({ nivel, regla, texto });
 
-    const mm = emparejarMaterial(l.codigo_detectado, l.descripcion_detectada);
+    const mm = emparejarMaterial(l.codigo_detectado, l.descripcion_detectada, cliente);
     const material = mm.score >= P.umbral_revision ? mm.material : null;
 
     if (!material) {
@@ -172,8 +190,13 @@ export function resolver(extraccion, opciones = {}) {
       anotaL("revision", "cantidad_fraccionada", `Cantidad ${cantidad} no es entera; verificar unidad de medida.`);
     }
 
-    /* precio: lista contra lo que escribió el cliente */
-    const precioLista = material ? precioEn(material.precio, moneda) : null;
+    /* precio: contrato o lista, contra lo que escribió el cliente.
+     * Si el cliente tiene precio pactado por contrato/licitación para esta
+     * referencia, ESE es el precio válido — no la lista general. Así un precio
+     * "por debajo de lista" no dispara falsas alarmas en contratos estatales. */
+    const precioContrato = (material && cliente?.contrato?.precios?.[material.cod]) ?? null;
+    const precioLista = material ? (precioContrato ?? precioEn(material.precio, moneda)) : null;
+    const origenPrecio = precioContrato !== null ? `contrato ${cliente.contrato.id}` : "lista";
     const precioCliente = typeof l.precio_unitario === "number" && isFinite(l.precio_unitario) ? l.precio_unitario : null;
     let precioAplicado = precioLista;
     let desvio = null;
@@ -183,14 +206,17 @@ export function resolver(extraccion, opciones = {}) {
       const abs = Math.abs(desvio);
       if (abs >= P.desvio_precio_frena) {
         anotaL("bloqueo", "precio_fuera_de_rango",
-          `El cliente pide ${precioCliente.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} y la lista es ${precioLista.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${moneda} (${(desvio * 100).toFixed(1)} %). Fuera del margen permitido.`);
+          `El cliente pide ${precioCliente.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} y el precio de ${origenPrecio} es ${precioLista.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${moneda} (${(desvio * 100).toFixed(1)} %). Fuera del margen permitido.`);
       } else if (abs >= P.desvio_precio_avisa) {
         anotaL("revision", "precio_con_desvio",
-          `Diferencia de ${(desvio * 100).toFixed(1)} % contra lista (${precioCliente.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} vs. ${precioLista.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${moneda}). Requiere autorización comercial.`);
+          `Diferencia de ${(desvio * 100).toFixed(1)} % contra ${origenPrecio} (${precioCliente.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} vs. ${precioLista.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${moneda}). Requiere autorización comercial.`);
+      } else if (precioContrato !== null) {
+        anotaL("informativo", "precio_de_contrato",
+          `Precio validado contra el ${origenPrecio}: ${precioLista.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${moneda}.`);
       }
     } else if (material && precioCliente === null) {
       anotaL("informativo", "precio_desde_lista",
-        `El pedido no traía precio; se aplica el de lista ${precioLista.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${moneda}.`);
+        `El pedido no traía precio; se aplica el de ${origenPrecio}: ${precioLista.toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${moneda}.`);
     }
 
     /* stock */
@@ -199,7 +225,35 @@ export function resolver(extraccion, opciones = {}) {
         `Se piden ${cantidad} ${material.um} y hay ${material.stock} disponibles. Falta ${cantidad - material.stock}: requiere decisión de despacho parcial o backorder.`);
     }
 
+    /* vida útil del lote contra la política de recepción del cliente.
+     * Esto reproduce la exigencia real: "los productos deben contar con una
+     * fecha de caducidad mayor a X; si no cumplen, notificar previamente". */
+    const mesesLote = material ? mesesVidaUtil(material) : null;
+    const minMeses = cliente?.exigencias?.vida_util_min_meses ?? null;
+    if (material && minMeses !== null && mesesLote !== null) {
+      if (mesesLote < minMeses) {
+        anotaL("revision", "lote_bajo_caducidad_minima",
+          `El lote disponible ${material.lote.num} vence ${material.lote.vence} (${mesesLote} meses de vida útil) y el cliente exige mínimo ${minMeses}. Notificar y obtener autorización antes de despachar.`);
+      }
+    }
+
+    /* lote pedido explícitamente (tarjeta de cirugía, reposición de comodato) */
+    const loteDetectado = l.lote_detectado ?? null;
+    if (material && loteDetectado && material.lote?.num &&
+        normalizar(loteDetectado) !== normalizar(material.lote.num)) {
+      anotaL("informativo", "lote_distinto_al_disponible",
+        `El documento reporta el lote ${loteDetectado}; el lote en inventario es ${material.lote.num}. Se registra el consumo del lote reportado.`);
+    }
+
+    /* fecha de entrega propia de la línea (las OC reales la traen por ítem) */
+    const fechaLinea = (typeof l.fecha_entrega === "string" && /^\d{4}-\d{2}-\d{2}$/.test(l.fecha_entrega)) ? l.fecha_entrega : null;
+
+    /* impuestos por línea, según el país del cliente */
+    const paisCod = cliente?.pais === "Colombia" ? "CO" : "EC";
+    const ivaPct = material ? (material.iva?.[paisCod] ?? 0) : 0;
+
     const importe = (material && cantidad !== null) ? +(precioAplicado * cantidad).toFixed(dec) : null;
+    const iva = importe !== null ? +((importe * ivaPct) / 100).toFixed(dec) : null;
 
     return {
       pos: (i + 1) * 10,
@@ -211,13 +265,24 @@ export function resolver(extraccion, opciones = {}) {
         precio: l.precio_unitario ?? null,
         nota: l.nota ?? null
       },
-      material: material ? { cod: material.cod, desc: material.desc, um: material.um, pres: material.pres, stock: material.stock } : null,
+      material: material ? {
+        cod: material.cod, desc: material.desc, um: material.um, pres: material.pres, stock: material.stock,
+        cum: material.cum ?? null,
+        registro: material.registro?.[cliente?.pais === "Colombia" ? "CO" : "EC"] ?? null,
+        lote: material.lote ?? null
+      } : null,
       match: { score: +mm.score.toFixed(3), motivo: mm.motivo, alternativas: mm.alternativas },
       cantidad,
       precio_lista: precioLista,
+      precio_origen: material ? origenPrecio : null,
       precio_cliente: precioCliente,
       precio_aplicado: precioAplicado,
       desvio_precio: desvio === null ? null : +(desvio * 100).toFixed(2),
+      iva_pct: ivaPct,
+      iva,
+      fecha_entrega: fechaLinea,
+      lote_reportado: loteDetectado,
+      vida_util_meses: mesesLote,
       importe,
       incidencias: inc,
       estado: inc.some((x) => x.nivel === "bloqueo") ? "bloqueada"
@@ -245,6 +310,7 @@ export function resolver(extraccion, opciones = {}) {
    * no contra el pedido completo: sería injusto rechazar por cupo un monto
    * que incluye líneas que de todas formas no van a entrar. */
   const total = +lineas.filter((l) => l.estado === "ok").reduce((s, l) => s + (l.importe || 0), 0).toFixed(dec);
+  const total_iva = +lineas.filter((l) => l.estado === "ok").reduce((s, l) => s + (l.iva || 0), 0).toFixed(dec);
   const total_solicitado = +lineas.reduce((s, l) => s + (l.importe || 0), 0).toFixed(dec);
   let cupo = null;
   if (cliente) {
@@ -304,7 +370,11 @@ export function resolver(extraccion, opciones = {}) {
     lineas,
     incidencias,
     cupo,
+    exigencias: cliente?.exigencias ?? null,
+    contrato: cliente?.contrato ? { id: cliente.contrato.id, vigencia: cliente.contrato.vigencia } : null,
     total,
+    total_iva,
+    total_con_iva: +(total + total_iva).toFixed(dec),
     total_solicitado,
     confianza,
     decision,
@@ -324,14 +394,16 @@ export function resolver(extraccion, opciones = {}) {
 /* ───────────────────────── destinos ───────────────────────── */
 
 /**
- * A qué sistemas va el pedido.
- * SUPUESTO A CONFIRMAR CON EL CLIENTE: hoy los pedidos de Ecuador se digitan dos
- * veces — al SAP corporativo y al ERP local. Los de Colombia solo a SAP. Si en
- * realidad Ecuador no replica a SAP, se cambia esta función y nada más.
+ * A qué sistemas va el pedido — según el levantamiento técnico:
+ * Ecuador se digita hoy DOS VECES (INSOFT local + SAP ECC corporativo);
+ * Colombia solo a SAP. Ninguno admite integración directa todavía, así que
+ * la entrega es por ARCHIVO DE CARGA: INSOFT importa archivos contra su
+ * ambiente de pruebas, y SAP recibe el archivo de carga masiva que importa
+ * el equipo de IT. Cuando llegue S/4HANA, se cambia el adaptador y ya.
  */
 export function destinos(pais) {
   if (pais === "Colombia") return ["SAP"];
-  if (pais === "Ecuador")  return ["SAP", "ERP_EC"];
+  if (pais === "Ecuador")  return ["INSOFT", "SAP"];
   return ["SAP"];
 }
 
@@ -340,7 +412,7 @@ export function destinos(pais) {
 /** Estructura de una BAPI_SALESORDER_CREATEFROMDAT2 de SAP. */
 export function payloadSAP(res, doc) {
   return {
-    _sistema: "SAP ECC · BAPI_SALESORDER_CREATEFROMDAT2",
+    _sistema: "SAP ECC · archivo de carga masiva (estructura BAPI_SALESORDER_CREATEFROMDAT2)",
     ORDER_HEADER_IN: {
       DOC_TYPE: "TA",
       SALES_ORG: res.cliente?.org ?? null,
@@ -370,10 +442,10 @@ export function payloadSAP(res, doc) {
   };
 }
 
-/** Estructura genérica REST del ERP de Ecuador. */
+/** Estructura del archivo de importación de INSOFT (ERP local de Ecuador). */
 export function payloadERP(res, doc) {
   return {
-    _sistema: "ERP Ecuador · POST /api/v1/pedidos",
+    _sistema: "INSOFT · archivo de importación (contra ambiente de pruebas primero)",
     pedido: {
       numero: doc,
       cliente_id: res.cliente?.cod ?? null,
@@ -395,4 +467,42 @@ export function payloadERP(res, doc) {
       total: +res.lineas.filter((l) => l.estado === "ok").reduce((s, l) => s + (l.importe || 0), 0).toFixed(2)
     }
   };
+}
+
+/* ───────────────────────── archivos de carga ─────────────────────────
+ * Lo que el equipo del cliente importaría HOY MISMO: un archivo por sistema,
+ * generado desde el pedido ya resuelto. Estos son los entregables tangibles
+ * del flujo — se pueden descargar desde el demo y abrir en Excel.
+ * ------------------------------------------------------------------- */
+
+const okLineas = (res) => res.lineas.filter((l) => l.estado === "ok");
+
+/** Archivo plano de importación de INSOFT (separado por punto y coma). */
+export function archivoINSOFT(res, doc) {
+  const f = [];
+  f.push(["PEDIDO", doc, new Date().toISOString().slice(0, 10),
+    res.cliente?.cod ?? "", res.cliente?.id ?? "", res.documento.referencia_cliente ?? "",
+    res.documento.condicion_pago ?? "", res.documento.moneda ?? ""].join(";"));
+  for (const l of okLineas(res)) {
+    f.push(["LINEA", l.pos, l.material.cod, l.material.desc, l.cantidad, l.material.um,
+      l.precio_aplicado, l.iva_pct, l.importe, l.material.lote?.num ?? "",
+      l.fecha_entrega ?? res.documento.fecha_solicitada ?? ""].join(";"));
+  }
+  f.push(["TOTAL", okLineas(res).length, res.total, res.total_iva, res.total_con_iva].join(";"));
+  return { nombre: `INSOFT_${doc}.txt`, contenido: f.join("\r\n"), mime: "text/plain" };
+}
+
+/** Archivo de carga masiva para SAP ECC (CSV, una fila por posición). */
+export function archivoSAP(res, doc) {
+  const cab = ["TIPO_DOC", "ORG_VENTAS", "CANAL", "SECTOR", "CLIENTE", "NIT_RUC",
+    "REF_CLIENTE", "FECHA_ENTREGA", "POSICION", "MATERIAL", "DESCRIPCION",
+    "CANTIDAD", "UM", "PRECIO", "MONEDA", "LOTE"];
+  const filas = okLineas(res).map((l) => ["TA", res.cliente?.org ?? "", "10", "00",
+    res.cliente?.cod ?? "", res.cliente?.id ?? "",
+    res.documento.referencia_cliente ?? "",
+    (l.fecha_entrega ?? res.documento.fecha_solicitada ?? "").replace(/-/g, ""),
+    String(l.pos).padStart(6, "0"), l.material.cod, l.material.desc,
+    l.cantidad, l.material.um, l.precio_aplicado, res.documento.moneda ?? "", l.material.lote?.num ?? ""
+  ].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(";"));
+  return { nombre: `SAP_CARGA_${doc}.csv`, contenido: [cab.join(";"), ...filas].join("\r\n"), mime: "text/csv" };
 }

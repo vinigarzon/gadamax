@@ -1,610 +1,691 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>Agente de pedidos · Demostración técnica · Gadamax</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El agente, en vivo · Gadamax</title>
+<meta name="description" content="Demo en vivo del agente de entrada de pedidos: lee correos, órdenes de compra, WhatsApp y tarjetas de cirugía fotografiadas, valida contra maestros y genera los archivos de carga.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/images/brand-logo-gadamax.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0D1321; --paper:#EDF0F6; --white:#FFFFFF; --rule:#C9D2E1; --rule-soft:#DEE4EE;
-  --muted:#5C6880; --muted-dark:#8C99B2; --panel:#F7F9FC;
-  --cobalt:#1F3BE0; --cobalt-ink:#152BA8; --cobalt-soft:#E3E8FF;
-  --flag:#B23A2E; --flag-soft:#F7E4E1;
-  --gain:#0E8F76; --gain-soft:#DFF2ED;
-  --amber:#B07C10; --amber-soft:#FBF0D8;
-  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
-  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --ink:#0A0F1C; --ink2:#121A2C; --paper:#F2F4F8; --white:#FFFFFF;
+  --rule:#C9D2E1; --rule-soft:#DFE4EC; --muted:#5C6880; --faint:#8C99B2;
+  --niebla:#7C89A5; --niebla2:#A9B4CA;
+  --naranja:#F8754C; --naranja-ink:#E05A30;
+  --verde:#00A97A; --verde-luz:#3BC79C; --verde-soft:#DFF2ED;
+  --ambar:#B57E10; --ambar-soft:#FBF3E1;
+  --rojo:#C94F3B; --rojo-soft:#F9E7E3;
+  --cobalt:#1F3BE0; --cobalt-soft:#E7EBFB;
+  --f-sans:"Archivo","Helvetica Neue",Arial,sans-serif;
   --f-serif:"Source Serif 4",Georgia,serif;
-  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
-  --radius:3px;
-  --shadow:0 1px 2px rgba(13,19,33,.06),0 12px 32px -18px rgba(13,19,33,.35);
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --radius:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
-a{color:var(--cobalt)}
-.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-sans);-webkit-font-smoothing:antialiased;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+a{color:inherit}
 
-/* ── cabecera ─────────────────────────────────────────── */
-header{background:var(--ink);color:var(--white);padding:22px 0}
-.hd{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.hd h1{font-size:19px;font-weight:600;letter-spacing:-.01em}
-.hd .sub{color:#9AA6BF;font-size:13px;margin-top:2px}
-.badge{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
-  border:1px solid #2A3550;color:#9AA6BF;padding:5px 10px;border-radius:var(--radius)}
-.badge.on{border-color:var(--gain);color:#63D6BC}
-.badge.alerta{border-color:var(--amber);color:#F0C25A}
-.aviso-respaldo{background:var(--amber-soft);border-left:3px solid var(--amber);padding:11px 14px;font-size:12.5px;color:#6B4C08}
+/* ══ cabecera oscura ══ */
+header.hero{background:radial-gradient(1200px 500px at 75% -10%, #1B2740 0%, var(--ink) 55%);color:#fff;padding:34px 0 46px;position:relative;overflow:hidden}
+header.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 55%,rgba(248,117,76,.06) 70%,transparent 85%)}
+.marcas{display:flex;align-items:center;gap:14px;margin-bottom:34px;flex-wrap:wrap}
+.marca-g{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px;text-decoration:none}
+.marca-g img{width:26px;height:26px}
+.para{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--niebla)}
+.marca-b{background:#fff;border-radius:6px;padding:5px 10px;display:flex;align-items:center}
+.marca-b img{height:20px;display:block}
+.eti{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--naranja);margin-bottom:14px}
+h1{font-size:clamp(32px,5.4vw,56px);font-weight:800;line-height:1.04;letter-spacing:-.02em;text-wrap:balance;max-width:17ch}
+.hero .sub{font-family:var(--f-serif);font-size:clamp(15px,2vw,18px);color:var(--niebla2);max-width:60ch;margin-top:14px}
+.sello-sint{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.06em;color:var(--verde-luz);border:1px solid rgba(59,199,156,.4);border-radius:99px;padding:6px 14px}
+.sello-sint i{width:7px;height:7px;border-radius:50%;background:var(--verde-luz);flex:none}
 
-/* ── aviso ────────────────────────────────────────────── */
-.nota{background:var(--amber-soft);border-bottom:1px solid #E8D7A8;padding:11px 0;font-size:13px;color:#6B4C08}
-.nota b{font-weight:600}
+/* ══ secciones ══ */
+section{padding:44px 0 8px}
+h2{font-size:clamp(21px,3vw,28px);font-weight:700;letter-spacing:-.015em;margin-bottom:6px}
+.paso-num{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--naranja-ink);margin-bottom:8px}
+.lede{font-family:var(--f-serif);color:var(--muted);font-size:15.5px;max-width:66ch;margin-bottom:22px}
 
-/* ── layout ───────────────────────────────────────────── */
-.grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px;padding:24px 0 40px;align-items:start}
-@media(max-width:1000px){.grid{grid-template-columns:1fr}}
-.card{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);box-shadow:var(--shadow)}
-.card>h2{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-  padding:13px 16px;border-bottom:1px solid var(--rule-soft)}
-.card .bd{padding:16px}
+/* ══ tarjetas de canal ══ */
+.canales{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:22px}
+.canal{background:var(--white);border:1.5px solid var(--rule-soft);border-radius:var(--radius);padding:14px 14px 12px;cursor:pointer;
+  transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;text-align:left}
+.canal:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(10,15,28,.08)}
+.canal.activo{border-color:var(--naranja);box-shadow:0 8px 22px rgba(248,117,76,.18)}
+.canal .ic{font-size:20px;margin-bottom:8px}
+.canal b{display:block;font-size:13.5px;line-height:1.25;margin-bottom:3px}
+.canal span{font-size:11.5px;color:var(--muted);line-height:1.35;display:block}
+.canal .pais{margin-top:8px;display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--paper);border-radius:3px;padding:2px 6px;color:var(--muted)}
 
-/* ── entrada ──────────────────────────────────────────── */
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.chip{font-size:12px;font-family:var(--f-body);background:var(--panel);border:1px solid var(--rule);
-  color:var(--ink);padding:6px 10px;border-radius:var(--radius);cursor:pointer;text-align:left;line-height:1.3}
-.chip:hover{border-color:var(--cobalt);background:var(--cobalt-soft)}
-.chip.sel{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
-.chip small{display:block;font-size:10.5px;opacity:.7;font-weight:400}
-textarea{width:100%;min-height:270px;font-family:var(--f-mono);font-size:12.5px;line-height:1.6;
-  padding:12px;border:1px solid var(--rule);border-radius:var(--radius);resize:vertical;background:var(--panel);color:var(--ink)}
-textarea:focus{outline:2px solid var(--cobalt);outline-offset:-1px;background:#fff}
-.row{display:flex;gap:8px;align-items:center;margin-top:12px}
-button{font-family:var(--f-body);font-size:14px;font-weight:500;padding:10px 18px;border-radius:var(--radius);
-  border:1px solid transparent;cursor:pointer;transition:background .12s}
-.b-main{background:var(--cobalt);color:#fff;flex:1}
-.b-main:hover:not(:disabled){background:var(--cobalt-ink)}
-.b-main:disabled{background:var(--muted-dark);cursor:not-allowed}
-.b-ghost{background:#fff;border-color:var(--rule);color:var(--ink)}
-.b-ghost:hover{background:var(--panel)}
-.b-sm{font-size:12px;padding:6px 11px}
-.hint{font-size:12px;color:var(--muted);margin-top:10px}
+/* ══ visor del documento ══ */
+#visor{margin-bottom:18px}
+.doc-marco{background:var(--white);border:1px solid var(--rule-soft);border-radius:var(--radius);overflow:hidden;box-shadow:0 10px 30px rgba(10,15,28,.07)}
+.doc-cab{display:flex;align-items:center;gap:8px;background:var(--ink2);color:#fff;padding:9px 14px;font-family:var(--f-mono);font-size:11px}
+.doc-cab .puntos{display:flex;gap:5px}
+.doc-cab .puntos i{width:9px;height:9px;border-radius:50%;background:#39415A}
+.doc-cab .rot{color:var(--niebla2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-cuerpo{padding:18px 20px;max-height:420px;overflow:auto}
+.doc-cuerpo pre{font-family:var(--f-mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;color:#222A3D}
+.correo-meta{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--rule-soft);padding-bottom:10px;margin-bottom:12px;line-height:1.7}
+.wa-fondo{background:#E4DDD4 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" opacity=".05"><circle cx="20" cy="20" r="2" fill="%23000"/><circle cx="60" cy="55" r="2" fill="%23000"/></svg>');padding:22px}
+.wa-burbuja{background:#fff;border-radius:2px 12px 12px 12px;max-width:520px;padding:12px 14px;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.wa-burbuja pre{font-family:var(--f-sans);font-size:13.5px;white-space:pre-wrap;line-height:1.55}
+.wa-hora{text-align:right;font-size:10.5px;color:#8a8a8a;margin-top:6px}
+.foto-marco{background:#20242B;display:flex;justify-content:center;padding:18px}
+.foto-marco img{max-width:100%;max-height:430px;border-radius:6px;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+#texto-libre{width:100%;min-height:220px;border:0;padding:18px 20px;font-family:var(--f-mono);font-size:13px;line-height:1.6;resize:vertical;outline:0;background:var(--white)}
+.doc-pie{display:flex;justify-content:space-between;align-items:center;gap:14px;border-top:1px solid var(--rule-soft);padding:10px 14px;background:#FAFBFD;flex-wrap:wrap}
+.espera{font-family:var(--f-serif);font-size:13px;color:var(--muted);max-width:60ch}
+.cta{font-family:var(--f-sans);font-weight:700;font-size:15px;border:0;border-radius:8px;cursor:pointer;padding:12px 26px;
+  background:var(--naranja);color:#1A0D07;transition:transform .15s ease, box-shadow .15s ease;white-space:nowrap}
+.cta:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(248,117,76,.35)}
+.cta:disabled{opacity:.5;cursor:default;transform:none;box-shadow:none}
 
-/* ── pipeline ─────────────────────────────────────────── */
-.paso{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid var(--rule-soft)}
-.paso:last-child{border-bottom:0}
-.dot{width:19px;height:19px;border-radius:50%;flex:0 0 19px;margin-top:1px;border:2px solid var(--rule);
-  display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--muted-dark);background:#fff}
-.paso.corriendo .dot{border-color:var(--cobalt);animation:pulso 1s ease-in-out infinite}
-.paso.listo .dot{border-color:var(--gain);background:var(--gain);color:#fff}
-.paso.omitido .dot{border-style:dashed}
-.paso.fallo .dot{border-color:var(--flag);background:var(--flag);color:#fff}
-@keyframes pulso{0%,100%{box-shadow:0 0 0 0 rgba(31,59,224,.35)}50%{box-shadow:0 0 0 5px rgba(31,59,224,0)}}
-.paso .t{font-size:13.5px;font-weight:500}
-.paso .d{font-size:12.5px;color:var(--muted);margin-top:2px}
-.paso .ms{font-family:var(--f-mono);font-size:11px;color:var(--muted-dark);margin-left:auto;white-space:nowrap}
+/* ══ tubería ══ */
+#tuberia{display:none}
+.tubo{background:var(--ink);border-radius:14px;padding:30px 26px 24px;color:#fff;position:relative;overflow:hidden}
+.tubo::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 200px at 20% 0%,rgba(31,59,224,.15),transparent 60%);pointer-events:none}
+.nodos{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;position:relative;z-index:1}
+.nodo{background:var(--ink2);border:1px solid #232D47;border-radius:10px;padding:13px 12px 11px;min-height:104px;transition:border-color .3s, box-shadow .3s, background .3s}
+.nodo .n{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--niebla);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.nodo .n i{width:7px;height:7px;border-radius:50%;background:#39415A;flex:none;transition:background .3s}
+.nodo b{font-size:12.5px;display:block;line-height:1.25;margin-bottom:4px}
+.nodo .d{font-size:10.5px;color:var(--niebla2);line-height:1.4;overflow-wrap:break-word}
+.nodo.corriendo{border-color:var(--naranja);box-shadow:0 0 0 1px var(--naranja), 0 6px 18px rgba(248,117,76,.25)}
+.nodo.corriendo .n i{background:var(--naranja);animation:pulso 1s ease-in-out infinite}
+.nodo.listo{border-color:rgba(59,199,156,.55)}
+.nodo.listo .n i{background:var(--verde-luz)}
+.nodo.fallo{border-color:var(--ambar)}
+.nodo.fallo .n i{background:var(--ambar)}
+.nodo.omitido{opacity:.55}
+@keyframes pulso{50%{opacity:.35}}
+.riel{height:3px;margin:16px 4px 4px;background:#232D47;border-radius:2px;position:relative;z-index:1}
+.riel .avance{height:100%;width:0;border-radius:2px;background:linear-gradient(90deg,var(--naranja),var(--verde-luz));transition:width .5s ease}
+.chip-viaje{position:absolute;top:-13px;font-family:var(--f-mono);font-size:10px;background:var(--naranja);color:#160B06;
+  padding:3px 8px;border-radius:3px;white-space:nowrap;font-weight:500;left:0;transition:left .6s cubic-bezier(.3,.8,.3,1);transform:translateX(-50%)}
+#bitacora-flujo{margin-top:16px;font-family:var(--f-mono);font-size:11.5px;line-height:1.7;color:var(--niebla2);position:relative;z-index:1;max-height:180px;overflow:auto}
+#bitacora-flujo div{display:flex;gap:8px}
+#bitacora-flujo .ok{color:var(--verde-luz)} #bitacora-flujo .run{color:var(--naranja)} #bitacora-flujo .warn{color:#E8B95A}
+#bitacora-flujo .ms{color:#556;flex:none;width:64px;text-align:right}
 
-/* ── veredicto ────────────────────────────────────────── */
-.ver{padding:14px 16px;border-left:3px solid;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
-.ver.aprobado{background:var(--gain-soft);border-color:var(--gain)}
-.ver.parcial{background:var(--amber-soft);border-color:var(--amber)}
-.ver.rechazado{background:var(--flag-soft);border-color:var(--flag)}
-.ver .et{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
-.ver.aprobado .et{color:var(--gain)} .ver.parcial .et{color:var(--amber)} .ver.rechazado .et{color:var(--flag)}
-.ver .rz{font-size:13.5px;margin-top:3px}
-.kpis{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
-.kpi .n{font-family:var(--f-mono);font-size:19px;font-weight:500;line-height:1.1}
-.kpi .l{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+/* ══ resultado ══ */
+#resultado{display:none}
+.veredicto{border-radius:var(--radius);padding:18px 22px;margin-bottom:16px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;border:1px solid transparent}
+.veredicto .grande{font-size:clamp(20px,3vw,26px);font-weight:800;letter-spacing:-.01em}
+.veredicto p{font-family:var(--f-serif);font-size:14.5px;max-width:70ch}
+.veredicto.aprobado{background:var(--verde-soft);border-color:var(--verde);color:#06412F}
+.veredicto.parcial{background:var(--ambar-soft);border-color:var(--ambar);color:#5B3E06}
+.veredicto.rechazado{background:var(--rojo-soft);border-color:var(--rojo);color:#5E1D12}
+.veredicto .conf{margin-left:auto;text-align:right;flex:none}
+.veredicto .conf .num{font-family:var(--f-mono);font-size:22px;font-weight:500}
+.veredicto .conf .rot{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
 
-/* ── pestañas ─────────────────────────────────────────── */
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);overflow-x:auto}
-.tab{font-size:12.5px;font-weight:500;padding:10px 14px;background:none;border:0;border-bottom:2px solid transparent;
-  color:var(--muted);cursor:pointer;white-space:nowrap;border-radius:0}
-.tab:hover{color:var(--ink)}
-.tab.sel{color:var(--cobalt);border-bottom-color:var(--cobalt)}
-.pane{display:none;padding:16px} .pane.sel{display:block}
+.panel2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.tarj{background:var(--white);border:1px solid var(--rule-soft);border-radius:var(--radius);padding:16px 18px}
+.tarj .t{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.tarj b.nom{font-size:16px;display:block}
+.tarj .mini{font-size:12.5px;color:var(--muted);line-height:1.55}
+.cupo-pista{background:var(--paper);border-radius:4px;height:26px;margin:10px 0 6px;overflow:hidden;display:flex}
+.cupo-pista .usado{background:var(--niebla2);height:100%}
+.cupo-pista .pedido{background:var(--naranja);height:100%;transition:width 1s ease .2s}
+.chip{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.05em;border-radius:3px;padding:2px 7px;font-weight:500;white-space:nowrap}
+.chip.ok{background:var(--verde-soft);color:#06614A}
+.chip.rev{background:var(--ambar-soft);color:var(--ambar)}
+.chip.blq{background:var(--rojo-soft);color:var(--rojo)}
+.chip.info{background:var(--cobalt-soft);color:var(--cobalt)}
+.chip.pii{background:var(--ink);color:var(--verde-luz)}
 
-/* ── tablas ───────────────────────────────────────────── */
-table{width:100%;border-collapse:collapse;font-size:12.5px}
-th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
-  font-weight:600;padding:7px 8px;border-bottom:1px solid var(--rule);white-space:nowrap}
-td{padding:8px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
-tr:last-child td{border-bottom:0}
-.num{font-family:var(--f-mono);text-align:right;white-space:nowrap}
-.mono{font-family:var(--f-mono);font-size:11.5px}
-tr.st-bloqueada{background:#FDF6F5} tr.st-revision{background:#FDFAF1}
-.pill{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;
-  padding:2px 6px;border-radius:2px;font-weight:500;white-space:nowrap}
-.p-ok{background:var(--gain-soft);color:var(--gain)}
-.p-revision{background:var(--amber-soft);color:var(--amber)}
-.p-bloqueada{background:var(--flag-soft);color:var(--flag)}
-.p-sap{background:var(--cobalt-soft);color:var(--cobalt-ink)}
-.p-erp{background:#E9E4F7;color:#5B3FA8}
-.inc{font-size:11.5px;margin-top:4px;padding-left:11px;border-left:2px solid var(--rule)}
-.inc.bloqueo{border-color:var(--flag);color:#8C2D24}
-.inc.revision{border-color:var(--amber);color:#7A5408}
-.inc.informativo{border-color:var(--rule);color:var(--muted)}
-.inc b{font-family:var(--f-mono);font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
-.flecha{color:var(--muted-dark);padding:0 3px}
-.score{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
+.exigencias{margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap}
+.exigencias .chip{font-size:11px;padding:5px 10px}
 
-pre{font-family:var(--f-mono);font-size:11.5px;line-height:1.55;background:var(--ink);color:#C9D2E1;
-  padding:14px;border-radius:var(--radius);overflow:auto;max-height:460px}
-pre .k{color:#8FB8FF} pre .s{color:#9FE0C4} pre .n{color:#F3C77B} pre .b{color:#E58B7F}
-.vacio{color:var(--muted);font-size:13px;padding:22px 4px;text-align:center;font-family:var(--f-serif);font-style:italic}
-.err{background:var(--flag-soft);border-left:3px solid var(--flag);padding:12px 14px;font-size:13px;color:#8C2D24}
-.sec-t{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
-.sec-t h2{font-size:15px;font-weight:600}
-.sec-t p{font-size:12.5px;color:var(--muted)}
-.dos{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-@media(max-width:900px){.dos{grid-template-columns:1fr}}
-footer{border-top:1px solid var(--rule);padding:20px 0 40px;font-size:12px;color:var(--muted)}
-.sel-mat{font-family:var(--f-body);font-size:12px;padding:5px 7px;border:1px solid var(--rule);border-radius:2px;max-width:100%}
+/* tabla de líneas */
+.tlineas{background:var(--white);border:1px solid var(--rule-soft);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.tlineas .fila{display:grid;grid-template-columns:44px 1.2fr 1.3fr 92px 130px 110px 92px;gap:10px;align-items:center;
+  padding:10px 16px;border-bottom:1px solid var(--rule-soft);font-size:12.5px}
+.tlineas .fila:last-child{border-bottom:0}
+.tlineas .cab{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:#FAFBFD}
+.tlineas .pos{font-family:var(--f-mono);color:var(--faint);font-size:11px}
+.tlineas .cli{color:var(--muted);font-size:12px;line-height:1.35}
+.tlineas .mat b{display:block;font-size:12.5px;line-height:1.3}
+.tlineas .mat span{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
+.tlineas .num{font-family:var(--f-mono);font-size:12px;text-align:right;white-space:nowrap}
+.tlineas .fila.nueva{animation:aparece .5s ease both}
+@keyframes aparece{from{opacity:0;transform:translateY(8px)}}
+.tlineas .inc{grid-column:2/-1;font-family:var(--f-serif);font-size:12.5px;color:var(--muted);padding-left:2px}
+.tlineas .inc .chip{margin-right:6px}
+.totales{display:flex;justify-content:flex-end;gap:26px;padding:12px 18px;background:#FAFBFD;font-family:var(--f-mono);font-size:13px}
+.totales b{font-weight:500}
+
+/* ══ salida a sistemas ══ */
+#salida{display:none}
+.pestanas{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.pestana{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em;border:1.5px solid var(--rule);background:var(--white);
+  border-radius:99px;padding:8px 16px;cursor:pointer;color:var(--muted)}
+.pestana.activa{background:var(--ink);border-color:var(--ink);color:#fff}
+.panel-salida{display:none}
+.panel-salida.activo{display:block}
+.archivo{background:var(--white);border:1px solid var(--rule-soft);border-radius:var(--radius);margin-bottom:14px;overflow:hidden}
+.archivo .cab{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--rule-soft);flex-wrap:wrap}
+.archivo .cab .sis{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:#fff;border-radius:3px;padding:3px 8px}
+.archivo .cab .sis.insoft{background:var(--cobalt)}
+.archivo .cab b{font-family:var(--f-mono);font-size:12.5px;font-weight:500}
+.archivo .cab .desc{font-size:12px;color:var(--muted)}
+.archivo .cab button{margin-left:auto;font-family:var(--f-sans);font-weight:600;font-size:12.5px;border:1.5px solid var(--ink);background:var(--white);border-radius:7px;padding:7px 14px;cursor:pointer}
+.archivo .cab button:hover{background:var(--ink);color:#fff}
+.archivo pre{font-family:var(--f-mono);font-size:11px;line-height:1.65;padding:14px 16px;overflow:auto;max-height:220px;background:#0D1321;color:#B9C4DA;white-space:pre}
+.bd-lista{background:var(--white);border:1px solid var(--rule-soft);border-radius:var(--radius);overflow:hidden}
+.bd-lista .fila{display:grid;grid-template-columns:110px 90px 1fr 120px 60px 110px;gap:10px;padding:10px 16px;border-bottom:1px solid var(--rule-soft);font-size:12.5px;align-items:center}
+.bd-lista .fila:last-child{border-bottom:0}
+.bd-lista .cab{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:#FAFBFD}
+.bd-lista .mono{font-family:var(--f-mono);font-size:11.5px}
+.bd-nota{font-family:var(--f-serif);font-size:13px;color:var(--muted);margin:12px 2px}
+.kpis-bd{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--rule-soft);border:1px solid var(--rule-soft);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.kpis-bd>div{background:var(--white);padding:12px 14px}
+.kpis-bd .k{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.kpis-bd .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+details.tecnico{background:var(--white);border:1px solid var(--rule-soft);border-radius:var(--radius);padding:0;overflow:hidden}
+details.tecnico summary{cursor:pointer;padding:13px 16px;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+details.tecnico pre{font-family:var(--f-mono);font-size:10.5px;line-height:1.6;padding:14px 16px;overflow:auto;max-height:380px;background:#0D1321;color:#B9C4DA}
+
+footer{margin-top:56px;background:var(--ink);color:var(--niebla);padding:26px 0 34px;font-size:12.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center}
+footer b{color:#fff}
+.error-caja{display:none;background:var(--rojo-soft);border:1px solid var(--rojo);color:#5E1D12;border-radius:var(--radius);padding:14px 18px;margin:14px 0;font-size:14px}
+
+@media (max-width:860px){
+  .nodos{grid-template-columns:repeat(2,1fr)}
+  .nodo:last-child{grid-column:1/-1}
+  .panel2{grid-template-columns:1fr}
+  .tlineas .fila{grid-template-columns:34px 1fr 1fr;row-gap:4px}
+  .tlineas .num,.tlineas .cab{display:none}
+  .bd-lista .fila{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap hd">
-    <div>
-      <h1>Agente de pedidos — demostración técnica</h1>
-      <div class="sub">Lectura de pedidos en texto libre, emparejamiento contra maestros y carga a SAP y al ERP de Ecuador</div>
+<header class="hero">
+  <div class="wrap">
+    <div class="marcas">
+      <a class="marca-g" href="https://www.gadamax.com" style="color:#fff">
+        <img src="/assets/images/brand-logo-gadamax.png" alt=""><b>Gadamax</b>
+      </a>
+      <span class="para">demo en vivo para</span>
+      <span class="marca-b"><img src="/assets/images/bbraun-logo-full.svg" alt="B. Braun"></span>
     </div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <span class="badge" id="bModelo">modelo · en espera</span>
-      <span class="badge" id="bAlmacen">almacenamiento</span>
-    </div>
+    <div class="eti">Agente de entrada de pedidos · procesamiento real</div>
+    <h1>Su pedido, del correo al ERP. En vivo.</h1>
+    <p class="sub">Elija un pedido —un correo de farmacia, una orden de compra formal, un WhatsApp, la foto de una tarjeta de cirugía— y véalo fluir: lectura con IA, validación contra maestros y reglas, decisión, grabación y el archivo de carga listo para INSOFT y SAP.</p>
+    <span class="sello-sint"><i></i>Estructura real de sus pedidos · datos 100 % sintéticos · nada confidencial</span>
   </div>
 </header>
 
-<div class="nota">
+<main>
+
+<section id="elegir">
   <div class="wrap">
-    <b>Esto es una maqueta funcional.</b> Los maestros de clientes y materiales son inventados y los dos sistemas de destino
-    están simulados. Lo que <b>sí es real</b>: la lectura del pedido la hace un modelo en vivo, las reglas de negocio se
-    ejecutan en código y los documentos generados quedan guardados — recargue la página y siguen ahí.
+    <div class="paso-num">Paso 1 · El pedido llega</div>
+    <h2>Como llegan de verdad</h2>
+    <p class="lede">Cinco casos calcados de la operación diaria — y un sexto espacio para escribir el suyo. Cada uno ejercita reglas distintas: doble código, precios de contrato, caducidad mínima, lotes, manuscritos.</p>
+    <div class="canales" id="canales"></div>
+    <div id="visor"></div>
+    <div class="error-caja" id="error"></div>
   </div>
-</div>
+</section>
 
-<div class="wrap grid">
-
-  <!-- ── columna izquierda: entrada ── -->
-  <div style="display:flex;flex-direction:column;gap:16px">
-    <section class="card">
-      <h2>1 · El pedido como llega</h2>
-      <div class="bd">
-        <div class="chips" id="chips"></div>
-        <textarea id="txt" spellcheck="false" placeholder="Pegue aquí un pedido: un correo, un WhatsApp, una tabla de Excel…"></textarea>
-        <div class="row">
-          <button class="b-main" id="btn">Procesar pedido</button>
-          <button class="b-ghost b-sm" id="btnLimpiar">Limpiar</button>
-        </div>
-        <p class="hint" id="hint">Elija un ejemplo o escriba el suyo. Puede editar el texto antes de procesarlo — el resultado cambia de verdad.</p>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Maestros cargados</h2>
-      <div class="bd" id="maestros"><div class="vacio">cargando…</div></div>
-    </section>
-  </div>
-
-  <!-- ── columna derecha: proceso y resultado ── -->
-  <div style="display:flex;flex-direction:column;gap:16px">
-    <section class="card">
-      <h2>2 · Qué hace el agente</h2>
-      <div class="bd" id="pipeline"><div class="vacio">Sin ejecutar todavía.</div></div>
-    </section>
-
-    <section class="card" id="cardRes" style="display:none">
-      <div id="veredicto"></div>
-      <div class="tabs" id="tabs"></div>
-      <div id="panes"></div>
-    </section>
-  </div>
-</div>
-
-<!-- ── estado de los sistemas ── -->
-<div class="wrap" style="padding-bottom:40px">
-  <div class="sec-t">
-    <div>
-      <h2>3 · Lo que quedó grabado en los sistemas</h2>
-      <p>Esta sección lee del almacenamiento, no de la pantalla. Recargue la página y compruébelo.</p>
+<section id="tuberia">
+  <div class="wrap">
+    <div class="paso-num">Paso 2 · El flujo</div>
+    <h2>Fluyendo, etapa por etapa</h2>
+    <p class="lede">Esto no es una animación de mentira: cada nodo se enciende cuando esa etapa termina de verdad, con su detalle y su tiempo.</p>
+    <div class="tubo">
+      <div class="nodos" id="nodos"></div>
+      <div class="riel"><div class="avance" id="avance"></div><div class="chip-viaje" id="chip-viaje" style="opacity:0">pedido</div></div>
+      <div id="bitacora-flujo"></div>
     </div>
-    <button class="b-ghost b-sm" id="btnRef">Actualizar</button>
   </div>
-  <div class="dos">
-    <section class="card">
-      <h2>Documentos generados</h2>
-      <div class="bd" id="ordenes"><div class="vacio">cargando…</div></div>
-    </section>
-    <section class="card">
-      <h2>Cola de excepciones — lo que espera a una persona</h2>
-      <div class="bd" id="excepciones"><div class="vacio">cargando…</div></div>
-    </section>
-  </div>
-</div>
+</section>
 
-<footer><div class="wrap">Gadamax · demostración interna. No indexada. Los datos mostrados no corresponden a clientes reales.</div></footer>
+<section id="resultado">
+  <div class="wrap">
+    <div class="paso-num">Paso 3 · La decisión</div>
+    <h2>Lo que decidió, y por qué</h2>
+    <p class="lede">Cada línea queda emparejada a una referencia B. Braun con su porcentaje de confianza, su precio validado y sus incidencias. Nada es una caja negra.</p>
+    <div id="veredicto"></div>
+    <div class="panel2" id="panel2"></div>
+    <div class="exigencias" id="exigencias"></div>
+    <div class="tlineas" id="tlineas"></div>
+  </div>
+</section>
+
+<section id="salida">
+  <div class="wrap">
+    <div class="paso-num">Paso 4 · A sus sistemas</div>
+    <h2>Y así entra a INSOFT y a SAP</h2>
+    <p class="lede">Sin integración directa todavía, la entrega es por archivo — exactamente el que su equipo importaría hoy: INSOFT contra el ambiente de pruebas, SAP con la carga masiva de IT. Cuando llegue S/4HANA, se cambia el conector y esta pantalla ni se entera.</p>
+    <div class="pestanas">
+      <button class="pestana activa" data-p="archivos">Archivos de carga</button>
+      <button class="pestana" data-p="bd">Lo que queda guardado</button>
+      <button class="pestana" data-p="tecnico">Detalle técnico</button>
+    </div>
+    <div class="panel-salida activo" id="p-archivos"></div>
+    <div class="panel-salida" id="p-bd">
+      <div class="kpis-bd" id="kpis-bd"></div>
+      <div class="bd-lista" id="bd-lista"></div>
+      <p class="bd-nota">Esto no es memoria del navegador: son los registros de la base de datos del demo. Recargue la página, ábrala en otro computador — siguen aquí, con su bitácora de quién decidió qué y cuándo.</p>
+    </div>
+    <div class="panel-salida" id="p-tecnico"></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b>Gadamax</b> · Automatización de entrada de pedidos<br>Demo con datos sintéticos: los clientes, precios, cupos y pacientes de esta página son inventados.</div>
+    <div>La lectura corre sobre el modelo en vivo, con salida estructurada.<br>Los datos personales de las tarjetas se protegen: solo quedan iniciales.</div>
+  </div>
+</footer>
 
 <script>
-const API = "/api";
+/* ═══════════════════════════ estado ═══════════════════════════ */
 const $ = (s) => document.querySelector(s);
-const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
-const fmt = (n, dec = 2) => n === null || n === undefined ? "—" :
-  Number(n).toLocaleString("es-EC", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+let EJS = [], sel = null, procesando = false, ultimo = null;
 
-let EJEMPLOS = [], ULT = null, MAESTROS = null;
+const ICONOS = { "correo-ec":"✉️", "oc-co":"📄", "contrato-co":"🏛️", "whatsapp":"💬", "tarjeta":"📸", "libre":"✏️" };
+const PAIS   = { "correo-ec":"Ecuador", "oc-co":"Colombia", "contrato-co":"Colombia", "whatsapp":"Ecuador", "tarjeta":"Ecuador", "libre":"Usted decide" };
 
-/* ── ejemplos ─────────────────────────────────────────── */
-async function cargarEjemplos() {
+const NODOS = [
+  { id: 1, rot: "Recepción",  det: "El pedido entra por su canal" },
+  { id: 2, rot: "Lectura · IA", det: "El modelo estructura el documento" },
+  { id: 3, rot: "Maestros y reglas", det: "Códigos, precios, cupo, lotes" },
+  { id: 4, rot: "Grabación", det: "Archivos para INSOFT y SAP" },
+  { id: 5, rot: "Excepciones", det: "Lo dudoso espera a una persona" }
+];
+
+/* ═══════════════════════ carga de ejemplos ═══════════════════════ */
+async function cargar() {
   try {
-    const r = await fetch(`${API}/ejemplos`);
-    EJEMPLOS = (await r.json()).ejemplos || [];
-  } catch { EJEMPLOS = []; }
-  $("#chips").innerHTML = EJEMPLOS.map((e, i) =>
-    `<button class="chip" data-i="${i}">${esc(e.titulo)}<small>${esc(e.subtitulo)}</small></button>`).join("");
-  document.querySelectorAll(".chip").forEach((c) => c.onclick = () => {
-    const e = EJEMPLOS[+c.dataset.i];
-    $("#txt").value = e.texto;
-    document.querySelectorAll(".chip").forEach((x) => x.classList.remove("sel"));
-    c.classList.add("sel");
-    $("#hint").textContent = "Lo que debería pasar: " + e.espera;
-  });
-  if (EJEMPLOS.length) document.querySelector(".chip").click();
+    const r = await fetch("/api/ejemplos");
+    EJS = (await r.json()).ejemplos;
+  } catch { EJS = []; }
+  EJS.push({ id: "libre", titulo: "Escriba el suyo", subtitulo: "Péguelo como llegue: correo, tabla, lo que sea", canal: null, espera: "El agente lo lee igual que a los demás.", texto: "" });
+  const c = $("#canales");
+  c.innerHTML = EJS.map((e) => `
+    <button class="canal" data-id="${e.id}">
+      <div class="ic">${ICONOS[e.id] ?? "📦"}</div>
+      <b>${e.titulo}</b><span>${e.subtitulo}</span>
+      <span class="pais">${PAIS[e.id] ?? ""}</span>
+    </button>`).join("");
+  c.querySelectorAll(".canal").forEach((b) => b.addEventListener("click", () => elegir(b.dataset.id)));
+  elegir("correo-ec");
 }
 
-/* ── maestros ─────────────────────────────────────────── */
-async function cargarMaestros() {
-  try {
-    const r = await fetch(`${API}/erp?q=maestros`);
-    MAESTROS = await r.json();
-  } catch { $("#maestros").innerHTML = '<div class="err">No se pudo leer el maestro.</div>'; return; }
-  const { materiales: m, clientes: c, parametros: p } = MAESTROS;
-  $("#maestros").innerHTML = `
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">
-      ${c.length} clientes y ${m.length} materiales. Estos son de ejemplo: el día que ustedes entreguen un extracto
-      de sus maestros reales, se reemplaza el archivo y el motor no cambia.
-    </p>
-    <table><thead><tr><th>Cliente</th><th>RUC / NIT</th><th class="num">Cupo libre</th></tr></thead><tbody>
-    ${c.map((x) => `<tr><td>${esc(x.nom)}${x.bloqueado ? ' <span class="pill p-bloqueada">bloqueado</span>' : ""}
-      <div class="score">${esc(x.pais)} · ${esc(x.cond)}</div></td>
-      <td class="mono">${esc(x.id)}</td>
-      <td class="num">${fmt(x.cupo - x.saldo, x.moneda === "COP" ? 0 : 2)} <span class="score">${esc(x.moneda)}</span></td></tr>`).join("")}
-    </tbody></table>
-    <p style="font-size:11.5px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--rule-soft)">
-      <b>Umbrales:</b> carga automática desde ${p.umbral_carga}; revisión humana entre ${p.umbral_revision} y ${p.umbral_carga}.
-      Desvío de precio: avisa al ${(p.desvio_precio_avisa * 100).toFixed(0)} %, bloquea al ${(p.desvio_precio_frena * 100).toFixed(0)} %.
-      Lead time ${p.lead_time_dias} días.
-    </p>`;
+function elegir(id) {
+  if (procesando) return;
+  sel = EJS.find((e) => e.id === id);
+  document.querySelectorAll(".canal").forEach((b) => b.classList.toggle("activo", b.dataset.id === id));
+  const v = $("#visor");
+  let cuerpo = "";
+
+  if (id === "libre") {
+    cuerpo = `<textarea id="texto-libre" placeholder="Pegue aquí un pedido, tal como llega: un correo, una tabla de Excel, un mensaje…"></textarea>`;
+  } else if (sel.canal === "whatsapp") {
+    cuerpo = `<div class="wa-fondo"><div class="wa-burbuja"><pre>${esc(sel.texto)}</pre><div class="wa-hora">07:41 ✓✓</div></div></div>`;
+  } else if (sel.canal === "foto_crm") {
+    cuerpo = `<div class="foto-marco"><img src="${sel.imagen}" alt="Tarjeta de control de cirugías (sintética)"></div>`;
+  } else if (id === "correo-ec") {
+    const partes = sel.texto.split(/\n\n/);
+    cuerpo = `<div class="doc-cuerpo"><div class="correo-meta">${esc(partes[0]).replace(/\n/g, "<br>")}</div><pre>${esc(partes.slice(1).join("\n\n"))}</pre></div>`;
+  } else {
+    cuerpo = `<div class="doc-cuerpo"><pre>${esc(sel.texto)}</pre></div>`;
+  }
+
+  const rotulos = {
+    "correo-ec": "Bandeja de Atención a Clientes — PEDIDO CLINICA SANTA AMALIA",
+    "oc-co": "OC04517.pdf — orden de compra adjunta al correo",
+    "contrato-co": "OC000000123870.pdf — compra amparada en contrato",
+    "whatsapp": "WhatsApp · Clínica del Austro",
+    "tarjeta": "CRM · feed del equipo de cirugía — fotografía adjunta",
+    "libre": "Su pedido"
+  };
+
+  v.innerHTML = `
+    <div class="doc-marco">
+      <div class="doc-cab"><div class="puntos"><i></i><i></i><i></i></div><div class="rot">${rotulos[id] ?? ""}</div></div>
+      ${cuerpo}
+      <div class="doc-pie">
+        <div class="espera">${esc(sel.espera)}</div>
+        <button class="cta" id="btn-procesar">Procesar este pedido →</button>
+      </div>
+    </div>`;
+  $("#btn-procesar").addEventListener("click", procesar);
+  $("#error").style.display = "none";
 }
 
-/* ── pipeline ─────────────────────────────────────────── */
-const PASOS = {};
-function pintarPipeline() {
-  const ns = Object.keys(PASOS).sort((a, b) => a - b);
-  if (!ns.length) { $("#pipeline").innerHTML = '<div class="vacio">Sin ejecutar todavía.</div>'; return; }
-  $("#pipeline").innerHTML = ns.map((n) => {
-    const p = PASOS[n];
-    const ico = p.estado === "listo" ? "✓" : p.estado === "fallo" ? "!" : p.estado === "omitido" ? "–" : n;
-    return `<div class="paso ${p.estado}">
-      <div class="dot">${ico}</div>
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;gap:10px"><span class="t">${esc(p.etiqueta)}</span><span class="ms">${p.ms} ms</span></div>
-        ${p.detalle ? `<div class="d">${esc(p.detalle)}</div>` : ""}
-      </div></div>`;
-  }).join("");
+/* ═══════════════════════ tubería visual ═══════════════════════ */
+function armarNodos() {
+  $("#nodos").innerHTML = NODOS.map((n) => `
+    <div class="nodo" id="nodo-${n.id}">
+      <div class="n"><i></i>Etapa ${n.id}</div>
+      <b>${n.rot}</b>
+      <div class="d" id="nodo-d-${n.id}">${n.det}</div>
+    </div>`).join("");
+  $("#avance").style.width = "0";
+  $("#bitacora-flujo").innerHTML = "";
+  const ch = $("#chip-viaje");
+  ch.style.opacity = "1"; ch.style.left = "6%";
 }
 
-/* ── proceso principal ────────────────────────────────── */
+function nodoEstado(n, estado, detalle) {
+  const el = $("#nodo-" + n);
+  if (!el) return;
+  el.classList.remove("corriendo", "listo", "fallo", "omitido");
+  el.classList.add(estado);
+  if (detalle) $("#nodo-d-" + n).textContent = detalle;
+  const pos = [6, 26, 48, 70, 92];
+  if (estado === "corriendo" || estado === "listo") {
+    $("#chip-viaje").style.left = pos[n - 1] + "%";
+    if (estado === "listo") $("#avance").style.width = pos[n - 1] + "%";
+  }
+}
+
+function log(clase, ms, texto) {
+  const b = $("#bitacora-flujo");
+  b.insertAdjacentHTML("beforeend",
+    `<div><span class="ms">${ms != null ? (ms / 1000).toFixed(1) + " s" : ""}</span><span class="${clase}">${esc(texto)}</span></div>`);
+  b.scrollTop = b.scrollHeight;
+}
+
+/* ═══════════════════════ procesamiento SSE ═══════════════════════ */
 async function procesar() {
-  const texto = $("#txt").value.trim();
-  if (!texto) return;
-  for (const k in PASOS) delete PASOS[k];
-  pintarPipeline();
-  $("#cardRes").style.display = "none";
-  $("#btn").disabled = true;
-  $("#btn").textContent = "Procesando…";
+  if (procesando || !sel) return;
+  let texto = sel.texto, imagen = null;
+
+  if (sel.id === "libre") {
+    texto = $("#texto-libre").value.trim();
+    if (!texto) { mostrarError("Escriba o pegue un pedido primero."); return; }
+  }
+  procesando = true;
+  $("#btn-procesar").disabled = true;
+  $("#btn-procesar").textContent = "Procesando…";
+  $("#resultado").style.display = "none";
+  $("#salida").style.display = "none";
+  $("#error").style.display = "none";
+  $("#tuberia").style.display = "block";
+  armarNodos();
+  $("#tuberia").scrollIntoView({ behavior: "smooth", block: "center" });
 
   try {
-    const r = await fetch(`${API}/agente-pedido`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ texto })
-    });
-
-    if (!r.ok || !r.body) {
-      let m = `El servidor respondió ${r.status}.`;
-      try { m = (await r.json()).error || m; } catch {}
-      throw new Error(m);
+    if (sel.canal === "foto_crm") {
+      nodoEstado(1, "corriendo", "Bajando la fotografía del CRM…");
+      const blob = await (await fetch(sel.imagen)).blob();
+      const b64 = await new Promise((res) => {
+        const fr = new FileReader();
+        fr.onload = () => res(String(fr.result).split(",")[1]);
+        fr.readAsDataURL(blob);
+      });
+      imagen = { b64, media_type: blob.type || "image/jpeg" };
     }
 
+    const r = await fetch("/api/agente-pedido", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ texto, canal: sel.canal, ejemplo: sel.id === "libre" ? null : sel.id, imagen })
+    });
+    if (!r.ok || !r.body) {
+      const e = await r.json().catch(() => ({}));
+      throw new Error(e.error || `El servidor respondió ${r.status}.`);
+    }
+
+    let extraccion = null, resolucion = null, fin = null;
     const lector = r.body.getReader();
     const dec = new TextDecoder();
     let buf = "";
+
     while (true) {
       const { done, value } = await lector.read();
       if (done) break;
       buf += dec.decode(value, { stream: true });
-      const trozos = buf.split("\n\n");
-      buf = trozos.pop();
-      for (const t of trozos) {
-        const ev = /event: (.+)/.exec(t)?.[1];
-        const dt = /data: (.+)/s.exec(t)?.[1];
-        if (!ev || !dt) continue;
-        manejar(ev, JSON.parse(dt));
+      let idx;
+      while ((idx = buf.indexOf("\n\n")) >= 0) {
+        const bloque = buf.slice(0, idx); buf = buf.slice(idx + 2);
+        const ev = /event: (.+)/.exec(bloque)?.[1];
+        const dato = /data: (.+)/s.exec(bloque)?.[1];
+        if (!ev || !dato) continue;
+        const d = JSON.parse(dato);
+
+        if (ev === "paso") {
+          const cl = d.estado === "listo" ? "ok" : d.estado === "corriendo" ? "run" : d.estado === "fallo" ? "warn" : "";
+          nodoEstado(d.n, d.estado === "omitido" ? "omitido" : d.estado === "fallo" ? "fallo" : d.estado, d.detalle);
+          log(cl, d.ms, `${d.etiqueta}${d.detalle ? " — " + d.detalle : ""}`);
+        }
+        if (ev === "extraccion") extraccion = d;
+        if (ev === "resolucion") { resolucion = d; pintarResultado(d, extraccion); }
+        if (ev === "fin") { fin = d; $("#avance").style.width = "100%"; $("#chip-viaje").style.opacity = "0"; }
+        if (ev === "error") throw new Error(d.mensaje);
       }
     }
+    if (fin) pintarSalida(resolucion, extraccion, fin);
   } catch (e) {
-    $("#pipeline").insertAdjacentHTML("beforeend", `<div class="err" style="margin-top:10px">${esc(e.message)}</div>`);
+    mostrarError(String(e.message || e));
   } finally {
-    $("#btn").disabled = false;
-    $("#btn").textContent = "Procesar pedido";
-    refrescar();
+    procesando = false;
+    const b = $("#btn-procesar");
+    if (b) { b.disabled = false; b.textContent = "Procesar este pedido →"; }
   }
 }
 
-function manejar(ev, d) {
-  if (ev === "paso") { PASOS[d.n] = d; pintarPipeline(); return; }
-  if (ev === "extraccion") {
-    ULT = { ...(ULT || {}), ...d };
-    $("#bModelo").className = d.respaldo ? "badge alerta" : "badge on";
-    $("#bModelo").textContent = d.respaldo ? "modo respaldo · API sin responder" : "modelo · " + d.modelo;
-    return;
-  }
-  if (ev === "resolucion") { ULT = { ...(ULT || {}), res: d }; pintarResultado(); return; }
-  if (ev === "fin") {
-    ULT = { ...(ULT || {}), fin: d };
-    $("#bAlmacen").className = "badge on";
-    $("#bAlmacen").textContent = d.almacen === "blobs" ? "almacenamiento · persistente" : "almacenamiento · memoria";
-    pintarResultado();
-    return;
-  }
-  if (ev === "error") {
-    const n = Math.max(0, ...Object.keys(PASOS).map(Number));
-    if (PASOS[n]) { PASOS[n].estado = "fallo"; PASOS[n].detalle = d.mensaje; pintarPipeline(); }
-    $("#pipeline").insertAdjacentHTML("beforeend", `<div class="err" style="margin-top:10px">${esc(d.mensaje)}</div>`);
-  }
+function mostrarError(m) {
+  const e = $("#error");
+  e.textContent = m;
+  e.style.display = "block";
 }
 
-/* ── resultado ────────────────────────────────────────── */
-function pintarResultado() {
-  const res = ULT?.res; if (!res) return;
-  const fin = ULT.fin;
-  const dec = res.documento.moneda === "COP" ? 0 : 2;
-  $("#cardRes").style.display = "";
+/* ═══════════════════════ resultado ═══════════════════════ */
+const fmt = (n, mon) => n == null ? "—" :
+  Number(n).toLocaleString("es-EC", { minimumFractionDigits: mon === "COP" ? 0 : 2, maximumFractionDigits: mon === "COP" ? 0 : 2 });
 
-  const et = { aprobado: "Cargado", parcial: "Cargado en parte", rechazado: "Detenido" }[res.decision] || res.decision;
-  $("#veredicto").className = "";
-  $("#veredicto").innerHTML = `<div class="ver ${res.decision}">
-    <div style="min-width:230px;flex:1">
-      <div class="et">${esc(et)}</div>
-      <div class="rz">${esc(res.razon)}</div>
-    </div>
-    <div class="kpis">
-      <div class="kpi"><div class="n">${res.conteo.ok}/${res.conteo.lineas}</div><div class="l">líneas grabadas</div></div>
-      <div class="kpi"><div class="n">${fmt(res.total, dec)}</div><div class="l">${esc(res.documento.moneda || "")}</div></div>
-      <div class="kpi"><div class="n">${(res.confianza * 100).toFixed(0)}%</div><div class="l">confianza</div></div>
-      ${fin ? `<div class="kpi"><div class="n">${(fin.ms / 1000).toFixed(1)}s</div><div class="l">total</div></div>` : ""}
-    </div></div>`;
+function pintarResultado(res, ext) {
+  $("#resultado").style.display = "block";
+  const mon = res.documento?.moneda ?? "";
 
-  const tabs = [
-    ["lineas", "Emparejamiento línea por línea"],
-    ["cabecera", "Cabecera y validaciones"],
-    ["docs", "Documentos generados"],
-    ["json", "Lo que leyó el modelo"]
-  ];
-  $("#tabs").innerHTML = tabs.map(([k, l], i) => `<button class="tab ${i === 0 ? "sel" : ""}" data-k="${k}">${l}</button>`).join("");
-  $("#panes").innerHTML = tabs.map(([k], i) => `<div class="pane ${i === 0 ? "sel" : ""}" id="pane-${k}"></div>`).join("");
-  document.querySelectorAll(".tab").forEach((t) => t.onclick = () => {
-    document.querySelectorAll(".tab").forEach((x) => x.classList.remove("sel"));
-    document.querySelectorAll(".pane").forEach((x) => x.classList.remove("sel"));
-    t.classList.add("sel"); $("#pane-" + t.dataset.k).classList.add("sel");
+  const rot = { aprobado: "Aprobado — entra solo", parcial: "Parcial — lo limpio entra, lo dudoso espera", rechazado: "Detenido — no se graba nada" };
+  $("#veredicto").innerHTML = `
+    <div class="veredicto ${res.decision}">
+      <div>
+        <div class="grande">${rot[res.decision] ?? res.decision}</div>
+        <p>${esc(res.razon)}</p>
+      </div>
+      <div class="conf"><div class="num">${Math.round(res.confianza * 100)} %</div><div class="rot">confianza</div></div>
+    </div>`;
+
+  /* cliente + cupo / cirugía */
+  let izq = "";
+  if (res.cliente) {
+    const c = res.cliente, cupo = res.cupo;
+    const usadoPct = Math.min(100, (cupo.saldo / cupo.limite) * 100);
+    const pedidoPct = Math.min(100 - usadoPct, (cupo.requerido / cupo.limite) * 100);
+    izq = `
+      <div class="tarj">
+        <div class="t">Cliente identificado</div>
+        <b class="nom">${esc(c.nom)}</b>
+        <div class="mini">${esc(c.id)} · ${esc(c.pais)} · paga a ${esc(c.cond)} en ${esc(c.moneda)}<br>
+        <em>${esc(res.match_cliente.motivo)}</em></div>
+        <div class="cupo-pista"><div class="usado" style="width:${usadoPct}%"></div><div class="pedido" style="width:0" data-w="${pedidoPct}%"></div></div>
+        <div class="mini">Cupo ${fmt(cupo.limite, mon)} ${mon} · usado ${fmt(cupo.saldo, mon)} · este pedido ${fmt(cupo.requerido, mon)}</div>
+        ${res.contrato ? `<div class="mini" style="margin-top:6px"><span class="chip info">contrato ${esc(res.contrato.id)}</span> precios pactados hasta ${esc(res.contrato.vigencia)}</div>` : ""}
+      </div>`;
+  } else {
+    izq = `<div class="tarj"><div class="t">Cliente</div><b class="nom">No identificado</b>
+      <div class="mini">"${esc(ext?.extraccion?.cliente?.nombre_detectado ?? "")}" no está en el maestro con confianza suficiente. El pedido se detiene aquí — nadie factura a un cliente adivinado.</div></div>`;
+  }
+
+  let der = "";
+  const cir = ext?.extraccion?.cirugia;
+  if (cir) {
+    der = `
+      <div class="tarj">
+        <div class="t">Tarjeta de cirugía · reposición de comodato</div>
+        <b class="nom">${esc(cir.procedimiento ?? "Procedimiento")} · ${esc(cir.fecha ?? "")}</b>
+        <div class="mini">${esc(cir.hospital ?? "")}</div>
+        <div class="mini" style="margin-top:8px">
+          <span class="chip pii">🔒 PII protegida</span>&nbsp;
+          Paciente: <b>${esc(cir.paciente_iniciales ?? "—")}</b> — el agente solo conserva iniciales. Nombre, cédula y equipo quirúrgico nunca salen del documento original.
+        </div>
+      </div>`;
+  } else {
+    const doc = res.documento;
+    der = `
+      <div class="tarj">
+        <div class="t">Documento</div>
+        <b class="nom">${esc(doc.referencia_cliente ?? "Sin referencia")}</b>
+        <div class="mini">
+          Entrega: ${esc(doc.fecha_solicitada ?? "no indicada")}${doc.lugar_entrega ? " · " + esc(doc.lugar_entrega) : ""}<br>
+          Moneda: ${esc(mon || "—")} · Condición: ${esc(doc.condicion_pago ?? "—")}<br>
+          Canal: ${esc(ext?.extraccion?.canal ?? "—")}${ext?.respaldo ? " · <b>extracción de respaldo (la API no respondió)</b>" : ""}
+        </div>
+      </div>`;
+  }
+  $("#panel2").innerHTML = izq + der;
+  requestAnimationFrame(() => {
+    const p = document.querySelector(".cupo-pista .pedido");
+    if (p) p.style.width = p.dataset.w;
   });
+
+  /* exigencias del cliente / del documento */
+  const ex = [];
+  if (res.exigencias?.vida_util_min_meses) ex.push(`Caducidad mínima ${res.exigencias.vida_util_min_meses} meses`);
+  if (res.exigencias?.max_lotes) ex.push(`Máximo ${res.exigencias.max_lotes} lotes por ítem`);
+  if (res.exigencias?.cert_lote) ex.push("Certificado de calidad por lote");
+  for (const e of (ext?.extraccion?.exigencias ?? []).slice(0, 4)) ex.push(e);
+  $("#exigencias").innerHTML = ex.length
+    ? `<span style="font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);align-self:center">Exigencias vigiladas:</span>` +
+      ex.map((e) => `<span class="chip info">${esc(e)}</span>`).join("")
+    : "";
 
   /* líneas */
-  $("#pane-lineas").innerHTML = `
-    <table><thead><tr>
-      <th>Lo que escribió el cliente</th><th>Lo que entendió el agente</th>
-      <th class="num">Cant.</th><th class="num">Precio</th><th class="num">Importe</th><th>Estado</th>
-    </tr></thead><tbody>
-    ${res.lineas.map((l) => `<tr class="st-${l.estado}">
-      <td><div class="mono">${esc(l.entrada.codigo || "—")}</div>${esc(l.entrada.descripcion || "")}
-        ${l.entrada.nota ? `<div class="score">nota: ${esc(l.entrada.nota)}</div>` : ""}</td>
-      <td>${l.material
-        ? `<div class="mono">${esc(l.material.cod)}</div>${esc(l.material.desc)}
-           <div class="score">${esc(l.match.motivo)}</div>`
-        : `<span style="color:var(--flag)">sin correspondencia</span>
-           <div class="score">mejor candidato descartado: ${(l.match.score * 100).toFixed(0)} %</div>`}</td>
-      <td class="num">${l.cantidad ?? "—"}<div class="score">${esc(l.material?.um || l.entrada.unidad || "")}</div></td>
-      <td class="num">${fmt(l.precio_aplicado, dec)}${l.desvio_precio !== null
-        ? `<div class="score" style="color:${Math.abs(l.desvio_precio) >= 15 ? "var(--flag)" : "var(--amber)"}">${l.desvio_precio > 0 ? "+" : ""}${l.desvio_precio}%</div>` : ""}</td>
-      <td class="num">${fmt(l.importe, dec)}</td>
-      <td><span class="pill p-${l.estado}">${l.estado}</span>
-        ${l.incidencias.map((i) => `<div class="inc ${i.nivel}"><b>${esc(i.regla)}</b><br>${esc(i.texto)}</div>`).join("")}</td>
-    </tr>`).join("")}
-    </tbody></table>`;
+  const chipEstado = { ok: '<span class="chip ok">entra</span>', revision: '<span class="chip rev">a revisión</span>', bloqueada: '<span class="chip blq">frenada</span>' };
+  const filas = res.lineas.map((l, i) => {
+    const incs = l.incidencias.filter((x) => x.nivel !== "informativo").length
+      ? `<div class="inc">${l.incidencias.map((x) => `<span class="chip ${x.nivel === "bloqueo" ? "blq" : x.nivel === "revision" ? "rev" : "info"}">${esc(x.regla.replace(/_/g, " "))}</span>${esc(x.texto)}`).join("<br>")}</div>`
+      : "";
+    return `
+      <div class="fila nueva" style="animation-delay:${i * 90}ms">
+        <div class="pos">${l.pos}</div>
+        <div class="cli">${esc(l.entrada.codigo ? "[" + l.entrada.codigo + "] " : "")}${esc(l.entrada.descripcion ?? "")}${l.lote_reportado ? `<br><span class="chip info">lote ${esc(l.lote_reportado)}</span>` : ""}</div>
+        <div class="mat">${l.material
+          ? `<b>${esc(l.material.desc)}</b><span>${esc(l.material.cod)} · ${esc(l.material.pres)} · match ${Math.round(l.match.score * 100)} %${l.material.cum ? " · CUM " + esc(l.material.cum) : ""}</span>`
+          : `<b style="color:var(--rojo)">Sin correspondencia</b><span>no está en el maestro</span>`}</div>
+        <div class="num">${l.cantidad ?? "—"} ${esc(l.material?.um ?? "")}</div>
+        <div class="num">${fmt(l.precio_aplicado, mon)}${l.precio_origen && l.precio_origen !== "lista" ? `<br><span class="chip info" style="font-size:9px">${esc(l.precio_origen)}</span>` : ""}</div>
+        <div class="num">${l.iva ? fmt(l.iva, mon) + ` <span style="color:var(--faint)">(${l.iva_pct}%)</span>` : l.iva_pct ? l.iva_pct + " %" : "0"}</div>
+        <div>${chipEstado[l.estado] ?? ""}</div>
+        ${incs}
+      </div>`;
+  }).join("");
 
-  /* cabecera */
-  const c = res.cliente;
-  $("#pane-cabecera").innerHTML = `
-    <table><tbody>
-      <tr><th style="width:180px">Cliente</th><td>${c ? `${esc(c.nom)} <span class="mono">${esc(c.cod)}</span>
-        <div class="score">${esc(res.match_cliente.motivo)} · confianza ${(res.match_cliente.score * 100).toFixed(0)} %</div>`
-        : '<span style="color:var(--flag)">no identificado en el maestro</span>'}</td></tr>
-      <tr><th>Identificación</th><td class="mono">${esc(c?.id || "—")}</td></tr>
-      <tr><th>País / organización</th><td>${esc(c?.pais || "—")} ${c ? `· <span class="mono">${esc(c.org)}</span>` : ""}</td></tr>
-      <tr><th>Referencia del cliente</th><td class="mono">${esc(res.documento.referencia_cliente || "—")}</td></tr>
-      <tr><th>Fecha solicitada</th><td class="mono">${esc(res.documento.fecha_solicitada || "no indicada")}</td></tr>
-      <tr><th>Lugar de entrega</th><td>${esc(res.documento.lugar_entrega || "—")}</td></tr>
-      <tr><th>Condición de pago</th><td>${esc(res.documento.condicion_pago || "—")}</td></tr>
-      ${res.cupo ? `<tr><th>Cupo de crédito</th><td>
-        Límite ${fmt(res.cupo.limite, dec)} · usado ${fmt(res.cupo.saldo, dec)} ·
-        <b>libre ${fmt(res.cupo.disponible, dec)}</b> ${esc(res.cupo.moneda)}
-        <div class="score">este pedido requiere ${fmt(res.cupo.requerido, dec)}</div></td></tr>` : ""}
-    </tbody></table>
-    <div style="margin-top:14px">
-      ${res.incidencias.length
-        ? res.incidencias.map((i) => `<div class="inc ${i.nivel}" style="margin-bottom:7px"><b>${esc(i.nivel)} · ${esc(i.regla)}</b><br>${esc(i.texto)}</div>`).join("")
-        : '<div class="score">Sin observaciones de cabecera.</div>'}
+  $("#tlineas").innerHTML = `
+    <div class="fila cab">
+      <div>Pos</div><div>Lo que escribió el cliente</div><div>Referencia B. Braun</div>
+      <div class="num">Cant.</div><div class="num">Precio</div><div class="num">IVA</div><div>Estado</div>
+    </div>
+    ${filas}
+    <div class="totales">
+      <span>Subtotal <b>${fmt(res.total, mon)} ${mon}</b></span>
+      <span>IVA <b>${fmt(res.total_iva, mon)}</b></span>
+      <span>Total a grabar <b>${fmt(res.total_con_iva, mon)} ${mon}</b></span>
     </div>`;
-
-  /* documentos */
-  const docs = fin?.documentos || [];
-  $("#pane-docs").innerHTML = docs.length ? docs.map((d) => `
-    <div style="margin-bottom:18px">
-      <div style="display:flex;align-items:center;gap:9px;margin-bottom:7px">
-        <span class="pill ${d.sistema === "SAP" ? "p-sap" : "p-erp"}">${esc(d.sistema === "SAP" ? "SAP" : "ERP Ecuador")}</span>
-        <span class="mono" style="font-size:14px;font-weight:500">${esc(d.documento)}</span>
-        <span class="score">${d.lineas} líneas · ${fmt(d.total, dec)} ${esc(res.documento.moneda)}</span>
-      </div>
-      <pre>${colorear(d.payload)}</pre>
-    </div>`).join("")
-    : `<div class="vacio">No se generó ningún documento.${res.decision === "rechazado" ? " El pedido se detuvo antes de grabar." : ""}</div>`;
-
-  /* json del modelo */
-  $("#pane-json").innerHTML = `
-    ${ULT.respaldo ? '<div class="aviso-respaldo" style="margin-bottom:12px"><b>Modo respaldo.</b> La API no respondió en esta corrida, así que lo de abajo es una extracción precalculada de este mismo ejemplo, no una lectura hecha en vivo. Las reglas y el grabado sí corrieron de verdad.</div>' : ""}
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">
-      Esto es lo único que hace el modelo: convertir texto suelto en campos. No elige códigos del ERP,
-      no calcula totales y no decide si el pedido entra — de eso se encarga el código de reglas.
-      ${ULT.uso ? `<br>Consumo real de esta corrida: ${ULT.uso.input_tokens} tokens de entrada, ${ULT.uso.output_tokens} de salida.` : ""}
-    </p>
-    <pre>${colorear(ULT.extraccion)}</pre>`;
+  $("#resultado").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function colorear(o) {
-  return esc(JSON.stringify(o, null, 2))
-    .replace(/&quot;([^&]*?)&quot;(\s*:)/g, '<span class="k">"$1"</span>$2')
-    .replace(/:\s*&quot;([^&]*?)&quot;/g, ': <span class="s">"$1"</span>')
-    .replace(/:\s*(-?\d+\.?\d*)/g, ': <span class="n">$1</span>')
-    .replace(/:\s*(true|false|null)/g, ': <span class="b">$1</span>');
-}
+/* ═══════════════════════ salida a sistemas ═══════════════════════ */
+function pintarSalida(res, ext, fin) {
+  $("#salida").style.display = "block";
+  ultimo = { res, ext, fin };
 
-/* ── estado de los sistemas ───────────────────────────── */
-async function refrescar() {
-  try {
-    const [o, e] = await Promise.all([
-      fetch(`${API}/erp?q=ordenes`).then((r) => r.json()),
-      fetch(`${API}/erp?q=excepciones`).then((r) => r.json())
-    ]);
-    pintarOrdenes(o); pintarExcepciones(e);
-  } catch {
-    $("#ordenes").innerHTML = '<div class="err">No se pudo leer el almacenamiento.</div>';
-  }
-}
-
-function pintarOrdenes(o) {
-  $("#ordenes").innerHTML = o.ordenes?.length ? `
-    <table><thead><tr><th>Sistema</th><th>Documento</th><th>Cliente</th><th class="num">Líneas</th><th class="num">Total</th></tr></thead><tbody>
-    ${o.ordenes.map((x) => `<tr>
-      <td><span class="pill ${x.sistema === "SAP" ? "p-sap" : "p-erp"}">${x.sistema === "SAP" ? "SAP" : "ERP EC"}</span></td>
-      <td class="mono">${esc(x.documento)}${x.modificado ? '<div class="score">modificado</div>' : ""}</td>
-      <td>${esc(x.cliente?.nom || "—")}<div class="score">${esc(x.referencia || "")}</div></td>
-      <td class="num">${x.lineas}</td>
-      <td class="num">${fmt(x.total, x.moneda === "COP" ? 0 : 2)} <span class="score">${esc(x.moneda || "")}</span></td>
-    </tr>`).join("")}</tbody></table>`
-    : '<div class="vacio">Todavía no se ha grabado ningún documento.</div>';
-}
-
-function pintarExcepciones(e) {
-  const abiertas = (e.excepciones || []).filter((x) => x.estado === "abierta");
-  $("#excepciones").innerHTML = e.excepciones?.length ? `
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">
-      ${abiertas.length} abierta${abiertas.length === 1 ? "" : "s"} de ${e.excepciones.length}.
-      El valor del agente no es acertar siempre: es saber cuándo no está seguro y dejarlo aquí en vez de inventar.</p>
-    ${e.excepciones.map((x) => `
-      <div style="border:1px solid var(--rule);border-radius:var(--radius);padding:11px;margin-bottom:9px;
-        ${x.estado === "resuelta" ? "opacity:.6" : ""}">
-        <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
-          <span class="pill ${x.estado === "abierta" ? "p-revision" : "p-ok"}">${x.estado}</span>
-          <b style="font-size:13px">${esc(x.cliente?.nom || "—")}</b>
-          <span class="mono score">${esc(x.referencia || x.id)}</span>
-          ${x.estado === "abierta" ? `<button class="b-ghost b-sm" style="margin-left:auto" onclick="abrirExc('${esc(x.id)}')">Resolver</button>` : ""}
+  const pa = $("#p-archivos");
+  if (!fin.documentos.length) {
+    pa.innerHTML = `<div class="tarj"><div class="t">Sin archivos</div><div class="mini">El pedido no superó las validaciones de cabecera: no se genera ningún archivo de carga. Eso también es el sistema funcionando — lo que no debe entrar, no entra.</div></div>`;
+  } else {
+    pa.innerHTML = fin.documentos.map((d, i) => `
+      <div class="archivo">
+        <div class="cab">
+          <span class="sis ${d.sistema === "INSOFT" ? "insoft" : ""}">${d.sistema}</span>
+          <b>${esc(d.archivo?.nombre ?? d.documento)}</b>
+          <span class="desc">${d.sistema === "INSOFT" ? "importación contra su ambiente de pruebas" : "carga masiva que importa su equipo de IT"} · documento ${esc(d.documento)} · ${d.lineas} líneas</span>
+          <button data-a="${i}">Descargar ↓</button>
         </div>
-        <div style="font-size:12.5px;color:var(--muted);margin-top:5px">${esc(x.razon)}</div>
-        <div id="exc-${esc(x.id)}"></div>
-      </div>`).join("")}`
-    : '<div class="vacio">Nada pendiente de revisión.</div>';
+        <pre>${esc(d.archivo?.contenido ?? "")}</pre>
+      </div>`).join("");
+    pa.querySelectorAll("button[data-a]").forEach((b) => b.addEventListener("click", () => {
+      const d = fin.documentos[Number(b.dataset.a)];
+      const blob = new Blob([d.archivo.contenido], { type: (d.archivo.mime || "text/plain") + ";charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = d.archivo.nombre;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    }));
+  }
+
+  $("#p-tecnico").innerHTML = `
+    <details class="tecnico"><summary>Extracción estructurada del modelo (JSON)</summary><pre>${esc(JSON.stringify(ext?.extraccion ?? {}, null, 2))}</pre></details>
+    <div style="height:10px"></div>
+    ${fin.documentos.map((d) => `<details class="tecnico"><summary>Payload ${esc(d.sistema)} · ${esc(d.documento)}</summary><pre>${esc(JSON.stringify(d.payload, null, 2))}</pre></details>`).join('<div style="height:10px"></div>')}`;
+
+  cargarBD();
+  $("#salida").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/* ── resolver una excepción ───────────────────────────── */
-window.abrirExc = async (id) => {
-  const cont = $("#exc-" + id);
-  if (cont.innerHTML) { cont.innerHTML = ""; return; }
-  cont.innerHTML = '<div class="score" style="margin-top:8px">cargando…</div>';
-  const x = await fetch(`${API}/erp?q=excepcion&id=${encodeURIComponent(id)}`).then((r) => r.json());
-  if (x.error) { cont.innerHTML = `<div class="err">${esc(x.error)}</div>`; return; }
+async function cargarBD() {
+  try {
+    const [rs, ro] = await Promise.all([fetch("/api/erp?q=resumen"), fetch("/api/erp?q=ordenes")]);
+    const s = await rs.json(), o = await ro.json();
+    $("#kpis-bd").innerHTML = `
+      <div><div class="k">Pedidos procesados</div><div class="v">${s.pedidos_procesados}</div></div>
+      <div><div class="k">Docs INSOFT</div><div class="v">${s.documentos_erp_ec ?? s.documentos - s.documentos_sap}</div></div>
+      <div><div class="k">Docs SAP</div><div class="v">${s.documentos_sap}</div></div>
+      <div><div class="k">Líneas grabadas</div><div class="v">${s.lineas}</div></div>
+      <div><div class="k">Excepciones abiertas</div><div class="v">${s.excepciones_abiertas}</div></div>`;
+    $("#bd-lista").innerHTML = `
+      <div class="fila cab"><div>Documento</div><div>Sistema</div><div>Cliente</div><div>Referencia</div><div>Líneas</div><div>Total</div></div>` +
+      o.ordenes.slice(0, 12).map((x) => `
+        <div class="fila">
+          <div class="mono">${esc(x.documento)}</div>
+          <div><span class="chip ${x.sistema === "INSOFT" ? "info" : "ok"}">${esc(x.sistema)}</span></div>
+          <div>${esc(x.cliente?.nom ?? "")}</div>
+          <div class="mono">${esc(x.referencia ?? "—")}</div>
+          <div class="mono">${x.lineas}</div>
+          <div class="mono">${fmt(x.total, x.moneda)} ${esc(x.moneda ?? "")}</div>
+        </div>`).join("");
+  } catch { /* la vista de BD es opcional */ }
+}
 
-  const opciones = (MAESTROS?.materiales || []).map((m) => `<option value="${esc(m.cod)}">${esc(m.cod)} — ${esc(m.desc)}</option>`).join("");
-  const filas = (x.lineas || []).map((l) => `
-    <tr>
-      <td>${esc(l.entrada.descripcion || l.entrada.codigo || "—")}
-        <div class="score">cant. ${l.entrada.cantidad ?? "no indicada"}</div>
-        ${l.incidencias.map((i) => `<div class="inc ${i.nivel}">${esc(i.texto)}</div>`).join("")}</td>
-      <td>
-        <select class="sel-mat" data-pos="${l.pos}">
-          <option value="">— descartar esta línea —</option>${opciones}
-        </select>
-        <div style="margin-top:5px"><input type="number" min="1" class="sel-mat" style="width:88px"
-          data-cant="${l.pos}" value="${l.entrada.cantidad ?? ""}" placeholder="cantidad"></div>
-      </td>
-    </tr>`).join("");
+/* pestañas */
+document.querySelectorAll(".pestana").forEach((p) => p.addEventListener("click", () => {
+  document.querySelectorAll(".pestana").forEach((x) => x.classList.toggle("activa", x === p));
+  document.querySelectorAll(".panel-salida").forEach((x) => x.classList.toggle("activo", x.id === "p-" + p.dataset.p));
+  if (p.dataset.p === "bd") cargarBD();
+}));
 
-  cont.innerHTML = `
-    <div style="margin-top:10px;border-top:1px solid var(--rule-soft);padding-top:10px">
-      ${(x.incidencias_cabecera || []).map((i) => `<div class="inc ${i.nivel}" style="margin-bottom:6px"><b>${esc(i.regla)}</b><br>${esc(i.texto)}</div>`).join("")}
-      ${filas ? `<table><thead><tr><th>Línea sin resolver</th><th>Decisión</th></tr></thead><tbody>${filas}</tbody></table>
-        <div class="row"><button class="b-main b-sm" onclick="guardarExc('${esc(id)}')">Aplicar y grabar</button></div>
-        <p class="hint">Lo que apruebe aquí se añade al documento ya generado y se recalcula el total.</p>`
-        : '<p class="hint">Esta excepción es de cabecera: no hay líneas que reasignar.</p>'}
-    </div>`;
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
 
-  /* preselecciona la sugerencia del motor */
-  (x.lineas || []).forEach((l) => {
-    if (l.sugerencia) {
-      const s = cont.querySelector(`select[data-pos="${l.pos}"]`);
-      if (s) s.value = l.sugerencia.cod;
-    }
-  });
-};
-
-window.guardarExc = async (id) => {
-  const cont = $("#exc-" + id);
-  const decisiones = [...cont.querySelectorAll("select[data-pos]")].map((s) => {
-    const pos = +s.dataset.pos;
-    const cant = cont.querySelector(`input[data-cant="${pos}"]`);
-    return s.value
-      ? { pos, accion: "asignar", material: s.value, cantidad: cant?.value ? +cant.value : null }
-      : { pos, accion: "descartar" };
-  });
-  cont.innerHTML = '<div class="score" style="margin-top:8px">grabando…</div>';
-  const r = await fetch(`${API}/erp`, {
-    method: "POST", headers: { "content-type": "application/json" },
-    body: JSON.stringify({ accion: "resolver-excepcion", id, decisiones })
-  }).then((x) => x.json());
-  if (r.error) { cont.innerHTML = `<div class="err">${esc(r.error)}</div>`; return; }
-  cont.innerHTML = `<div class="inc informativo" style="margin-top:8px">
-    ${r.agregadas} línea(s) añadidas. ${r.documentos.map((d) => `${esc(d.sistema)} ${esc(d.documento)} → ${fmt(d.total)}`).join(" · ")}</div>`;
-  refrescar();
-};
-
-/* ── arranque ─────────────────────────────────────────── */
-$("#btn").onclick = procesar;
-$("#btnRef").onclick = refrescar;
-$("#btnLimpiar").onclick = () => {
-  $("#txt").value = "";
-  document.querySelectorAll(".chip").forEach((x) => x.classList.remove("sel"));
-  $("#txt").focus();
-};
-$("#txt").addEventListener("keydown", (e) => {
-  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") procesar();
-});
-
-cargarEjemplos();
-cargarMaestros();
-refrescar();
+cargar();
 </script>
 </body>
 </html>
