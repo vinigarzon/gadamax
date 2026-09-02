@@ -5,307 +5,493 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Propuesta · Automatización de entrada de pedidos · Gadamax</title>
-<meta name="description" content="Propuesta de servicios profesionales preparada por Gadamax.">
+<meta name="description" content="Presentación de la propuesta preparada por Gadamax.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0D1321; --paper:#EDF0F6; --white:#FFFFFF; --rule:#C9D2E1; --rule-soft:#DEE4EE;
-  --muted:#5C6880; --faint:#8C99B2; --panel:#F7F9FC;
-  --cobalt:#1F3BE0; --cobalt-ink:#152BA8; --cobalt-soft:#E3E8FF;
-  --gain:#0E8F76; --gain-soft:#DFF2ED;
-  --amber:#B07C10; --amber-soft:#FBF0D8;
-  --flag:#B23A2E; --flag-soft:#F7E4E1;
-  --braun:#00A97A;
-  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --ink:#0A0F1C; --ink2:#121A2C; --paper:#F2F4F8; --white:#FFFFFF;
+  --rule:#C9D2E1; --rule-soft:#DFE4EC; --muted:#5C6880; --faint:#8C99B2;
+  --niebla:#7C89A5; --niebla2:#A9B4CA;
+  --naranja:#F8754C; --naranja-ink:#E05A30;
+  --verde:#00A97A; --verde-luz:#3BC79C;
+  --cobalt:#1F3BE0;
+  --rojo:#E8604A;
+  --f-sans:"Archivo","Helvetica Neue",Arial,sans-serif;
   --f-serif:"Source Serif 4",Georgia,serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-  --radius:3px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:840px;margin:0 auto;padding:0 22px}
+html,body{height:100%}
+body{background:var(--ink);color:#fff;font-family:var(--f-sans);overflow:hidden;-webkit-font-smoothing:antialiased}
 
-/* ── portada ── */
-header{background:var(--ink);color:#fff;padding:0 0 46px}
-.marcas{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #212B40;flex-wrap:wrap}
-.marca-g{display:flex;align-items:center;gap:9px;text-decoration:none;color:#fff}
-.marca-g img{width:26px;height:26px;display:block}
-.marca-g b{font-size:16px;font-weight:600;letter-spacing:-.01em}
-.marcas .para{font-size:12px;color:#6E7B96;font-family:var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
-.marcas .cliente img{height:22px;width:auto;display:block}
-.ey{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#7C89A5;margin:40px 0 14px}
-header h1{font-size:clamp(28px,5vw,42px);font-weight:600;letter-spacing:-.02em;line-height:1.1;max-width:20ch;text-wrap:balance}
-header .sub{color:#A9B4CA;font-size:17.5px;margin-top:16px;max-width:52ch;font-family:var(--f-serif);line-height:1.55}
-header .meta{display:flex;gap:22px;margin-top:26px;flex-wrap:wrap;font-family:var(--f-mono);font-size:11.5px;color:#6E7B96;letter-spacing:.05em;text-transform:uppercase}
-header .meta span{display:flex;align-items:center;gap:7px}
-header .meta i{width:5px;height:5px;border-radius:50%;background:var(--braun);display:block;font-style:normal}
+/* ══ escenario ══ */
+#escenario{position:fixed;inset:0}
+.lamina{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transform:translateY(26px);
+  transition:opacity .55s ease,transform .55s ease,visibility 0s .55s;overflow:hidden}
+.lamina.activa{opacity:1;visibility:visible;transform:none;transition:opacity .55s ease,transform .55s ease}
+.lamina .cont{width:min(1060px,92vw);max-height:88vh;padding:0 8px}
+.lamina.clara{background:var(--paper);color:var(--ink)}
 
-main{padding:10px 0 80px}
-section{padding-top:54px}
-h2{font-size:13px;font-family:var(--f-mono);font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt);margin:0 0 8px}
-h2+.lede{font-family:var(--f-serif);font-size:20.5px;line-height:1.45;margin:0 0 22px;max-width:56ch;text-wrap:balance}
-h3{font-size:17px;font-weight:600;margin:26px 0 8px;letter-spacing:-.01em}
-p{margin:0 0 14px;max-width:70ch}
-strong{font-weight:600}
-.serif{font-family:var(--f-serif)}
+/* revelado en cascada */
+.rev{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.lamina.activa .rev{opacity:1;transform:none}
+.lamina.activa .rev:nth-child(1){transition-delay:.08s}
+.lamina.activa .rev:nth-child(2){transition-delay:.22s}
+.lamina.activa .rev:nth-child(3){transition-delay:.36s}
+.lamina.activa .rev:nth-child(4){transition-delay:.5s}
+.lamina.activa .rev:nth-child(5){transition-delay:.64s}
+.lamina.activa .rev:nth-child(6){transition-delay:.78s}
+.lamina.activa .rev:nth-child(7){transition-delay:.92s}
 
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:8px 0}
-.kpis>div{background:var(--white);padding:15px 16px}
-.kpis .k{font-family:var(--f-mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-.kpis .v{font-size:22px;font-weight:600;line-height:1.15;font-variant-numeric:tabular-nums}
-.kpis .v small{font-size:12.5px;font-weight:400;color:var(--muted)}
-.kpis .s{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+/* ══ tipografía ══ */
+.eti{font-family:var(--f-mono);font-size:clamp(11px,1.2vw,13px);letter-spacing:.16em;text-transform:uppercase;color:var(--naranja);margin-bottom:18px}
+.clara .eti{color:var(--naranja-ink)}
+h1{font-size:clamp(34px,6.2vw,74px);font-weight:700;line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
+h2{font-size:clamp(28px,4.6vw,54px);font-weight:700;line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
+.sub{font-family:var(--f-serif);font-size:clamp(16px,2vw,22px);line-height:1.5;color:var(--niebla2);margin-top:20px;max-width:56ch}
+.clara .sub{color:var(--muted)}
+.gigante{font-family:var(--f-mono);font-weight:500;font-size:clamp(56px,11vw,150px);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.nar{color:var(--naranja)} .ver{color:var(--verde-luz)} .clara .ver{color:var(--verde)}
 
-.tarjeta{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:20px 22px;margin:14px 0}
-.nota{border-left:3px solid;padding:14px 16px;margin:16px 0;font-size:14.5px;border-radius:0 2px 2px 0}
-.nota .et{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
-.nota p{margin:0 0 8px;max-width:none}
-.nota p:last-child{margin:0}
-.n-verde{background:var(--gain-soft);border-color:var(--gain)} .n-verde .et{color:var(--gain)}
-.n-ambar{background:var(--amber-soft);border-color:var(--amber)} .n-ambar .et{color:var(--amber)}
-.n-azul{background:var(--cobalt-soft);border-color:var(--cobalt)} .n-azul .et{color:var(--cobalt-ink)}
+/* ══ marcas ══ */
+.marcas-top{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;gap:14px;
+  padding:16px clamp(18px,4vw,44px);pointer-events:none}
+.marcas-top img{display:block}
+.marcas-top .g{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:#fff}
+.marcas-top .x{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;color:var(--niebla);text-transform:uppercase}
+.marcas-top .braun{height:20px;filter:none}
+.tema-claro .marcas-top .g{color:var(--ink)}
+.tema-claro .marcas-top .x{color:var(--faint)}
 
-ul.limpia{list-style:none;margin:0 0 14px;padding:0}
-ul.limpia li{position:relative;padding-left:20px;margin-bottom:9px;max-width:68ch}
-ul.limpia li::before{content:"";position:absolute;left:2px;top:.6em;width:6px;height:6px;background:var(--cobalt);border-radius:50%}
+/* ══ navegación ══ */
+#nav{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;align-items:center;gap:16px;
+  padding:16px clamp(18px,4vw,44px)}
+#puntos{display:flex;gap:7px;flex:1;align-items:center}
+#puntos i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);cursor:pointer;transition:all .25s;font-style:normal}
+#puntos i.aqui{background:var(--naranja);transform:scale(1.35)}
+.tema-claro #puntos i{background:rgba(10,15,28,.18)}
+.tema-claro #puntos i.aqui{background:var(--naranja-ink)}
+.btn-nav{font-family:var(--f-sans);font-size:14.5px;font-weight:600;padding:12px 22px;border-radius:3px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;transition:all .2s}
+.btn-nav:hover{border-color:#fff}
+.btn-nav.sig{background:var(--naranja);border-color:var(--naranja);color:#160B06}
+.btn-nav.sig:hover{background:#FF8B63}
+.tema-claro .btn-nav{border-color:rgba(10,15,28,.25);color:var(--ink)}
+.tema-claro .btn-nav:hover{border-color:var(--ink)}
+.tema-claro .btn-nav.sig{background:var(--naranja-ink);border-color:var(--naranja-ink);color:#fff}
+#num{font-family:var(--f-mono);font-size:12px;color:var(--niebla);min-width:52px;text-align:right}
+.tema-claro #num{color:var(--faint)}
 
-.tcaja{overflow-x:auto;border:1px solid var(--rule);background:var(--white);border-radius:var(--radius)}
-table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:560px}
-th{text-align:left;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:11px 14px;border-bottom:1px solid var(--rule);white-space:nowrap}
-td{padding:12px 14px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
-tbody tr:last-child td{border-bottom:0}
-.pill{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:2px;font-weight:500;white-space:nowrap}
-.p-v{background:var(--gain-soft);color:var(--gain)}
-.p-a{background:var(--amber-soft);color:var(--amber)}
-.p-c{background:var(--cobalt-soft);color:var(--cobalt-ink)}
+/* ══ componentes ══ */
+.fila-datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:clamp(14px,2.5vw,34px);margin-top:38px}
+.dato .n{font-family:var(--f-mono);font-size:clamp(34px,4.6vw,58px);font-weight:500;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.dato .l{font-size:clamp(12.5px,1.4vw,15px);color:var(--niebla2);margin-top:8px;line-height:1.4}
+.clara .dato .l{color:var(--muted)}
 
-/* flujo de la solución */
-.flujo{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
-.paso{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:14px;position:relative}
-.paso .n{font-family:var(--f-mono);font-size:10px;color:var(--cobalt);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
-.paso b{display:block;font-size:14px;font-weight:600;margin-bottom:4px;letter-spacing:-.01em}
-.paso p{font-size:12.5px;color:var(--muted);margin:0;line-height:1.45}
+.tarjetas{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:34px}
+.tj{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:clamp(14px,1.8vw,22px)}
+.clara .tj{background:var(--white);border-color:var(--rule)}
+.tj .ic{width:34px;height:34px;border-radius:4px;display:grid;place-items:center;font-size:16px;margin-bottom:12px;
+  background:rgba(248,117,76,.14);color:var(--naranja)}
+.clara .tj .ic{background:#FDE9E1;color:var(--naranja-ink)}
+.tj.v .ic{background:rgba(0,169,122,.15);color:var(--verde-luz)}
+.clara .tj.v .ic{background:#DFF2ED;color:var(--verde)}
+.tj b{display:block;font-size:clamp(14.5px,1.5vw,17px);font-weight:600;margin-bottom:6px;letter-spacing:-.01em}
+.tj p{font-size:clamp(12.5px,1.35vw,14.5px);line-height:1.5;color:var(--niebla2)}
+.clara .tj p{color:var(--muted)}
+
+/* pipeline animado */
+.tubo{margin-top:44px;position:relative}
+.etapas{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.etapa{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);border-radius:4px;
+  padding:16px 12px;text-align:center;position:relative;transition:border-color .3s,background .3s}
+.etapa .ic{font-size:20px;margin-bottom:8px}
+.etapa b{display:block;font-size:clamp(11px,1.25vw,14px);font-weight:600}
+.etapa span{display:block;font-family:var(--f-mono);font-size:10px;color:var(--niebla);margin-top:4px;letter-spacing:.05em;text-transform:uppercase}
+.etapa.viva{border-color:var(--verde-luz);background:rgba(0,169,122,.12)}
+.pedidito{position:absolute;top:-26px;left:0;font-family:var(--f-mono);font-size:11px;background:var(--naranja);color:#160B06;
+  padding:4px 9px;border-radius:3px;white-space:nowrap;font-weight:500;opacity:0;transform:translateX(0)}
+.lamina.activa .pedidito{animation:viaje 7s ease-in-out infinite .6s}
+@keyframes viaje{
+  0%{opacity:0;left:2%}6%{opacity:1}
+  18%{left:2%}
+  30%{left:22%}
+  48%{left:42%}
+  66%{left:62%}
+  84%{left:84%;opacity:1}
+  92%{opacity:0}100%{opacity:0;left:84%}
+}
+.linea-t{height:2px;background:linear-gradient(90deg,var(--naranja),var(--verde-luz));margin:0 4% 14px;border-radius:2px;
+  transform:scaleX(0);transform-origin:left;transition:transform 1.6s ease .4s}
+.lamina.activa .linea-t{transform:scaleX(1)}
+
+/* barras comparativas */
+.barras{margin-top:40px;display:flex;flex-direction:column;gap:22px}
+.barra{display:grid;grid-template-columns:minmax(150px,240px) 1fr;gap:16px;align-items:center}
+.barra .rot{font-size:clamp(13px,1.5vw,16px);font-weight:600;line-height:1.3}
+.barra .rot span{display:block;font-family:var(--f-mono);font-size:11px;color:var(--faint);font-weight:400;margin-top:3px}
+.barra .pista{background:rgba(10,15,28,.07);border-radius:3px;height:clamp(34px,4.5vw,52px);position:relative;overflow:visible}
+.barra .relleno{height:100%;border-radius:3px;display:flex;align-items:center;padding:0 14px;
+  font-family:var(--f-mono);font-size:clamp(12px,1.5vw,16px);font-weight:500;white-space:nowrap;
+  width:0;transition:width 1.3s cubic-bezier(.2,.7,.2,1) .35s;color:#fff}
+.lamina.activa .relleno{width:var(--w)}
+.relleno.roja{background:linear-gradient(90deg,#D4553F,var(--rojo))}
+.relleno.verde{background:linear-gradient(90deg,#00996E,var(--verde))}
+.barra .fuera{position:absolute;left:calc(var(--w) + 12px);top:50%;transform:translateY(-50%);
+  font-family:var(--f-mono);font-size:clamp(12px,1.4vw,15px);color:var(--ink);opacity:0;transition:opacity .5s 1.5s}
+.lamina.activa .fuera{opacity:1}
 
 /* precio */
-.precio{background:var(--ink);color:#fff;border-radius:var(--radius);padding:26px;margin:18px 0;display:flex;gap:24px;align-items:center;flex-wrap:wrap}
-.precio .tt{flex:1;min-width:240px}
-.precio .tt b{font-size:17px;font-weight:600;display:block}
-.precio .tt span{font-size:13.5px;color:#A9B4CA;font-family:var(--f-serif)}
-.precio .cifra{font-family:var(--f-mono);font-size:30px;font-weight:500;white-space:nowrap}
-.precio .cifra small{font-size:13px;color:#7C89A5;display:block;text-align:right;margin-top:2px;font-family:var(--f-body)}
+.caja-precio{margin-top:36px;background:var(--ink);color:#fff;border-radius:6px;padding:clamp(22px,3vw,36px);
+  display:flex;gap:26px;align-items:center;flex-wrap:wrap;box-shadow:0 24px 60px -30px rgba(10,15,28,.55)}
+.caja-precio .iz{flex:1;min-width:230px}
+.caja-precio .iz b{font-size:clamp(17px,2vw,22px);font-weight:700;display:block}
+.caja-precio .iz span{font-family:var(--f-serif);font-size:clamp(13px,1.5vw,16px);color:var(--niebla2)}
+.caja-precio .cif{font-family:var(--f-mono);font-size:clamp(40px,6vw,66px);font-weight:500;letter-spacing:-.02em}
+.caja-precio .cif small{display:block;font-family:var(--f-sans);font-size:12.5px;color:var(--niebla);text-align:right;margin-top:4px}
+.sellos{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px}
+.sello2{border:1px solid var(--rule);background:var(--white);border-left:4px solid var(--verde);border-radius:4px;padding:16px 18px}
+.sello2 b{display:block;font-size:15px;margin-bottom:4px;color:var(--verde)}
+.sello2 p{font-size:13.5px;line-height:1.5;color:var(--muted)}
 
-footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;color:var(--faint)}
-.acciones{margin:26px 0 0}
-.acciones button{font-family:var(--f-body);font-size:14px;padding:11px 20px;background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);cursor:pointer;color:var(--ink)}
-.acciones button:hover{background:var(--panel)}
-.marca-print{display:none}
+/* línea de tiempo */
+.tiempo{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
+.hito{position:relative;padding-top:22px}
+.hito::before{content:"";position:absolute;top:6px;left:0;right:-12px;height:2px;background:rgba(255,255,255,.15)}
+.hito:last-child::before{right:0}
+.hito::after{content:"";position:absolute;top:0;left:0;width:14px;height:14px;border-radius:50%;background:var(--naranja);
+  box-shadow:0 0 0 5px rgba(248,117,76,.18)}
+.hito.v::after{background:var(--verde-luz);box-shadow:0 0 0 5px rgba(0,169,122,.18)}
+.hito b{display:block;font-size:clamp(13.5px,1.5vw,17px);font-weight:700;margin-bottom:4px}
+.hito .cu{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--naranja);margin-bottom:6px;display:block}
+.hito.v .cu{color:var(--verde-luz)}
+.hito p{font-size:clamp(12px,1.3vw,14px);color:var(--niebla2);line-height:1.5}
 
-@media print{
-  header,.acciones,footer{display:none!important}
-  body{background:#fff;font-size:13px}
-  .marca-print{display:flex;align-items:center;gap:14px;padding-bottom:12px;margin-bottom:18px;border-bottom:2px solid #0D1321}
-  .marca-print .g{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}
-  .marca-print .p{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#5C6880}
-  section{padding-top:26px;break-inside:avoid-page}
-  .precio{background:#fff;color:#0D1321;border:2px solid #0D1321}
-  .precio .tt span,.precio .cifra small{color:#5C6880}
-  .wrap{max-width:100%}
+/* cta final */
+.cta-fila{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap}
+.cta{font-family:var(--f-sans);font-size:clamp(14px,1.6vw,17px);font-weight:600;padding:16px 28px;border-radius:4px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .2s;border:1px solid transparent}
+.cta.p{background:var(--naranja);color:#160B06}
+.cta.p:hover{background:#FF8B63;transform:translateY(-2px)}
+.cta.s{border-color:rgba(255,255,255,.3);color:#fff}
+.cta.s:hover{border-color:#fff}
+
+.pie-lamina{position:absolute;bottom:74px;left:0;right:0;text-align:center;font-family:var(--f-mono);
+  font-size:11px;color:var(--niebla);letter-spacing:.08em}
+
+/* fondo animado portada */
+.aurora{position:absolute;inset:-20%;background:
+  radial-gradient(38% 44% at 22% 28%,rgba(248,117,76,.16),transparent 60%),
+  radial-gradient(34% 40% at 78% 66%,rgba(0,169,122,.14),transparent 60%),
+  radial-gradient(30% 36% at 60% 20%,rgba(31,59,224,.10),transparent 60%);
+  animation:flotar 16s ease-in-out infinite alternate;pointer-events:none}
+@keyframes flotar{from{transform:translate3d(-2%,-1%,0) scale(1)}to{transform:translate3d(2%,2%,0) scale(1.06)}}
+.reja{position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:56px 56px}
+
+.tacha{position:relative;white-space:nowrap}
+.tacha::after{content:"";position:absolute;left:-2%;right:-2%;top:52%;height:4px;background:var(--rojo);border-radius:2px;
+  transform:scaleX(0);transform-origin:left;transition:transform .7s ease 1.1s}
+.lamina.activa .tacha::after{transform:scaleX(1)}
+
+@media (prefers-reduced-motion: reduce){
+  .lamina,.rev,.relleno,.linea-t,.tacha::after{transition:none!important;animation:none!important}
+  .lamina.activa .pedidito,.aurora{animation:none!important}
+  .lamina.activa .relleno{width:var(--w)}
+}
+@media (max-width:700px){
+  .etapas{grid-template-columns:repeat(2,1fr)}
+  .etapa:last-child{grid-column:1/-1}
+  .tiempo{grid-template-columns:1fr 1fr}
+  .barra{grid-template-columns:1fr}
+  .gigante{font-size:clamp(48px,16vw,90px)}
 }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap">
-    <div class="marcas">
-      <a class="marca-g" href="https://www.gadamax.com" target="_blank" rel="noopener">
-        <img src="/assets/images/brand-logo-gadamax.png" alt="" width="26" height="26"><b>Gadamax</b>
-      </a>
-      <span class="para">propuesta para</span>
-      <span class="cliente"><img src="/assets/images/bbraun-logo-full.svg" alt="B. Braun" height="22"></span>
-    </div>
-    <p class="ey">Propuesta de servicios profesionales · Confidencial</p>
-    <h1>Automatización de la entrada de pedidos</h1>
-    <p class="sub">Un agente que lee los pedidos como llegan —correo, Excel, WhatsApp, fotografía—, los valida contra las reglas del negocio y los deja listos en los sistemas. Construido para sobrevivir a la migración a S/4HANA.</p>
-    <div class="meta">
-      <span><i></i>Ecuador · Colombia</span>
-      <span><i></i>Septiembre 2026</span>
-      <span><i></i>Vigencia 30 días</span>
-    </div>
-  </div>
-</header>
-
-<main class="wrap">
-
-<div class="marca-print">
-  <span class="g"><img src="/assets/images/brand-logo-gadamax.png" alt="" width="22" height="22">Gadamax</span>
-  <span class="p">propuesta para</span>
-  <img src="/assets/images/bbraun-logo-full.svg" alt="B. Braun" height="18">
+<div class="marcas-top">
+  <span class="g"><img src="/assets/images/brand-logo-gadamax.png" alt="" width="24" height="24">Gadamax</span>
+  <span class="x">para</span>
+  <img class="braun" src="/assets/images/bbraun-logo-full.svg" alt="B. Braun" height="20">
 </div>
 
-<section>
-  <h2>Punto de partida</h2>
-  <p class="lede">Esta propuesta no parte de supuestos: parte de sus respuestas y de sus pedidos.</p>
-  <p>Antes de poner una sola cifra, pedimos dos cosas: un levantamiento técnico —que su equipo respondió completo, las 47 preguntas— y una muestra real de pedidos, que recibimos bajo acuerdo de confidencialidad: <strong>25 casos de Ecuador y las 6 tipologías de Colombia</strong> (estándar, comodato, contrato estatal, contrato por cantidades, bonificación y sus combinaciones). Lo que sigue está construido sobre ese material.</p>
+<div id="escenario">
 
-  <div class="kpis">
-    <div><div class="k">Pedidos / mes</div><div class="v">1.200</div><div class="s">~5 líneas por pedido</div></div>
-    <div><div class="k">Digitación actual</div><div class="v">15–30 <small>min</small></div><div class="s">por pedido, en dos sistemas</div></div>
-    <div><div class="k">Personas involucradas</div><div class="v">6–10</div><div class="s">parte de su jornada</div></div>
-    <div><div class="k">Esfuerzo mensual</div><div class="v">≈ 400 <small>horas</small></div><div class="s">equivalente a 2,5–3 tiempos completos</div></div>
-  </div>
-</section>
-
-<section>
-  <h2>Lo que encontramos en sus pedidos</h2>
-  <p class="lede">La muestra confirma que el problema es real, y también que es más rico de lo que parece desde afuera.</p>
-
-  <ul class="limpia">
-    <li><strong>Cada cliente pide en su propio idioma.</strong> Hospitales que usan sus códigos internos de artículo junto a la referencia B. Braun y el registro sanitario por línea; distribuidores con formatos de orden propios; correos en lenguaje libre donde la dirección de entrega llega como un enlace de Google Maps.</li>
-    <li><strong>Las exigencias regulatorias vienen impresas en la propia orden:</strong> máximo de lotes por producto, vida útil mínima de meses, certificado de análisis por lote. El agente tiene que leerlas y respetarlas, no solo copiar cantidades.</li>
-    <li><strong>El precio no sale de una lista:</strong> condiciones negociadas, descuentos escalonados por pronto pago, IVA distinto por línea, contratos y licitaciones con precio fijado. La validación correcta es contra la condición del cliente, no contra un precio único.</li>
-    <li><strong>Una parte del volumen llega como imagen:</strong> fotografías de WhatsApp, capturas del CRM interno y tarjetas de control de cirugía escritas a mano, con producto y lote. Se procesan con lectura por visión, y contienen datos de pacientes que tratamos bajo el acuerdo de confidencialidad, con anonimización en todo material de trabajo.</li>
-    <li><strong>Los documentos son heterogéneos:</strong> PDFs con texto, PDFs escaneados sin texto, dos plantillas de Excel que no se parecen en nada entre sí, correos reenviados. El sistema debe recibirlos todos por igual.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>La solución</h2>
-  <p class="lede">Una plataforma con cinco etapas, donde la inteligencia artificial hace exactamente una cosa: leer. Todo lo demás es código verificable.</p>
-
-  <div class="flujo">
-    <div class="paso"><div class="n">1 · Recepción</div><b>Todos los canales</b><p>Casilla de correo, adjuntos Excel y PDF, WhatsApp, y las fotografías del CRM — incluidas las tarjetas manuscritas, por visión.</p></div>
-    <div class="paso"><div class="n">2 · Lectura</div><b>Extracción con IA</b><p>El modelo convierte el documento en campos estructurados. No inventa códigos ni decide nada: solo lee, incluso escaneados y manuscritos.</p></div>
-    <div class="paso"><div class="n">3 · Validación</div><b>Motor de reglas</b><p>Cruce contra maestros y equivalencias de códigos, condiciones y contratos del cliente, lote y vida útil, cupo. Determinista y auditable.</p></div>
-    <div class="paso"><div class="n">4 · Revisión</div><b>Cola de excepciones</b><p>Lo que no supera el umbral espera al analista de Administración de Ventas, con la sugerencia lista para aprobar en menos de una hora.</p></div>
-    <div class="paso"><div class="n">5 · Entrega</div><b>Adaptadores de salida</b><p>Archivos de carga validados para INSOFT y para SAP ECC hoy; el conector de S/4HANA cuando llegue la migración.</p></div>
-  </div>
-
-  <div class="nota n-verde">
-    <span class="et">Por qué adaptadores, y no integración profunda</span>
-    <p>Ustedes mismos nos lo dijeron: INSOFT no será para siempre, y tanto Ecuador como Colombia migran a S/4HANA en uno o dos años. Todo lo que se construya pegado a un ERP se botará dos veces. En esta arquitectura, la plataforma —recepción, lectura, reglas, excepciones, auditoría— es lo estable; cuando cambie el ERP, se cambia únicamente el conector de salida. Es la forma concreta de «no construir dos veces».</p>
-  </div>
-
-  <p>Cada decisión del sistema queda registrada: qué leyó, con qué lo emparejó, qué regla aplicó, quién aprobó qué y cuándo. Esa bitácora responde a lo que su operación exige —auditoría corporativa, buenas prácticas, autoridad sanitaria, ISO 9001— y conserva los documentos originales.</p>
-</section>
-
-<section>
-  <h2>Plan de trabajo</h2>
-  <p class="lede">Cuatro fases. La primera tiene alcance y precio en firme; las siguientes se cotizan con lo que la primera mide.</p>
-
-  <div class="tcaja">
-  <table>
-    <thead><tr><th>Fase</th><th>Qué se hace</th><th>Qué entrega</th></tr></thead>
-    <tbody>
-      <tr>
-        <td><strong>0 · Diagnóstico</strong><br><span class="pill p-v">3 semanas · en firme</span></td>
-        <td>El agente se calibra y corre contra su muestra real completa, con maestros de trabajo construidos desde sus propias órdenes. Sesión técnica con IT para confirmar el mecanismo y la frecuencia de carga a SAP ECC y el formato de importación de INSOFT.</td>
-        <td>Tasa de acierto <em>medida</em> por canal y tipología; arquitectura y plan definitivo; <strong>precio en firme del programa en los tres modelos</strong>.</td>
-      </tr>
-      <tr>
-        <td><strong>1 · Agente en operación asistida</strong><br><span class="pill p-c">se cotiza en fase 0</span></td>
-        <td>Los cuatro canales conectados; validación con condiciones por cliente, contratos, lote y vida útil; cola de excepciones operando con su analista. Acceso con usuarios y perfiles —analista, supervisor, consulta, administrador— autenticados con su propio directorio corporativo de Microsoft, con registro de quién aprobó qué.</td>
-        <td>Archivos de carga validados para INSOFT y SAP; el equipo deja de digitar y pasa a revisar.</td>
-      </tr>
-      <tr>
-        <td><strong>2 · Entrega automática</strong><br><span class="pill p-c">se cotiza en fase 0</span></td>
-        <td>Importación automatizada a INSOFT contra su ambiente de pruebas primero; carga a SAP según lo acordado con IT; validación de cupo activada con regla acordada.</td>
-        <td>Flujo de punta a punta sin intervención manual para los pedidos limpios.</td>
-      </tr>
-      <tr>
-        <td><strong>3 · Continuidad S/4HANA</strong><br><span class="pill p-a">cuando migren</span></td>
-        <td>Sustitución de los adaptadores de archivo por el conector estándar de S/4HANA, sin tocar plataforma, reglas ni historia.</td>
-        <td>La inversión sobrevive al cambio de ERP — en los dos países.</td>
-      </tr>
-    </tbody>
-  </table>
-  </div>
-</section>
-
-<section>
-  <h2>Modelos comerciales</h2>
-  <p class="lede">Los tres que nos pidieron comparar. Las cifras de cada uno salen del diagnóstico — cualquier número que pusiéramos hoy sería inventado, y preferimos no empezar así.</p>
-
-  <div class="tcaja">
-  <table>
-    <thead><tr><th>Modelo</th><th>Estructura</th><th>Para quién tiene sentido</th></tr></thead>
-    <tbody>
-      <tr><td><strong>A · Proyecto</strong></td><td>Pago único de desarrollo más un mantenimiento mensual.</td><td>Si prefieren activo propio e inversión de capital.</td></tr>
-      <tr><td><strong>B · Suscripción</strong></td><td>Sin inversión inicial; mensualidad todo incluido: plataforma, modelo de IA, monitoreo, soporte en horario hábil con niveles de servicio acordados, y evolución continua — incluida la adaptación a S/4HANA cuando llegue.</td><td>El que mejor absorbe la migración de ERP: los dos cambios de conector quedan dentro de la mensualidad.</td></tr>
-      <tr><td><strong>C · Por pedido</strong></td><td>Base menor de implementación más un variable por pedido procesado.</td><td>Si quieren que el costo siga al uso; con 1.200 pedidos al mes es fácil de proyectar y de auditar.</td></tr>
-    </tbody>
-  </table>
-  </div>
-
-  <h3>El contexto de mercado</h3>
-  <p>Para que evalúen cualquier número nuestro con referencias sobre la mesa:</p>
-  <div class="tcaja">
-  <table>
-    <thead><tr><th>Referencia</th><th>Orden de magnitud</th><th>Nota</th></tr></thead>
-    <tbody>
-      <tr><td>Plataformas enterprise de automatización de pedidos (Esker, Conexiom)</td><td class="serif">USD 50.000+ <span style="color:var(--muted)">/ año</span></td><td>Más implementación, que suele costar otro tanto. No procesan manuscritos ni canales como su CRM.</td></tr>
-      <tr><td>Soluciones intermedias de captura de documentos (Rossum y similares)</td><td class="serif">desde USD 10.000 <span style="color:var(--muted)">/ año</span></td><td>Capturan el documento; las reglas de negocio y la integración van aparte.</td></tr>
-      <tr><td><strong>Su costo operativo actual de digitación</strong></td><td class="serif">≈ USD 50.000 <span style="color:var(--muted)">/ año</span></td><td>~400 horas al mes de su equipo, con el costo de error incluido.</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p class="serif" style="font-size:14.5px;color:var(--muted)">Nuestro compromiso al cotizar tras el diagnóstico: los tres modelos quedarán por debajo de su costo operativo actual — el proyecto debe pagarse solo desde el primer año.</p>
-</section>
-
-<section>
-  <h2>El diagnóstico, en firme</h2>
-  <p class="lede">Lo único que cotizamos hoy, porque es lo único cuyo alcance ya se conoce por completo.</p>
-
-  <p><strong>Semana 1 —</strong> Calibración con su muestra: los 25 casos de Ecuador y las órdenes de Colombia, más las que quieran sumar. Construcción de los maestros de trabajo y de las equivalencias de códigos a partir de sus propias órdenes.</p>
-  <p><strong>Semana 2 —</strong> Medición: el agente corre contra todo el corpus y se mide la tasa de acierto por canal, por tipología y por tipo de línea. Sesión técnica con su equipo de IT: mecanismo y frecuencia de carga a SAP ECC, formato de importación de INSOFT, accesos al ambiente de pruebas.</p>
-  <p><strong>Semana 3 —</strong> Diseño y número: arquitectura definitiva, plan de implementación por fases, y el precio en firme del programa completo en los tres modelos, calculado sobre lo medido — no sobre estimaciones.</p>
-
-  <div class="precio">
-    <div class="tt">
-      <b>Diagnóstico · 3 semanas</b>
-      <span>Alcance cerrado, entregables definidos, sin compromiso de continuar.</span>
+<!-- 1 · PORTADA -->
+<section class="lamina" data-tema="oscuro">
+  <div class="aurora"></div><div class="reja"></div>
+  <div class="cont">
+    <div class="eti rev">Propuesta · Confidencial · Septiembre 2026</div>
+    <h1 class="rev">Que los pedidos<br>se carguen <span class="nar">solos</span>.</h1>
+    <p class="sub rev">Un agente de inteligencia artificial que lee sus pedidos como llegan —correo, Excel, WhatsApp, fotografía—, los valida con sus reglas y los deja listos en sus sistemas. Ya lo probamos con sus propias órdenes.</p>
+    <div class="fila-datos rev">
+      <div class="dato"><div class="n nar">EC · CO</div><div class="l">Alcance del programa</div></div>
+      <div class="dato"><div class="n">3 sem</div><div class="l">para tener números medidos en la mesa</div></div>
+      <div class="dato"><div class="n ver">90 %</div><div class="l">de acierto garantizado, o no cobramos</div></div>
     </div>
-    <div class="cifra">USD 7.500<small>50 % al inicio · 50 % contra entrega</small></div>
   </div>
+  <div class="pie-lamina">use las flechas o el botón siguiente →</div>
+</section>
 
-  <div class="nota n-verde">
-    <span class="et">Dos compromisos que asumimos nosotros</span>
-    <p><strong>Garantía de resultado.</strong> Si la tasa de acierto medida sobre su muestra no supera el 90 %, el segundo pago no se factura y el informe completo queda en sus manos.</p>
-    <p><strong>Acreditación total.</strong> Si al término del diagnóstico deciden continuar con Gadamax en cualquiera de los tres modelos, los USD 7.500 se acreditan íntegros al programa: el diagnóstico les termina saliendo gratis.</p>
+<!-- 2 · EL DOLOR -->
+<section class="lamina clara" data-tema="claro">
+  <div class="cont">
+    <div class="eti rev">Hoy</div>
+    <h2 class="rev">Cada pedido se teclea a mano.<br><span class="tacha">Dos veces.</span></h2>
+    <p class="sub rev">Una en SAP. Otra en INSOFT. Con códigos que cada hospital escribe a su manera, precios que dependen del contrato, y pedidos que llegan hasta en fotografías escritas a mano.</p>
+    <div class="fila-datos rev">
+      <div class="dato"><div class="n" data-cuenta="1200">0</div><div class="l">pedidos cada mes</div></div>
+      <div class="dato"><div class="n"><span data-cuenta="30">0</span> min</div><div class="l">por pedido, en los dos sistemas</div></div>
+      <div class="dato"><div class="n" data-cuenta="10">0</div><div class="l">personas atrapadas digitando</div></div>
+      <div class="dato"><div class="n"><span data-cuenta="400">0</span> h</div><div class="l">de trabajo manual al mes</div></div>
+    </div>
   </div>
 </section>
 
-<section>
-  <h2>Supuestos y condiciones</h2>
-  <ul class="limpia">
-    <li>La escritura en SAP ECC se realiza mediante archivo de carga masiva importado por su equipo, según el mecanismo que se confirme con IT en el diagnóstico. La integración directa a SAP queda fuera del alcance mientras la política corporativa no la habilite.</li>
-    <li>La escritura en INSOFT se realiza por importación de archivos contra su ambiente de pruebas primero; los formatos exactos se confirman en el diagnóstico.</li>
-    <li>B. Braun facilita durante el diagnóstico: las muestras adicionales que decida sumar, una sesión con IT (2 horas son suficientes) y una persona de Administración de Ventas como contraparte funcional.</li>
-    <li>Todo el material se trata bajo el acuerdo de confidencialidad suscrito. Los datos personales presentes en los documentos se anonimizan en cualquier material de trabajo o demostración.</li>
-    <li>La operación diaria queda en manos del equipo de B. Braun, con sus propios usuarios y perfiles; Gadamax monitorea la plataforma, responde incidentes técnicos en horario hábil de Ecuador y Colombia y mantiene el sistema en evolución. Los niveles de servicio se formalizan en el diagnóstico y quedan incluidos en la mensualidad.</li>
-    <li>La plataforma puede operar como servicio de Gadamax o desplegarse en el tenant de Microsoft de B. Braun; la decisión se toma con el diseño de la fase 0 y no cambia la arquitectura.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>Siguiente paso</h2>
-  <p class="lede">Uno solo: agendar el arranque del diagnóstico.</p>
-  <p>Con la orden de inicio, en tres semanas tienen sobre la mesa la tasa de acierto medida con sus propios pedidos y el precio en firme del programa en los tres modelos — con nuestra garantía de resultado de por medio. La demostración del agente leyendo sus órdenes reales puede verse en la misma reunión de arranque.</p>
-  <div class="acciones">
-    <button type="button" onclick="window.print()">Guardar esta propuesta en PDF</button>
+<!-- 3 · EL COSTO -->
+<section class="lamina" data-tema="oscuro">
+  <div class="cont">
+    <div class="eti rev">Lo que cuesta seguir igual</div>
+    <div class="gigante rev">$<span data-cuenta="50000">0</span><span style="font-size:.35em;color:var(--niebla)">/año</span></div>
+    <p class="sub rev" style="max-width:60ch">Solo en horas de digitación: unas 400 al mes — el equivalente a tres personas a tiempo completo copiando datos de un papel a dos pantallas. Sin contar los errores, los reprocesos, ni lo que ese mismo equipo podría estar haciendo por sus clientes.</p>
+    <div class="tarjetas rev">
+      <div class="tj"><div class="ic">⌨</div><b>Doble digitación</b><p>El mismo pedido, tecleado dos veces, todos los días.</p></div>
+      <div class="tj"><div class="ic">⚠</div><b>Errores silenciosos</b><p>Un código mal cruzado o un precio de contrato mal aplicado cuesta más que el tiempo.</p></div>
+      <div class="tj"><div class="ic">⏱</div><b>Picos de fin de mes</b><p>Cuando más pedidos entran, menos tiempo hay para revisar cada uno.</p></div>
+    </div>
   </div>
 </section>
 
-</main>
-
-<footer>
-  <div class="wrap">
-    Gadamax LLC · 2735 Hassert Blvd, Ste 135 #874, Naperville, IL 60564, EE. UU. · mvg@gadamax.com<br>
-    Propuesta confidencial preparada para B. Braun · Válida por 30 días desde su envío · Página privada, no indexada.
+<!-- 4 · LA PROMESA (flujo animado) -->
+<section class="lamina clara" data-tema="claro">
+  <div class="cont">
+    <div class="eti rev">Mañana</div>
+    <h2 class="rev">El <span class="ver">95 %</span> entra solo.<br>Su equipo revisa, no digita.</h2>
+    <p class="sub rev">Así viaja un pedido real por la plataforma — de la casilla de correo a los dos sistemas, sin que nadie lo escriba:</p>
+    <div class="tubo rev">
+      <div class="pedidito">📄 OC 241829 · Hospital Pablo Tobón</div>
+      <div class="linea-t"></div>
+      <div class="etapas" id="etapas">
+        <div class="etapa"><div class="ic">📥</div><b>Llega</b><span>correo · excel · foto</span></div>
+        <div class="etapa"><div class="ic">🧠</div><b>La IA lee</b><span>incluso manuscritos</span></div>
+        <div class="etapa"><div class="ic">✓</div><b>Se valida</b><span>maestros · contratos · lote</span></div>
+        <div class="etapa"><div class="ic">👁</div><b>Se revisa</b><span>solo lo dudoso</span></div>
+        <div class="etapa"><div class="ic">⚡</div><b>Se carga</b><span>SAP + INSOFT</span></div>
+      </div>
+    </div>
+    <p class="sub rev" style="font-size:15px;margin-top:26px">Lo que no supera el umbral no se inventa: espera en una cola con la sugerencia lista, y su analista lo resuelve en un clic. Cada decisión queda registrada — quién, qué, cuándo — para auditoría.</p>
   </div>
-</footer>
+</section>
 
+<!-- 5 · YA LO PROBAMOS CON SUS PEDIDOS -->
+<section class="lamina" data-tema="oscuro">
+  <div class="cont">
+    <div class="eti rev">Esto no es una promesa de folleto</div>
+    <h2 class="rev">Ya leyó <span class="nar">sus</span> pedidos reales.</h2>
+    <p class="sub rev">Trabajamos sobre la muestra que su equipo nos envió bajo confidencialidad — y por eso sabemos exactamente contra qué nos medimos:</p>
+    <div class="fila-datos rev">
+      <div class="dato"><div class="n" data-cuenta="25">0</div><div class="l">casos reales de Ecuador, con sus adjuntos</div></div>
+      <div class="dato"><div class="n" data-cuenta="6">0</div><div class="l">tipologías de Colombia: estándar, comodato, estatal, cantidades, bonificación</div></div>
+      <div class="dato"><div class="n" data-cuenta="4">0</div><div class="l">canales distintos: correo, Excel, WhatsApp y fotos del CRM</div></div>
+    </div>
+    <div class="tarjetas rev">
+      <div class="tj v"><div class="ic">🏥</div><b>Códigos de cada hospital</b><p>AP10125 del hospital = 8270066SP suyo. La plataforma cruza ambos, con registro sanitario por línea.</p></div>
+      <div class="tj v"><div class="ic">📜</div><b>Reglas impresas en la orden</b><p>«Máximo 2 lotes, vencimiento no menor a 15 meses.» Las lee y las respeta.</p></div>
+      <div class="tj v"><div class="ic">✍</div><b>Tarjetas manuscritas</b><p>Las tarjetas de cirugía del CRM se leen por visión artificial, con producto y lote.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · QUÉ RECIBEN -->
+<section class="lamina clara" data-tema="claro">
+  <div class="cont">
+    <div class="eti rev">Lo que su equipo recibe</div>
+    <h2 class="rev">Un portal que es suyo.<br>Una plataforma que no envejece.</h2>
+    <div class="tarjetas rev">
+      <div class="tj"><div class="ic">🖥</div><b>Portal de operación</b><p>Cola de excepciones, tableros y consulta de todo lo cargado. Su equipo lo opera solo, todos los días.</p></div>
+      <div class="tj"><div class="ic">🔐</div><b>Usuarios y perfiles</b><p>Analista, supervisor, consulta y administrador — entrando con su propia cuenta corporativa de Microsoft.</p></div>
+      <div class="tj"><div class="ic">🧾</div><b>Auditoría total</b><p>Bitácora de cada decisión y documentos originales conservados. ISO 9001, BPM y autoridad sanitaria, cubiertos.</p></div>
+      <div class="tj"><div class="ic">🔌</div><b>Salida a sus sistemas</b><p>Archivos de carga validados para INSOFT y SAP ECC desde el primer día.</p></div>
+      <div class="tj v"><div class="ic">🛡</div><b>A prueba de S/4HANA</b><p>Cuando migren —Ecuador y Colombia—, se cambia solo el conector. La plataforma, las reglas y la historia quedan intactas. Como ustedes dijeron: no construir dos veces.</p></div>
+      <div class="tj"><div class="ic">🤝</div><b>Nosotros, debajo</b><p>Monitoreo, soporte en horario hábil y evolución continua incluidos. Si un cliente inventa un formato nuevo, lo absorbemos nosotros.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · LA MATEMÁTICA -->
+<section class="lamina clara" data-tema="claro">
+  <div class="cont">
+    <div class="eti rev">La matemática</div>
+    <h2 class="rev">Hoy gastan <span style="color:var(--rojo)">$4.200 al mes</span> en digitar.<br>El programa costará <span class="ver">menos que eso</span>.</h2>
+    <div class="barras rev">
+      <div class="barra">
+        <div class="rot">Su costo actual<span>400 h/mes de su equipo</span></div>
+        <div class="pista"><div class="relleno roja" style="--w:92%">≈ $4.200 / mes</div></div>
+      </div>
+      <div class="barra">
+        <div class="rot">Plataformas enterprise<span>Esker · Conexiom, sin implementación</span></div>
+        <div class="pista"><div class="relleno roja" style="--w:88%;opacity:.65">$4.200+ / mes</div></div>
+      </div>
+      <div class="barra">
+        <div class="rot">Nuestro compromiso<span>cifra en firme al fin del diagnóstico</span></div>
+        <div class="pista"><div class="relleno verde" style="--w:46%">por debajo de su costo actual</div><span class="fuera" style="--w:46%">→ se paga solo desde el año 1</span></div>
+      </div>
+    </div>
+    <p class="sub rev" style="font-size:15px;margin-top:30px">Y el tiempo: de ~400 horas de digitación a una fracción dedicada solo a revisar excepciones. Su gente vuelve a atender clientes. Las cifras exactas de los tres modelos —proyecto, suscripción o pago por pedido— se entregan en firme al terminar el diagnóstico, medidas sobre sus datos.</p>
+  </div>
+</section>
+
+<!-- 8 · EL PLAN -->
+<section class="lamina" data-tema="oscuro">
+  <div class="cont">
+    <div class="eti rev">El plan</div>
+    <h2 class="rev">De la firma al pedido cargándose solo.</h2>
+    <div class="tiempo rev">
+      <div class="hito"><span class="cu">Semanas 1–3</span><b>Diagnóstico</b><p>El agente corre contra toda su muestra. Sesión con su IT. Tasa de acierto medida y precios en firme de los tres modelos.</p></div>
+      <div class="hito"><span class="cu">Fase 1</span><b>Operación asistida</b><p>Los 4 canales conectados, portal con sus usuarios, archivos validados para INSOFT y SAP. Su equipo deja de digitar.</p></div>
+      <div class="hito"><span class="cu">Fase 2</span><b>Entrega automática</b><p>Importación automatizada a los dos sistemas y validación de cupo activada.</p></div>
+      <div class="hito v"><span class="cu">Cuando migren</span><b>S/4HANA</b><p>Se cambia el conector. Nada más. La inversión sobrevive al cambio de ERP.</p></div>
+    </div>
+    <p class="sub rev" style="margin-top:34px">Plazo de ustedes: este trimestre. Con la orden de inicio esta semana, el diagnóstico entrega resultados antes de que termine septiembre.</p>
+  </div>
+</section>
+
+<!-- 9 · LA INVERSIÓN -->
+<section class="lamina clara" data-tema="claro">
+  <div class="cont">
+    <div class="eti rev">La inversión de hoy</div>
+    <h2 class="rev">Una sola decisión, sin riesgo.</h2>
+    <div class="caja-precio rev">
+      <div class="iz">
+        <b>Diagnóstico · 3 semanas</b>
+        <span>Alcance cerrado. Tasa de acierto medida con sus pedidos, mecanismos confirmados con su IT, y los precios en firme de los tres modelos.</span>
+      </div>
+      <div class="cif">USD 7.500<small>50 % al inicio · 50 % contra entrega</small></div>
+    </div>
+    <div class="sellos rev">
+      <div class="sello2"><b>Garantía de resultado</b><p>Si la tasa de acierto medida no supera el 90 %, el segundo pago no se factura y el informe completo queda en sus manos.</p></div>
+      <div class="sello2"><b>Se acredita completo</b><p>Si continúan con cualquiera de los tres modelos, los USD 7.500 se descuentan íntegros del programa. El diagnóstico les sale gratis.</p></div>
+    </div>
+    <p class="sub rev" style="font-size:14.5px;margin-top:22px">Sin compromiso de continuar. Lo peor que puede pasar: se quedan con la medición más completa que jamás se haya hecho de su proceso de pedidos.</p>
+  </div>
+</section>
+
+<!-- 10 · CIERRE -->
+<section class="lamina" data-tema="oscuro">
+  <div class="aurora"></div><div class="reja"></div>
+  <div class="cont">
+    <div class="eti rev">El siguiente paso</div>
+    <h2 class="rev">Arranquemos el diagnóstico.<br><span class="nar">En 3 semanas hablamos con números.</span></h2>
+    <p class="sub rev">En la reunión de arranque, el agente lee una de sus órdenes reales en vivo. De ahí en adelante, todo lo que les digamos estará medido.</p>
+    <div class="cta-fila rev">
+      <a class="cta p" href="mailto:mvg@gadamax.com?subject=Diagn%C3%B3stico%20%E2%80%94%20orden%20de%20inicio">Dar la orden de inicio</a>
+      <a class="cta s" href="/pedido-demo/" target="_blank" rel="noopener">Ver el agente en acción</a>
+      <a class="cta s" href="/propuesta/documento/" target="_blank" rel="noopener">Documento formal · PDF</a>
+    </div>
+    <p class="sub rev" style="font-size:13px;margin-top:36px;color:var(--niebla)">Gadamax LLC · Naperville, Illinois, EE. UU. · mvg@gadamax.com · Propuesta confidencial para B. Braun, válida 30 días.</p>
+  </div>
+</section>
+
+</div>
+
+<div id="nav">
+  <div id="puntos"></div>
+  <span id="num">1 / 10</span>
+  <button class="btn-nav" id="atras" type="button">← Anterior</button>
+  <button class="btn-nav sig" id="sig" type="button">Siguiente →</button>
+</div>
+
+<script>
+const laminas = [...document.querySelectorAll(".lamina")];
+const puntos = document.getElementById("puntos");
+const num = document.getElementById("num");
+let i = 0, bloqueo = false;
+
+laminas.forEach((_, k) => {
+  const p = document.createElement("i");
+  p.onclick = () => ir(k);
+  puntos.appendChild(p);
+});
+
+function ir(k) {
+  if (k < 0 || k >= laminas.length || bloqueo) return;
+  bloqueo = true; setTimeout(() => bloqueo = false, 550);
+  laminas[i].classList.remove("activa");
+  i = k;
+  const lam = laminas[i];
+  lam.classList.add("activa");
+  document.body.classList.toggle("tema-claro", lam.dataset.tema === "claro");
+  [...puntos.children].forEach((p, j) => p.classList.toggle("aqui", j === i));
+  num.textContent = (i + 1) + " / " + laminas.length;
+  document.getElementById("atras").style.visibility = i === 0 ? "hidden" : "";
+  document.getElementById("sig").textContent = i === laminas.length - 1 ? "Volver al inicio ↺" : "Siguiente →";
+  try { history.replaceState(null, "", "#" + (i + 1)); } catch {}
+  animarCuentas(lam);
+  animarEtapas(lam);
+}
+
+document.getElementById("sig").onclick = () => ir(i === laminas.length - 1 ? 0 : i + 1);
+document.getElementById("atras").onclick = () => ir(i - 1);
+addEventListener("keydown", (e) => {
+  if (["ArrowRight", "PageDown", " ", "Enter"].includes(e.key)) { e.preventDefault(); ir(i + 1); }
+  if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); ir(i - 1); }
+  if (e.key === "Home") ir(0);
+});
+/* deslizar en pantallas táctiles */
+let ty = null, tx = null;
+addEventListener("touchstart", (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+addEventListener("touchend", (e) => {
+  if (tx === null) return;
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.max(Math.abs(dx), Math.abs(dy)) > 60) (Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? ir(i+1) : ir(i-1)) : (dy < 0 ? ir(i+1) : ir(i-1)));
+  tx = ty = null;
+}, { passive: true });
+/* rueda del ratón, con freno */
+let ultimaRueda = 0;
+addEventListener("wheel", (e) => {
+  const ahora = Date.now();
+  if (ahora - ultimaRueda < 900 || Math.abs(e.deltaY) < 24) return;
+  ultimaRueda = ahora;
+  ir(e.deltaY > 0 ? i + 1 : i - 1);
+}, { passive: true });
+
+/* contadores */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function animarCuentas(lam) {
+  lam.querySelectorAll("[data-cuenta]").forEach((el) => {
+    const fin = +el.dataset.cuenta;
+    if (reduce) { el.textContent = fin.toLocaleString("es-EC"); return; }
+    const t0 = performance.now(), dur = 1400;
+    function paso(t) {
+      const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(fin * e).toLocaleString("es-EC");
+      if (p < 1 && el.closest(".lamina").classList.contains("activa")) requestAnimationFrame(paso);
+    }
+    requestAnimationFrame(paso);
+  });
+}
+
+/* etapas del flujo que se encienden al paso del pedido */
+let relojEtapas = null;
+function animarEtapas(lam) {
+  clearInterval(relojEtapas);
+  const ets = lam.querySelectorAll(".etapa");
+  if (!ets.length || reduce) { ets.forEach((e) => e.classList.add("viva")); return; }
+  const ciclo = 7000, marcas = [0.18, 0.30, 0.48, 0.66, 0.84];
+  const inicio = Date.now() + 600;
+  relojEtapas = setInterval(() => {
+    if (!lam.classList.contains("activa")) { clearInterval(relojEtapas); return; }
+    const p = ((Date.now() - inicio) % ciclo) / ciclo;
+    ets.forEach((e, k) => e.classList.toggle("viva", p >= marcas[k] - 0.04 && p < (marcas[k + 1] ?? 0.95)));
+  }, 120);
+}
+
+const h = parseInt(location.hash.slice(1), 10);
+ir(Number.isFinite(h) && h >= 1 && h <= laminas.length ? h - 1 : 0);
+</script>
 </body>
 </html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Propuesta · Automatización de entrada de pedidos · Gadamax</title>
+<meta name="description" content="Propuesta de servicios profesionales preparada por Gadamax.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1321; --paper:#EDF0F6; --white:#FFFFFF; --rule:#C9D2E1; --rule-soft:#DEE4EE;
+  --muted:#5C6880; --faint:#8C99B2; --panel:#F7F9FC;
+  --cobalt:#1F3BE0; --cobalt-ink:#152BA8; --cobalt-soft:#E3E8FF;
+  --gain:#0E8F76; --gain-soft:#DFF2ED;
+  --amber:#B07C10; --amber-soft:#FBF0D8;
+  --flag:#B23A2E; --flag-soft:#F7E4E1;
+  --braun:#00A97A;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Source Serif 4",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --radius:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:0 22px}
+
+/* ── portada ── */
+header{background:var(--ink);color:#fff;padding:0 0 46px}
+.marcas{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #212B40;flex-wrap:wrap}
+.marca-g{display:flex;align-items:center;gap:9px;text-decoration:none;color:#fff}
+.marca-g img{width:26px;height:26px;display:block}
+.marca-g b{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.marcas .para{font-size:12px;color:#6E7B96;font-family:var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.marcas .cliente img{height:22px;width:auto;display:block}
+.ey{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#7C89A5;margin:40px 0 14px}
+header h1{font-size:clamp(28px,5vw,42px);font-weight:600;letter-spacing:-.02em;line-height:1.1;max-width:20ch;text-wrap:balance}
+header .sub{color:#A9B4CA;font-size:17.5px;margin-top:16px;max-width:52ch;font-family:var(--f-serif);line-height:1.55}
+header .meta{display:flex;gap:22px;margin-top:26px;flex-wrap:wrap;font-family:var(--f-mono);font-size:11.5px;color:#6E7B96;letter-spacing:.05em;text-transform:uppercase}
+header .meta span{display:flex;align-items:center;gap:7px}
+header .meta i{width:5px;height:5px;border-radius:50%;background:var(--braun);display:block;font-style:normal}
+
+main{padding:10px 0 80px}
+section{padding-top:54px}
+h2{font-size:13px;font-family:var(--f-mono);font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt);margin:0 0 8px}
+h2+.lede{font-family:var(--f-serif);font-size:20.5px;line-height:1.45;margin:0 0 22px;max-width:56ch;text-wrap:balance}
+h3{font-size:17px;font-weight:600;margin:26px 0 8px;letter-spacing:-.01em}
+p{margin:0 0 14px;max-width:70ch}
+strong{font-weight:600}
+.serif{font-family:var(--f-serif)}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:8px 0}
+.kpis>div{background:var(--white);padding:15px 16px}
+.kpis .k{font-family:var(--f-mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.kpis .v{font-size:22px;font-weight:600;line-height:1.15;font-variant-numeric:tabular-nums}
+.kpis .v small{font-size:12.5px;font-weight:400;color:var(--muted)}
+.kpis .s{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+
+.tarjeta{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:20px 22px;margin:14px 0}
+.nota{border-left:3px solid;padding:14px 16px;margin:16px 0;font-size:14.5px;border-radius:0 2px 2px 0}
+.nota .et{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.nota p{margin:0 0 8px;max-width:none}
+.nota p:last-child{margin:0}
+.n-verde{background:var(--gain-soft);border-color:var(--gain)} .n-verde .et{color:var(--gain)}
+.n-ambar{background:var(--amber-soft);border-color:var(--amber)} .n-ambar .et{color:var(--amber)}
+.n-azul{background:var(--cobalt-soft);border-color:var(--cobalt)} .n-azul .et{color:var(--cobalt-ink)}
+
+ul.limpia{list-style:none;margin:0 0 14px;padding:0}
+ul.limpia li{position:relative;padding-left:20px;margin-bottom:9px;max-width:68ch}
+ul.limpia li::before{content:"";position:absolute;left:2px;top:.6em;width:6px;height:6px;background:var(--cobalt);border-radius:50%}
+
+.tcaja{overflow-x:auto;border:1px solid var(--rule);background:var(--white);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:560px}
+th{text-align:left;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:11px 14px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+.pill{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:2px;font-weight:500;white-space:nowrap}
+.p-v{background:var(--gain-soft);color:var(--gain)}
+.p-a{background:var(--amber-soft);color:var(--amber)}
+.p-c{background:var(--cobalt-soft);color:var(--cobalt-ink)}
+
+/* flujo de la solución */
+.flujo{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+.paso{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:14px;position:relative}
+.paso .n{font-family:var(--f-mono);font-size:10px;color:var(--cobalt);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.paso b{display:block;font-size:14px;font-weight:600;margin-bottom:4px;letter-spacing:-.01em}
+.paso p{font-size:12.5px;color:var(--muted);margin:0;line-height:1.45}
+
+/* precio */
+.precio{background:var(--ink);color:#fff;border-radius:var(--radius);padding:26px;margin:18px 0;display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.precio .tt{flex:1;min-width:240px}
+.precio .tt b{font-size:17px;font-weight:600;display:block}
+.precio .tt span{font-size:13.5px;color:#A9B4CA;font-family:var(--f-serif)}
+.precio .cifra{font-family:var(--f-mono);font-size:30px;font-weight:500;white-space:nowrap}
+.precio .cifra small{font-size:13px;color:#7C89A5;display:block;text-align:right;margin-top:2px;font-family:var(--f-body)}
+
+footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;color:var(--faint)}
+.acciones{margin:26px 0 0}
+.acciones button{font-family:var(--f-body);font-size:14px;padding:11px 20px;background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);cursor:pointer;color:var(--ink)}
+.acciones button:hover{background:var(--panel)}
+.marca-print{display:none}
+
+@media print{
+  header,.acciones,footer{display:none!important}
+  body{background:#fff;font-size:13px}
+  .marca-print{display:flex;align-items:center;gap:14px;padding-bottom:12px;margin-bottom:18px;border-bottom:2px solid #0D1321}
+  .marca-print .g{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}
+  .marca-print .p{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#5C6880}
+  section{padding-top:26px;break-inside:avoid-page}
+  .precio{background:#fff;color:#0D1321;border:2px solid #0D1321}
+  .precio .tt span,.precio .cifra small{color:#5C6880}
+  .wrap{max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="marcas">
+      <a class="marca-g" href="https://www.gadamax.com" target="_blank" rel="noopener">
+        <img src="/assets/images/brand-logo-gadamax.png" alt="" width="26" height="26"><b>Gadamax</b>
+      </a>
+      <span class="para">propuesta para</span>
+      <span class="cliente"><img src="/assets/images/bbraun-logo-full.svg" alt="B. Braun" height="22"></span>
+    </div>
+    <p class="ey">Propuesta de servicios profesionales · Confidencial</p>
+    <h1>Automatización de la entrada de pedidos</h1>
+    <p class="sub">Un agente que lee los pedidos como llegan —correo, Excel, WhatsApp, fotografía—, los valida contra las reglas del negocio y los deja listos en los sistemas. Construido para sobrevivir a la migración a S/4HANA.</p>
+    <div class="meta">
+      <span><i></i>Ecuador · Colombia</span>
+      <span><i></i>Septiembre 2026</span>
+      <span><i></i>Vigencia 30 días</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="marca-print">
+  <span class="g"><img src="/assets/images/brand-logo-gadamax.png" alt="" width="22" height="22">Gadamax</span>
+  <span class="p">propuesta para</span>
+  <img src="/assets/images/bbraun-logo-full.svg" alt="B. Braun" height="18">
+</div>
+
+<section>
+  <h2>Punto de partida</h2>
+  <p class="lede">Esta propuesta no parte de supuestos: parte de sus respuestas y de sus pedidos.</p>
+  <p>Antes de poner una sola cifra, pedimos dos cosas: un levantamiento técnico —que su equipo respondió completo, las 47 preguntas— y una muestra real de pedidos, que recibimos bajo acuerdo de confidencialidad: <strong>25 casos de Ecuador y las 6 tipologías de Colombia</strong> (estándar, comodato, contrato estatal, contrato por cantidades, bonificación y sus combinaciones). Lo que sigue está construido sobre ese material.</p>
+
+  <div class="kpis">
+    <div><div class="k">Pedidos / mes</div><div class="v">1.200</div><div class="s">~5 líneas por pedido</div></div>
+    <div><div class="k">Digitación actual</div><div class="v">15–30 <small>min</small></div><div class="s">por pedido, en dos sistemas</div></div>
+    <div><div class="k">Personas involucradas</div><div class="v">6–10</div><div class="s">parte de su jornada</div></div>
+    <div><div class="k">Esfuerzo mensual</div><div class="v">≈ 400 <small>horas</small></div><div class="s">equivalente a 2,5–3 tiempos completos</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Lo que encontramos en sus pedidos</h2>
+  <p class="lede">La muestra confirma que el problema es real, y también que es más rico de lo que parece desde afuera.</p>
+
+  <ul class="limpia">
+    <li><strong>Cada cliente pide en su propio idioma.</strong> Hospitales que usan sus códigos internos de artículo junto a la referencia B. Braun y el registro sanitario por línea; distribuidores con formatos de orden propios; correos en lenguaje libre donde la dirección de entrega llega como un enlace de Google Maps.</li>
+    <li><strong>Las exigencias regulatorias vienen impresas en la propia orden:</strong> máximo de lotes por producto, vida útil mínima de meses, certificado de análisis por lote. El agente tiene que leerlas y respetarlas, no solo copiar cantidades.</li>
+    <li><strong>El precio no sale de una lista:</strong> condiciones negociadas, descuentos escalonados por pronto pago, IVA distinto por línea, contratos y licitaciones con precio fijado. La validación correcta es contra la condición del cliente, no contra un precio único.</li>
+    <li><strong>Una parte del volumen llega como imagen:</strong> fotografías de WhatsApp, capturas del CRM interno y tarjetas de control de cirugía escritas a mano, con producto y lote. Se procesan con lectura por visión, y contienen datos de pacientes que tratamos bajo el acuerdo de confidencialidad, con anonimización en todo material de trabajo.</li>
+    <li><strong>Los documentos son heterogéneos:</strong> PDFs con texto, PDFs escaneados sin texto, dos plantillas de Excel que no se parecen en nada entre sí, correos reenviados. El sistema debe recibirlos todos por igual.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>La solución</h2>
+  <p class="lede">Una plataforma con cinco etapas, donde la inteligencia artificial hace exactamente una cosa: leer. Todo lo demás es código verificable.</p>
+
+  <div class="flujo">
+    <div class="paso"><div class="n">1 · Recepción</div><b>Todos los canales</b><p>Casilla de correo, adjuntos Excel y PDF, WhatsApp, y las fotografías del CRM — incluidas las tarjetas manuscritas, por visión.</p></div>
+    <div class="paso"><div class="n">2 · Lectura</div><b>Extracción con IA</b><p>El modelo convierte el documento en campos estructurados. No inventa códigos ni decide nada: solo lee, incluso escaneados y manuscritos.</p></div>
+    <div class="paso"><div class="n">3 · Validación</div><b>Motor de reglas</b><p>Cruce contra maestros y equivalencias de códigos, condiciones y contratos del cliente, lote y vida útil, cupo. Determinista y auditable.</p></div>
+    <div class="paso"><div class="n">4 · Revisión</div><b>Cola de excepciones</b><p>Lo que no supera el umbral espera al analista de Administración de Ventas, con la sugerencia lista para aprobar en menos de una hora.</p></div>
+    <div class="paso"><div class="n">5 · Entrega</div><b>Adaptadores de salida</b><p>Archivos de carga validados para INSOFT y para SAP ECC hoy; el conector de S/4HANA cuando llegue la migración.</p></div>
+  </div>
+
+  <div class="nota n-verde">
+    <span class="et">Por qué adaptadores, y no integración profunda</span>
+    <p>Ustedes mismos nos lo dijeron: INSOFT no será para siempre, y tanto Ecuador como Colombia migran a S/4HANA en uno o dos años. Todo lo que se construya pegado a un ERP se botará dos veces. En esta arquitectura, la plataforma —recepción, lectura, reglas, excepciones, auditoría— es lo estable; cuando cambie el ERP, se cambia únicamente el conector de salida. Es la forma concreta de «no construir dos veces».</p>
+  </div>
+
+  <p>Cada decisión del sistema queda registrada: qué leyó, con qué lo emparejó, qué regla aplicó, quién aprobó qué y cuándo. Esa bitácora responde a lo que su operación exige —auditoría corporativa, buenas prácticas, autoridad sanitaria, ISO 9001— y conserva los documentos originales.</p>
+</section>
+
+<section>
+  <h2>Plan de trabajo</h2>
+  <p class="lede">Cuatro fases. La primera tiene alcance y precio en firme; las siguientes se cotizan con lo que la primera mide.</p>
+
+  <div class="tcaja">
+  <table>
+    <thead><tr><th>Fase</th><th>Qué se hace</th><th>Qué entrega</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>0 · Diagnóstico</strong><br><span class="pill p-v">3 semanas · en firme</span></td>
+        <td>El agente se calibra y corre contra su muestra real completa, con maestros de trabajo construidos desde sus propias órdenes. Sesión técnica con IT para confirmar el mecanismo y la frecuencia de carga a SAP ECC y el formato de importación de INSOFT.</td>
+        <td>Tasa de acierto <em>medida</em> por canal y tipología; arquitectura y plan definitivo; <strong>precio en firme del programa en los tres modelos</strong>.</td>
+      </tr>
+      <tr>
+        <td><strong>1 · Agente en operación asistida</strong><br><span class="pill p-c">se cotiza en fase 0</span></td>
+        <td>Los cuatro canales conectados; validación con condiciones por cliente, contratos, lote y vida útil; cola de excepciones operando con su analista. Acceso con usuarios y perfiles —analista, supervisor, consulta, administrador— autenticados con su propio directorio corporativo de Microsoft, con registro de quién aprobó qué.</td>
+        <td>Archivos de carga validados para INSOFT y SAP; el equipo deja de digitar y pasa a revisar.</td>
+      </tr>
+      <tr>
+        <td><strong>2 · Entrega automática</strong><br><span class="pill p-c">se cotiza en fase 0</span></td>
+        <td>Importación automatizada a INSOFT contra su ambiente de pruebas primero; carga a SAP según lo acordado con IT; validación de cupo activada con regla acordada.</td>
+        <td>Flujo de punta a punta sin intervención manual para los pedidos limpios.</td>
+      </tr>
+      <tr>
+        <td><strong>3 · Continuidad S/4HANA</strong><br><span class="pill p-a">cuando migren</span></td>
+        <td>Sustitución de los adaptadores de archivo por el conector estándar de S/4HANA, sin tocar plataforma, reglas ni historia.</td>
+        <td>La inversión sobrevive al cambio de ERP — en los dos países.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>Modelos comerciales</h2>
+  <p class="lede">Los tres que nos pidieron comparar. Las cifras de cada uno salen del diagnóstico — cualquier número que pusiéramos hoy sería inventado, y preferimos no empezar así.</p>
+
+  <div class="tcaja">
+  <table>
+    <thead><tr><th>Modelo</th><th>Estructura</th><th>Para quién tiene sentido</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A · Proyecto</strong></td><td>Pago único de desarrollo más un mantenimiento mensual.</td><td>Si prefieren activo propio e inversión de capital.</td></tr>
+      <tr><td><strong>B · Suscripción</strong></td><td>Sin inversión inicial; mensualidad todo incluido: plataforma, modelo de IA, monitoreo, soporte en horario hábil con niveles de servicio acordados, y evolución continua — incluida la adaptación a S/4HANA cuando llegue.</td><td>El que mejor absorbe la migración de ERP: los dos cambios de conector quedan dentro de la mensualidad.</td></tr>
+      <tr><td><strong>C · Por pedido</strong></td><td>Base menor de implementación más un variable por pedido procesado.</td><td>Si quieren que el costo siga al uso; con 1.200 pedidos al mes es fácil de proyectar y de auditar.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>El contexto de mercado</h3>
+  <p>Para que evalúen cualquier número nuestro con referencias sobre la mesa:</p>
+  <div class="tcaja">
+  <table>
+    <thead><tr><th>Referencia</th><th>Orden de magnitud</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td>Plataformas enterprise de automatización de pedidos (Esker, Conexiom)</td><td class="serif">USD 50.000+ <span style="color:var(--muted)">/ año</span></td><td>Más implementación, que suele costar otro tanto. No procesan manuscritos ni canales como su CRM.</td></tr>
+      <tr><td>Soluciones intermedias de captura de documentos (Rossum y similares)</td><td class="serif">desde USD 10.000 <span style="color:var(--muted)">/ año</span></td><td>Capturan el documento; las reglas de negocio y la integración van aparte.</td></tr>
+      <tr><td><strong>Su costo operativo actual de digitación</strong></td><td class="serif">≈ USD 50.000 <span style="color:var(--muted)">/ año</span></td><td>~400 horas al mes de su equipo, con el costo de error incluido.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="serif" style="font-size:14.5px;color:var(--muted)">Nuestro compromiso al cotizar tras el diagnóstico: los tres modelos quedarán por debajo de su costo operativo actual — el proyecto debe pagarse solo desde el primer año.</p>
+</section>
+
+<section>
+  <h2>El diagnóstico, en firme</h2>
+  <p class="lede">Lo único que cotizamos hoy, porque es lo único cuyo alcance ya se conoce por completo.</p>
+
+  <p><strong>Semana 1 —</strong> Calibración con su muestra: los 25 casos de Ecuador y las órdenes de Colombia, más las que quieran sumar. Construcción de los maestros de trabajo y de las equivalencias de códigos a partir de sus propias órdenes.</p>
+  <p><strong>Semana 2 —</strong> Medición: el agente corre contra todo el corpus y se mide la tasa de acierto por canal, por tipología y por tipo de línea. Sesión técnica con su equipo de IT: mecanismo y frecuencia de carga a SAP ECC, formato de importación de INSOFT, accesos al ambiente de pruebas.</p>
+  <p><strong>Semana 3 —</strong> Diseño y número: arquitectura definitiva, plan de implementación por fases, y el precio en firme del programa completo en los tres modelos, calculado sobre lo medido — no sobre estimaciones.</p>
+
+  <div class="precio">
+    <div class="tt">
+      <b>Diagnóstico · 3 semanas</b>
+      <span>Alcance cerrado, entregables definidos, sin compromiso de continuar.</span>
+    </div>
+    <div class="cifra">USD 7.500<small>50 % al inicio · 50 % contra entrega</small></div>
+  </div>
+
+  <div class="nota n-verde">
+    <span class="et">Dos compromisos que asumimos nosotros</span>
+    <p><strong>Garantía de resultado.</strong> Si la tasa de acierto medida sobre su muestra no supera el 90 %, el segundo pago no se factura y el informe completo queda en sus manos.</p>
+    <p><strong>Acreditación total.</strong> Si al término del diagnóstico deciden continuar con Gadamax en cualquiera de los tres modelos, los USD 7.500 se acreditan íntegros al programa: el diagnóstico les termina saliendo gratis.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Supuestos y condiciones</h2>
+  <ul class="limpia">
+    <li>La escritura en SAP ECC se realiza mediante archivo de carga masiva importado por su equipo, según el mecanismo que se confirme con IT en el diagnóstico. La integración directa a SAP queda fuera del alcance mientras la política corporativa no la habilite.</li>
+    <li>La escritura en INSOFT se realiza por importación de archivos contra su ambiente de pruebas primero; los formatos exactos se confirman en el diagnóstico.</li>
+    <li>B. Braun facilita durante el diagnóstico: las muestras adicionales que decida sumar, una sesión con IT (2 horas son suficientes) y una persona de Administración de Ventas como contraparte funcional.</li>
+    <li>Todo el material se trata bajo el acuerdo de confidencialidad suscrito. Los datos personales presentes en los documentos se anonimizan en cualquier material de trabajo o demostración.</li>
+    <li>La operación diaria queda en manos del equipo de B. Braun, con sus propios usuarios y perfiles; Gadamax monitorea la plataforma, responde incidentes técnicos en horario hábil de Ecuador y Colombia y mantiene el sistema en evolución. Los niveles de servicio se formalizan en el diagnóstico y quedan incluidos en la mensualidad.</li>
+    <li>La plataforma puede operar como servicio de Gadamax o desplegarse en el tenant de Microsoft de B. Braun; la decisión se toma con el diseño de la fase 0 y no cambia la arquitectura.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Siguiente paso</h2>
+  <p class="lede">Uno solo: agendar el arranque del diagnóstico.</p>
+  <p>Con la orden de inicio, en tres semanas tienen sobre la mesa la tasa de acierto medida con sus propios pedidos y el precio en firme del programa en los tres modelos — con nuestra garantía de resultado de por medio. La demostración del agente leyendo sus órdenes reales puede verse en la misma reunión de arranque.</p>
+  <div class="acciones">
+    <button type="button" onclick="window.print()">Guardar esta propuesta en PDF</button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Gadamax LLC · 2735 Hassert Blvd, Ste 135 #874, Naperville, IL 60564, EE. UU. · mvg@gadamax.com<br>
+    Propuesta confidencial preparada para B. Braun · Válida por 30 días desde su envío · Página privada, no indexada.
+  </div>
+</footer>
+
+</body>
+</html>
