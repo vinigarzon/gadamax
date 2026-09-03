@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Contrato de Host · Gadamax</title>
+<meta name="description" content="Contrato de servicios independientes con firma electrónica.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1321; --paper:#EDF0F6; --white:#FFFFFF; --rule:#C9D2E1; --rule-soft:#DEE4EE;
+  --muted:#5C6880; --faint:#8C99B2; --panel:#F7F9FC;
+  --cobalt:#1F3BE0; --cobalt-ink:#152BA8; --cobalt-soft:#E3E8FF;
+  --gain:#0E8F76; --gain-soft:#DFF2ED;
+  --flag:#B23A2E; --flag-soft:#F7E4E1;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Source Serif 4",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --f-firma:"Caveat","Segoe Script",cursive;
+  --radius:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+header{background:var(--ink);color:#fff;padding:0 0 30px}
+.marcas{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #212B40}
+.marca-g{display:flex;align-items:center;gap:9px;text-decoration:none;color:#fff}
+.marca-g img{width:26px;height:26px;display:block}
+.marca-g b{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.marcas .para{font-size:12px;color:#6E7B96;font-family:var(--f-mono);letter-spacing:.08em;text-transform:uppercase;margin-left:auto}
+header h1{font-size:clamp(22px,4vw,30px);font-weight:600;letter-spacing:-.02em;line-height:1.15;margin-top:28px;text-wrap:balance}
+header .sub{color:#A9B4CA;font-size:15.5px;margin-top:10px;max-width:58ch;font-family:var(--f-serif)}
+header .meta{font-family:var(--f-mono);font-size:11.5px;color:#6E7B96;letter-spacing:.05em;text-transform:uppercase;margin-top:16px}
+
+main{padding:26px 0 70px}
+.estado-caja{padding:13px 16px;border-left:3px solid;margin-bottom:18px;font-size:14.5px;border-radius:0 2px 2px 0}
+.e-ok{background:var(--gain-soft);border-color:var(--gain);color:#0A5A4A}
+.e-err{background:var(--flag-soft);border-color:var(--flag);color:#8C2D24}
+
+.resumen{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:20px 22px;margin-bottom:18px}
+.resumen h3{font-size:12px;font-family:var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.resumen ul{list-style:none;display:grid;gap:6px;font-size:14.5px}
+.resumen li{display:flex;gap:10px;align-items:baseline}
+.resumen li::before{content:"—";color:var(--faint);flex:0 0 auto}
+.resumen .nota{font-size:12.5px;color:var(--muted);margin-top:12px;font-family:var(--f-serif);font-style:italic}
+
+.doc{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:clamp(22px,5vw,44px)}
+.doc h2{font-family:var(--f-serif);font-size:22px;font-weight:600;letter-spacing:-.01em;text-align:center;margin-bottom:4px;text-wrap:balance}
+.doc h2 .st{display:block;font-size:17px;font-weight:400;font-style:italic;margin-top:4px}
+.doc .vv{font-family:var(--f-mono);font-size:11px;color:var(--faint);text-align:center;letter-spacing:.06em;margin-bottom:26px}
+.doc p{font-family:var(--f-serif);font-size:15.5px;line-height:1.65;margin-bottom:14px;text-align:justify;hyphens:auto}
+.doc h3{font-size:14px;font-weight:600;margin:20px 0 6px;letter-spacing:-.005em}
+.huella{font-family:var(--f-mono);font-size:10.5px;color:var(--faint);word-break:break-all;
+  border-top:1px solid var(--rule-soft);margin-top:24px;padding-top:12px}
+
+table.tarifas{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:14px}
+table.tarifas th,table.tarifas td{padding:9px 10px;border-bottom:1px solid var(--rule-soft);text-align:left;vertical-align:top}
+table.tarifas th{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+table.tarifas td.m{font-family:var(--f-mono);white-space:nowrap;font-weight:500}
+table.tarifas td .n{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* ── firma ── */
+.firmas{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:640px){.firmas{grid-template-columns:1fr}}
+.bloque{border:1px solid var(--rule);border-radius:var(--radius);padding:16px;background:var(--panel)}
+.bloque .quien{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.bloque .linea{font-family:var(--f-firma);font-size:30px;line-height:1.1;min-height:40px;color:var(--cobalt-ink);
+  border-bottom:1.5px solid var(--ink);padding:2px 4px 4px;margin-bottom:8px}
+.bloque .datos{font-size:13px;line-height:1.5}
+.bloque .datos b{font-weight:600}
+.bloque .datos .mono{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.bloque.pendiente .linea{color:var(--faint);font-family:var(--f-serif);font-style:italic;font-size:14px;display:flex;align-items:flex-end}
+
+.evidencia{margin-top:18px;border:1px dashed var(--rule);border-radius:var(--radius);padding:12px 16px;background:var(--panel);font-family:var(--f-mono);font-size:11px;color:var(--muted);line-height:1.7;word-break:break-all}
+.evidencia b{color:var(--ink);font-weight:500}
+
+.tarjeta{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:22px;margin-top:18px}
+.tarjeta h3{font-size:16px;font-weight:600;margin-bottom:4px}
+.tarjeta .ay{font-size:13.5px;color:var(--muted);margin-bottom:16px;max-width:60ch}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.campos .full{grid-column:1/-1}
+.campos label{display:block;font-size:11.5px;font-weight:500;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+input[type=text],input[type=email]{font-family:var(--f-body);font-size:15px;width:100%;padding:10px 12px;
+  border:1px solid var(--rule);border-radius:var(--radius);background:var(--panel);color:var(--ink)}
+input:focus{outline:2px solid var(--cobalt);outline-offset:-1px;background:#fff}
+@media(max-width:560px){.campos{grid-template-columns:1fr}}
+
+.previa{margin-top:14px;border:1px dashed var(--rule);border-radius:var(--radius);padding:12px 16px;background:var(--panel)}
+.previa .et{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.previa .tinta{font-family:var(--f-firma);font-size:34px;line-height:1.15;color:var(--cobalt-ink);min-height:42px}
+.previa .tinta.vacia{font-family:var(--f-serif);font-style:italic;font-size:14px;color:var(--faint);display:flex;align-items:center;min-height:42px}
+
+.acepto{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:13px;background:var(--cobalt-soft);
+  border-radius:var(--radius);font-size:13.5px;line-height:1.5;cursor:pointer}
+.acepto input{margin-top:3px;width:17px;height:17px;flex:0 0 auto;accent-color:var(--cobalt)}
+button.firmar{font-family:var(--f-body);font-size:16px;font-weight:500;padding:13px 24px;width:100%;margin-top:14px;
+  background:var(--cobalt);color:#fff;border:0;border-radius:var(--radius);cursor:pointer}
+button.firmar:hover:not(:disabled){background:var(--cobalt-ink)}
+button.firmar:disabled{background:var(--faint);cursor:not-allowed}
+.pieAy{font-size:12px;color:var(--muted);margin-top:9px;text-align:center}
+
+.sello{display:flex;gap:12px;align-items:center;background:var(--gain-soft);border:1px solid #BFE5D8;
+  border-radius:var(--radius);padding:14px 16px;margin-top:18px}
+.sello .ic{width:34px;height:34px;border-radius:50%;background:var(--gain);color:#fff;display:grid;place-items:center;font-size:17px;flex:0 0 34px}
+.sello .tx{font-size:13.5px;line-height:1.45;color:#0A5A4A}
+.sello .tx b{font-weight:600}
+.acciones{display:flex;gap:10px;margin-top:14px}
+.acciones button{font-family:var(--f-body);font-size:13.5px;padding:9px 16px;background:#fff;
+  border:1px solid var(--rule);border-radius:var(--radius);cursor:pointer;color:var(--ink)}
+.acciones button:hover{background:var(--panel)}
+.acciones-top{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.acciones-top button{font-family:var(--f-body);font-size:13.5px;padding:9px 16px;border-radius:var(--radius);cursor:pointer;background:var(--gain);border:1px solid var(--gain);color:#fff}
+.acciones-top button:hover{background:#0B7561}
+
+footer{border-top:1px solid var(--rule);padding:18px 0 46px;font-size:12px;color:var(--faint)}
+.trampa{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.cargando{text-align:center;padding:60px;color:var(--muted);font-family:var(--f-serif);font-style:italic}
+.marca-print{display:none}
+
+@media print{
+  @page{margin:18mm 16mm}
+  header,.tarjeta,.acciones,.acciones-top,footer,.estado-caja,.resumen{display:none!important}
+  body{background:#fff;font-size:12.5px}
+  .doc{border:0;padding:0}
+  .doc p{font-size:12.5px}
+  .doc h3{page-break-after:avoid}
+  .firmas,.bloque,.evidencia,table.tarifas{page-break-inside:avoid}
+  .wrap{max-width:100%;padding:0}
+  .marca-print{display:flex;align-items:center;gap:14px;padding-bottom:14px;margin-bottom:20px;border-bottom:2px solid #0D1321}
+  .marca-print img{display:block}
+  .marca-print .g{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
+  .marca-print .p{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#5C6880;margin-left:auto}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="marcas">
+      <a class="marca-g" href="https://www.gadamax.com" target="_blank" rel="noopener">
+        <img src="/assets/images/brand-logo-gadamax.png" alt="" width="26" height="26"><b>Gadamax</b>
+      </a>
+      <span class="para">contrato privado</span>
+    </div>
+    <h1>Contrato de Host y Conductora</h1>
+    <p class="sub">Tu relación como host de los podcasts, eventos y masterclasses de Gurumba: qué haces, cuánto y cuándo cobras, y cómo se cuida tu nombre. Se lee y se firma electrónicamente en esta misma página.</p>
+    <p class="meta" id="metaDoc"></p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="avisos"></div>
+  <div id="cuerpo" class="cargando">cargando el contrato…</div>
+</main>
+
+<footer><div class="wrap">Página privada, no indexada. Consultas sobre este contrato: mvg@gadamax.com</div></footer>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const fFecha = (iso) => new Date(iso).toLocaleString("es-EC", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
+const API = "/api/contracts/allison";
+const CLAVE_VER = new URLSearchParams(location.search).get("ver");
+let DOC = null;
+
+function bloqueFirmado(quien, r) {
+  return `<div class="bloque">
+    <div class="quien">${quien}</div>
+    <div class="linea">${esc(r.nombre)}</div>
+    <div class="datos">
+      <b>${esc(r.nombre)}</b>${r.cargo ? ` · ${esc(r.cargo)}` : ""}<br>
+      ${esc(r.linea2)}<br>
+      <span class="mono">${esc(r.correo)}</span><br>
+      <span class="mono">firmado electrónicamente · ${esc(fFecha(r.firmado_el))}</span>
+    </div></div>`;
+}
+
+function tablaTarifas(tarifas) {
+  return `<h3>Anexo — Honorarios por pieza (cláusula 5)</h3>
+  <table class="tarifas">
+    <thead><tr><th>Pieza</th><th>Honorario</th></tr></thead>
+    <tbody>${tarifas.map((t) => `<tr>
+      <td>${esc(t.pieza)}${t.nota ? `<span class="n">${esc(t.nota)}</span>` : ""}</td>
+      <td class="m">USD ${esc(t.monto)}<span class="n">${esc(t.unidad)}</span></td></tr>`).join("")}
+    </tbody></table>`;
+}
+
+function pintarResumen(d) {
+  const t = d.tarifas;
+  return `<div class="resumen">
+    <h3>En dos minutos</h3>
+    <ul>
+      <li>Conduces el podcast, los eventos y las masterclasses de Gurumba; la producción la ponemos nosotros.</li>
+      <li>Cobras por pieza: ${t.map((x) => `USD ${x.monto} ${x.pieza.toLowerCase().replace(" conducido", "").replace(" conducida", "")}`).join(", ")}.</li>
+      <li>Lo que ganes como guru (sesiones, cursos, participaciones) va aparte, con las tarifas de la plataforma.</li>
+      <li>Liquidación mensual en dólares, a 30 días, sin retención. Sin exclusividad y sin mínimos obligatorios.</li>
+      <li>Doce meses renovables; cualquiera puede salir con 30 días de aviso. Cada seis meses revisamos el esquema juntos.</li>
+    </ul>
+    <p class="nota">Este resumen ayuda a leer; lo que vincula es el texto completo de abajo.</p>
+  </div>`;
+}
+
+function pintarDoc(d, firma, registro) {
+  DOC = d.documento;
+  $("#metaDoc").textContent = `Versión ${DOC.version} · ${DOC.fecha_version} · Huella ${DOC.hash.slice(0, 16)}…`;
+
+  const g = DOC.gadamax, c = DOC.contratista;
+  const clausulas = DOC.clausulas.map((x) => `<h3>${esc(x.t)}</h3><p>${esc(x.c)}</p>`).join("");
+
+  const firmas = firma
+    ? `${bloqueFirmado("La Contratista", { ...firma.contratista, linea2: [firma.contratista.identificacion, firma.contratista.ciudad].filter(Boolean).join(" · "), firmado_el: firma.firmado_el })}
+       ${bloqueFirmado("Gadamax", { nombre: firma.gadamax.firmante, cargo: firma.gadamax.cargo, linea2: firma.gadamax.razon, correo: firma.gadamax.correo, firmado_el: firma.gadamax.firmado_el })}`
+    : `<div class="bloque pendiente">
+        <div class="quien">La Contratista</div>
+        <div class="linea">pendiente de firma — completa el bloque de abajo</div>
+        <div class="datos"><b>${esc(c.nombre)}</b><br>${esc(c.ciudad)}<br><span class="mono">confirma tus datos al firmar</span></div>
+      </div>
+      <div class="bloque">
+        <div class="quien">Gadamax</div>
+        <div class="linea">${esc(g.firmante)}</div>
+        <div class="datos"><b>${esc(g.firmante)}</b> · ${esc(g.cargo)}<br>${esc(g.razon)}<br>
+        <span class="mono">suscribe electrónicamente al momento de la firma de la Contratista</span></div>
+      </div>`;
+
+  const evidencia = registro ? `<div class="evidencia">
+      <b>Registro de firma (copia de Gadamax)</b><br>
+      Registro: ${esc(registro.id)} · versión ${esc(registro.version)}<br>
+      Firmado: ${esc(registro.firmado_el)} (UTC)<br>
+      IP: ${esc(registro.evidencia?.ip ?? "—")}<br>
+      Navegador: ${esc(registro.evidencia?.navegador ?? "—")}<br>
+      Aceptación: ${esc(registro.evidencia?.aceptacion ?? "—")}<br>
+      Huella firmada: ${esc(registro.hash)}
+    </div>` : "";
+
+  const cierre = firma ? `
+    <div class="sello">
+      <div class="ic">✓</div>
+      <div class="tx"><b>Contrato suscrito por ambas Partes.</b> Registro ${esc(firma.id)} ·
+        firmado el ${esc(fFecha(firma.firmado_el))}. La huella del documento quedó sellada en el registro de firma.</div>
+    </div>
+    <div class="acciones">
+      <button type="button" onclick="window.print()">Imprimir o guardar en PDF</button>
+    </div>`
+    : `
+    <div class="tarjeta" id="zonaFirma">
+      <h3>Tu firma</h3>
+      <p class="ay">Confirma tus datos. Escribir tu nombre y marcar la aceptación constituye tu firma electrónica; Gadamax suscribe en el mismo acto.</p>
+      <form id="fFirma" autocomplete="on">
+        <div class="campos">
+          <div class="full"><label for="c-nombre">Nombre completo</label>
+            <input type="text" id="c-nombre" value="${esc(c.nombre)}" required></div>
+          <div><label for="c-id">Cédula o pasaporte (opcional)</label><input type="text" id="c-id"></div>
+          <div><label for="c-correo">Correo para notificaciones</label><input type="email" id="c-correo" value="${esc(c.correo)}" required></div>
+          <div class="full"><label for="c-ciudad">Ciudad y país de residencia</label><input type="text" id="c-ciudad" value="${esc(c.ciudad)}" required></div>
+        </div>
+        <div class="previa">
+          <span class="et">Así queda tu firma</span>
+          <div class="tinta" id="tinta">${esc(c.nombre)}</div>
+        </div>
+        <label class="acepto">
+          <input type="checkbox" id="c-acepta">
+          <span>Declaro que he leído este Contrato completo, incluidos los honorarios de la cláusula 5, que lo acepto y que consiento firmarlo por medios electrónicos conforme a la cláusula 18. Entiendo que escribir mi nombre constituye mi firma electrónica vinculante.</span>
+        </label>
+        <div class="trampa"><label>No llenar<input type="text" id="sitio_web" tabindex="-1" autocomplete="off"></label></div>
+        <button type="submit" class="firmar" id="btnFirmar" disabled>Firmar el contrato</button>
+        <p class="pieAy">Al firmar, ambas Partes quedan vinculadas y esta página mostrará el contrato ejecutado para que guardes tu PDF.</p>
+      </form>
+    </div>`;
+
+  $("#cuerpo").className = "";
+  $("#cuerpo").innerHTML = `
+    ${firma ? "" : pintarResumen(DOC)}
+    <div class="doc">
+      <div class="marca-print">
+        <span class="g"><img src="/assets/images/brand-logo-gadamax.png" alt="" width="24" height="24">Gadamax</span>
+        <span class="p">contrato de servicios independientes</span>
+      </div>
+      <h2>${esc(DOC.titulo).replace(" · ", "<br><span class=\"st\">")}</span></h2>
+      <div class="vv">versión ${esc(DOC.version)} · ${esc(DOC.fecha_version)}</div>
+      <p>${esc(DOC.preambulo)}</p>
+      ${clausulas}
+      ${tablaTarifas(DOC.tarifas)}
+      <div class="firmas">${firmas}</div>
+      ${evidencia}
+      <div class="huella">Huella SHA-256 del documento: ${esc(DOC.hash)}</div>
+    </div>
+    ${cierre}`;
+
+  if (!firma) engancharFirma();
+}
+
+function engancharFirma() {
+  const nombre = $("#c-nombre"), tinta = $("#tinta"), acepta = $("#c-acepta"), btn = $("#btnFirmar");
+  const refrescar = () => {
+    const n = nombre.value.trim();
+    tinta.textContent = n || "escribe tu nombre arriba para verla";
+    tinta.className = "tinta" + (n ? "" : " vacia");
+    btn.disabled = !(n && acepta.checked && $("#c-correo").value.trim() && $("#c-ciudad").value.trim());
+  };
+  ["input", "change"].forEach((ev) => $("#fFirma").addEventListener(ev, refrescar));
+  refrescar();
+
+  $("#fFirma").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btn.disabled = true; btn.textContent = "Firmando…";
+    try {
+      const r = await fetch(API, {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          nombre: nombre.value.trim(),
+          identificacion: $("#c-id").value.trim(),
+          correo: $("#c-correo").value.trim(),
+          ciudad: $("#c-ciudad").value.trim(),
+          acepta: acepta.checked,
+          hash: DOC.hash,
+          sitio_web: $("#sitio_web").value
+        })
+      });
+      const d = await r.json();
+      if (r.status === 409 && d.firma) { pintarDoc({ documento: DOC }, d.firma); avisoEjecutado("Este contrato ya había sido firmado. Abajo está el ejecutado."); return; }
+      if (!r.ok) throw new Error(d.error || `Error ${r.status}`);
+      pintarDoc({ documento: DOC }, d.firma);
+      avisoEjecutado("Contrato firmado por ambas Partes. Guarda tu copia en PDF aquí mismo; nosotros conservamos el registro electrónico y puedes volver a este enlace cuando quieras.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      aviso("err", "No se pudo registrar la firma: " + err.message + ". Vuelve a intentar en un momento.");
+      btn.disabled = false; btn.textContent = "Firmar el contrato";
+    }
+  });
+}
+
+function aviso(tipo, texto) {
+  $("#avisos").innerHTML = `<div class="estado-caja e-${tipo}">${esc(texto)}</div>`;
+}
+
+function avisoEjecutado(texto) {
+  $("#avisos").innerHTML = `<div class="estado-caja e-ok">
+    ${esc(texto)}
+    <div class="acciones-top"><button type="button" onclick="window.print()">Imprimir o guardar en PDF</button></div>
+  </div>`;
+}
+
+(async () => {
+  let d;
+  try {
+    d = await (await fetch(CLAVE_VER !== null ? `${API}?ver=${encodeURIComponent(CLAVE_VER)}` : API)).json();
+  } catch { $("#cuerpo").innerHTML = '<div class="estado-caja e-err">No se pudo cargar el contrato. Recarga la página.</div>'; return; }
+  if (d.error) { $("#cuerpo").className = ""; $("#cuerpo").innerHTML = `<div class="estado-caja e-err">${esc(d.error)}</div>`; return; }
+
+  /* Vista de Gadamax (?ver=clave): contrato ejecutado + evidencia, listo para imprimir. */
+  if (CLAVE_VER !== null) {
+    document.title = "Contrato de Host · registro de firma · Gadamax";
+    if (!d.firmado) { pintarDoc(d, null); aviso("err", "Aún no está firmado. Esta es la vista de Gadamax con la versión vigente."); return; }
+    pintarDoc(d, d.registro, d.registro);
+    avisoEjecutado(`Copia de Gadamax con el registro completo de la firma (${d.registro.id}).`);
+    document.body.dataset.listo = "1";
+    return;
+  }
+
+  pintarDoc(d, d.firmado ? d.firma : null);
+  if (d.firmado) avisoEjecutado("Este contrato ya está firmado por ambas Partes. Abajo está el documento ejecutado; puedes guardar tu PDF cuando quieras.");
+  document.body.dataset.listo = "1";
+})();
+</script>
+</body>
+</html>
