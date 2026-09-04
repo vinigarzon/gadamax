@@ -190,6 +190,15 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
     <p>Ustedes mismos nos lo dijeron: INSOFT no será para siempre, y tanto Ecuador como Colombia migran a S/4HANA en uno o dos años. Todo lo que se construya pegado a un ERP se botará dos veces. En esta arquitectura, la plataforma —recepción, lectura, reglas, excepciones, auditoría— es lo estable; cuando cambie el ERP, se cambia únicamente el conector de salida. Es la forma concreta de «no construir dos veces».</p>
   </div>
 
+  <h3>Los pedidos que entran por Salesforce</h3>
+  <p>Los correos de pedido que hoy se convierten en casos vía Email-to-Case —y las tarjetas de cirugía del feed— siguen llegando a Salesforce exactamente igual; su equipo no cambia su forma de trabajar. La plataforma los recibe por el nivel que ustedes elijan, y los tres están incluidos:</p>
+  <ul class="limpia">
+    <li><strong>Manual, desde el día uno.</strong> El analista reenvía el correo o sube el documento al portal. Cero cambios en su IT.</li>
+    <li><strong>Reenvío automático (recomendado para arrancar).</strong> Una regla de correo corporativo o un Flow de Salesforce reenvía cada pedido con sus adjuntos a la plataforma, en segundos y sin intervención humana.</li>
+    <li><strong>API en tiempo real (la evolución).</strong> Con un acceso de lectura que habilita su IT sobre su propio Salesforce, cada caso llega al instante y la plataforma escribe de vuelta el resultado en el caso —«pedido cargado, documento SAP 4500001234»—, cerrando el ciclo dentro de su herramienta. Por la misma vía se lee el feed de tarjetas de cirugía.</li>
+  </ul>
+  <p>Pasar de un nivel a otro es cambiar el adaptador de entrada — la plataforma, las reglas y la historia no se tocan.</p>
+
   <p>Cada decisión del sistema queda registrada: qué leyó, con qué lo emparejó, qué regla aplicó, quién aprobó qué y cuándo. Esa bitácora responde a lo que su operación exige —auditoría corporativa, buenas prácticas, autoridad sanitaria, ISO 9001— y conserva los documentos originales.</p>
 </section>
 
@@ -233,9 +242,9 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
   <div class="precio">
     <div class="tt">
       <b>Puesta en marcha · pago único</b>
-      <span>Todo lo de la etapa 1: calibración con sus pedidos reales, maestros y equivalencias, los cuatro canales, usuarios y perfiles con su directorio de Microsoft, formatos de carga para SAP ECC e INSOFT, capacitación de su equipo.</span>
+      <span>Todo lo de la etapa 1: calibración con sus pedidos reales, maestros y equivalencias, los cuatro canales, usuarios y perfiles con su directorio de Microsoft, formatos de carga para SAP ECC e INSOFT, capacitación de su equipo. Se acredita íntegro al servicio mensual.</span>
     </div>
-    <div class="cifra">USD 7.000<small>100 % al inicio</small></div>
+    <div class="cifra">USD 7.000<small>100 % al inicio · es un anticipo</small></div>
   </div>
 
   <div class="precio verde">
@@ -247,8 +256,9 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
   </div>
 
   <div class="nota n-verde">
-    <span class="et">Prepago anual · −20 %</span>
-    <p>Pagando el año por adelantado, el servicio mensual queda en <strong>USD 18.240 / año — equivalente a USD 1.520 al mes</strong>.</p>
+    <span class="et">El setup no es un costo: es un anticipo</span>
+    <p>Los USD 7.000 de la puesta en marcha <strong>se acreditan íntegros al servicio mensual</strong>: desde que la suscripción arranca (al superar el 90 % de acierto), las primeras mensualidades se cubren con ese anticipo hasta agotarlo. <strong>Su primer año completo cuesta USD 22.800</strong> — el setup no suma, adelanta.</p>
+    <p><strong>Prepago anual · −20 %.</strong> Si al alcanzar el 90 % optan por el año por adelantado, el servicio anual queda en <strong>USD 18.240 (equivalente a USD 1.520 al mes)</strong>, con los 7.000 ya pagados acreditados a ese valor.</p>
   </div>
 
   <h3>Qué paga el mensual, exactamente</h3>
@@ -268,7 +278,7 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
       <tr><td>Plataformas enterprise de automatización de pedidos (Esker, Conexiom)</td><td class="serif">USD 50.000+ <span style="color:var(--muted)">/ año</span></td><td>Más implementación, que suele costar otro tanto. No procesan manuscritos ni canales como su CRM.</td></tr>
       <tr><td>Soluciones intermedias de captura de documentos (Rossum y similares)</td><td class="serif">desde USD 10.000 <span style="color:var(--muted)">/ año</span></td><td>Capturan el documento; las reglas de negocio y la integración van aparte.</td></tr>
       <tr><td><strong>Su costo operativo actual de digitación</strong></td><td class="serif">≈ USD 100.000 <span style="color:var(--muted)">/ año</span></td><td>~830 horas al mes de su equipo con 2.500 pedidos, con el costo de error incluido.</td></tr>
-      <tr><td><strong>Esta propuesta, primer año completo</strong></td><td class="serif">USD 29.800 <span style="color:var(--muted)">· 25.240 prepago</span></td><td>Setup más doce meses de servicio. Menos de lo que hoy cuesta digitar — y el mensual solo corre desde el 90 % de acierto.</td></tr>
+      <tr><td><strong>Esta propuesta, primer año completo</strong></td><td class="serif">USD 22.800 <span style="color:var(--muted)">· 18.240 prepago</span></td><td>El setup se acredita íntegro al servicio: no es un costo adicional. Menos de la cuarta parte de lo que hoy cuesta digitar — y el mensual solo corre desde el 90 % de acierto.</td></tr>
     </tbody>
   </table>
   </div>
@@ -301,6 +311,7 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
   <h2>Supuestos y condiciones</h2>
   <ul class="limpia">
     <li>El servicio mensual cubre hasta 4.000 pedidos por mes (~20.000 líneas). Por encima de ese volumen sostenido, el valor se ajusta por tramos acordados — siempre conversado antes, nunca por sorpresa.</li>
+    <li>El pago de puesta en marcha (USD 7.000) se acredita íntegramente al servicio mensual: una vez alcanzado el 90 % de acierto y activada la suscripción, las mensualidades se descuentan de ese anticipo hasta agotarlo, y solo entonces se emite la primera factura mensual. Si optan por el prepago anual, los 7.000 se acreditan a ese valor.</li>
     <li>La escritura en SAP ECC se realiza mediante archivo de carga masiva importado por su equipo, según el mecanismo que se confirme con IT en la puesta en marcha. La integración directa a SAP queda fuera del alcance mientras la política corporativa no la habilite.</li>
     <li>La escritura en INSOFT se realiza por importación de archivos contra su ambiente de pruebas primero; los formatos exactos se confirman en la puesta en marcha.</li>
     <li>B. Braun facilita durante la puesta en marcha: las muestras adicionales que decida sumar, una sesión con IT (2 horas son suficientes) y una persona de Administración de Ventas como contraparte funcional.</li>
@@ -315,7 +326,9 @@ footer{border-top:1px solid var(--rule);padding:22px 0 50px;font-size:12.5px;col
   <p class="lede">Uno solo: dar la orden de inicio.</p>
   <p>Con la orden de inicio y el pago del setup, la puesta en marcha arranca de inmediato: la plataforma queda leyendo sus pedidos reales en semanas, no en meses. El servicio mensual no se factura hasta que la tasa de acierto medida sobre su operación supere el 90 % — hasta entonces, el riesgo es nuestro. La demostración del agente leyendo sus órdenes reales puede verse en la misma reunión de arranque.</p>
   <div class="acciones">
-    <button type="button" onclick="window.print()">Guardar esta propuesta en PDF</button>
+    <a href="/propuesta/Propuesta-Gadamax-BBraun.pdf" download="Propuesta-Gadamax-BBraun.pdf"
+       style="display:inline-block;text-decoration:none;font-family:var(--f-body);font-size:14px;font-weight:600;padding:11px 20px;background:var(--ink);color:#fff;border-radius:var(--radius);margin-right:8px">Descargar la propuesta · PDF</a>
+    <button type="button" onclick="window.print()">Imprimir esta página</button>
   </div>
 </section>
 

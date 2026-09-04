@@ -102,6 +102,14 @@ h2{font-size:clamp(28px,4.6vw,54px);font-weight:700;line-height:1.05;letter-spac
 .tj b{display:block;font-size:clamp(14.5px,1.5vw,17px);font-weight:600;margin-bottom:6px;letter-spacing:-.01em}
 .tj p{font-size:clamp(12.5px,1.35vw,14.5px);line-height:1.5;color:var(--niebla2)}
 .clara .tj p{color:var(--muted)}
+/* láminas con muchas tarjetas: compactas para que todo quepa en 16:9 */
+.compacta h2{font-size:clamp(24px,3.4vw,40px)}
+.compacta .tarjetas{grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px}
+.compacta .tj{padding:12px 14px}
+.compacta .tj .ic{width:27px;height:27px;font-size:13px;margin-bottom:8px}
+.compacta .tj b{font-size:clamp(12.5px,1.2vw,14px);margin-bottom:4px}
+.compacta .tj p{font-size:clamp(11px,1.05vw,12.5px);line-height:1.45}
+@media (max-width:700px){.compacta .tarjetas{grid-template-columns:1fr 1fr}}
 
 /* pipeline animado */
 .tubo{margin-top:44px;position:relative}
@@ -306,6 +314,21 @@ h2{font-size:clamp(28px,4.6vw,54px);font-weight:700;line-height:1.05;letter-spac
   </div>
 </section>
 
+<!-- 5b · SALESFORCE -->
+<section class="lamina compacta" data-tema="oscuro">
+  <div class="cont">
+    <div class="eti rev">Su Salesforce, conectado</div>
+    <h2 class="rev">¿Los pedidos entran por Salesforce?<br><span class="nar">Mejor todavía.</span></h2>
+    <p class="sub rev">Email-to-Case seguirá convirtiendo sus correos en casos, y las tarjetas seguirán en el feed — su equipo no cambia nada. Lo que elegimos juntos es cómo la plataforma los recibe, en tres niveles. Se puede empezar hoy.</p>
+    <div class="tarjetas rev">
+      <div class="tj"><div class="ic">📨</div><b>Hoy mismo · manual</b><p>Su analista reenvía el correo o sube el documento al portal. Cero cambios en su IT — sirve desde el primer día de la puesta en marcha.</p></div>
+      <div class="tj v"><div class="ic">⚡</div><b>En semanas · reenvío automático</b><p>Una regla de correo o un Flow de Salesforce reenvía cada pedido con sus adjuntos a la plataforma — en segundos, sin que nadie toque nada. Recomendado para arrancar.</p></div>
+      <div class="tj"><div class="ic">🔌</div><b>La evolución · API en tiempo real</b><p>Con el acceso de lectura que su IT habilite, cada caso llega al instante — y la plataforma escribe de vuelta el resultado en el propio caso: «cargado: SAP 4500001234». Misma vía para el feed de tarjetas.</p></div>
+    </div>
+    <p class="sub rev" style="font-size:14px;margin-top:26px;color:var(--niebla)">Las tres están incluidas — usan su Salesforce tal como está. Y como todo en esta arquitectura: pasar de una a otra es cambiar el adaptador de entrada, nunca reconstruir.</p>
+  </div>
+</section>
+
 <!-- 6 · QUÉ RECIBEN -->
 <section class="lamina clara" data-tema="claro">
   <div class="cont">
@@ -370,9 +393,9 @@ h2{font-size:clamp(28px,4.6vw,54px);font-weight:700;line-height:1.05;letter-spac
       <div class="caja-precio" style="margin:0">
         <div class="iz">
           <b>Setup · pago único</b>
-          <span>Construcción y puesta en marcha: portal, base de datos, conectores a SAP e INSOFT, y calibración con sus pedidos reales.</span>
+          <span>Construcción y puesta en marcha: portal, base de datos, conectores a SAP e INSOFT, y calibración con sus pedidos reales. <strong style="color:#fff">Se acredita íntegro al servicio mensual.</strong></span>
         </div>
-        <div class="cif" style="font-size:clamp(32px,4.5vw,52px)">USD 7.000<small>100 % al inicio</small></div>
+        <div class="cif" style="font-size:clamp(32px,4.5vw,52px)">USD 7.000<small>100 % al inicio · es un anticipo</small></div>
       </div>
       <div class="caja-precio" style="margin:0;background:var(--verde);box-shadow:0 24px 60px -30px rgba(0,169,122,.55)">
         <div class="iz">
@@ -383,8 +406,9 @@ h2{font-size:clamp(28px,4.6vw,54px);font-weight:700;line-height:1.05;letter-spac
       </div>
     </div>
     <div class="sellos rev">
-      <div class="sello2"><b>El riesgo es nuestro</b><p>El mensual <strong>no se factura</strong> hasta que la plataforma supere el 90 % de acierto medido con sus pedidos. Si no llega, se corrige y se ajusta hasta llegar — sin costo adicional.</p></div>
-      <div class="sello2"><b>Prepago anual: −20 %</b><p>Pagando el año por adelantado: <strong>USD 18.240</strong> en lugar de 22.800 — equivale a USD 1.520 por mes.</p></div>
+      <div class="sello2"><b>El setup no es un costo: es un anticipo</b><p>Los USD 7.000 <strong>se acreditan íntegros al servicio mensual</strong> desde que arranca la suscripción: cubren las primeras mensualidades. Su año 1 completo: <strong>USD 22.800</strong>.</p></div>
+      <div class="sello2"><b>El riesgo es nuestro</b><p>El mensual <strong>no se factura</strong> hasta superar el 90 % de acierto medido con sus pedidos. Si no llega, se ajusta hasta llegar — sin costo adicional.</p></div>
+      <div class="sello2"><b>Prepago anual: −20 %</b><p>Optando por el año por adelantado al alcanzar el 90 %: <strong>USD 18.240</strong> en total, con los 7.000 ya acreditados — equivale a USD 1.520 por mes.</p></div>
     </div>
     <p class="sub rev" style="font-size:14.5px;margin-top:20px">Sin permanencia forzada. Los datos son suyos y se exportan completos en cualquier momento.</p>
   </div>
@@ -406,7 +430,7 @@ h2{font-size:clamp(28px,4.6vw,54px);font-weight:700;line-height:1.05;letter-spac
 </section>
 
 <!-- 9c · SEGURIDAD -->
-<section class="lamina clara" data-tema="claro">
+<section class="lamina clara compacta" data-tema="claro">
   <div class="cont">
     <div class="eti rev">Seguridad, de serie</div>
     <h2 class="rev">Construida para pasar<br>su auditoría. No para explicarse después.</h2>
@@ -422,7 +446,7 @@ h2{font-size:clamp(28px,4.6vw,54px);font-weight:700;line-height:1.05;letter-spac
 </section>
 
 <!-- 9d · PREGUNTAS DIRECTAS -->
-<section class="lamina clara" data-tema="claro">
+<section class="lamina clara compacta" data-tema="claro">
   <div class="cont">
     <div class="eti rev">Hablemos claro</div>
     <h2 class="rev">Las preguntas que nos harían.<br>Respondidas antes.</h2>
@@ -446,7 +470,7 @@ h2{font-size:clamp(28px,4.6vw,54px);font-weight:700;line-height:1.05;letter-spac
     <div class="cta-fila rev">
       <a class="cta p" href="mailto:mvg@gadamax.com?subject=Gadamax%20%E2%80%94%20orden%20de%20inicio">Dar la orden de inicio</a>
       <a class="cta s" href="/pedido-demo/" target="_blank" rel="noopener">Ver el agente en acción</a>
-      <a class="cta s" href="/propuesta/documento/" target="_blank" rel="noopener">Documento formal · PDF</a>
+      <a class="cta s" href="/propuesta/Propuesta-Gadamax-BBraun.pdf" download="Propuesta-Gadamax-BBraun.pdf">Descargar la propuesta · PDF</a>
     </div>
     <p class="sub rev" style="font-size:13px;margin-top:36px;color:var(--niebla)">Gadamax LLC · Naperville, Illinois, EE. UU. · mvg@gadamax.com · Propuesta confidencial para B. Braun, válida 30 días.</p>
   </div>
