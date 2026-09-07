@@ -8,8 +8,10 @@
  * se firmó. Cualquier cambio de texto o de tarifas debe subir VERSION.
  */
 
-export const VERSION = "1.0";
-export const FECHA_VERSION = "3 de septiembre de 2026";
+export const VERSION = "1.1";
+export const FECHA_VERSION = "7 de septiembre de 2026";
+/* v1.1: honorarios acordados con la Contratista (podcast 250, evento presencial 400),
+   alcance del episodio, meta semanal, y cláusula 12 acotada a lo que ofrece Gurumba. */
 
 export const GADAMAX = {
   razon: "Gadamax LLC",
@@ -29,10 +31,12 @@ export const CONTRATISTA = {
 
 /* Honorarios por pieza. Una pieza se paga una sola vez, por el rol desempeñado. */
 export const TARIFAS = [
-  { pieza: "Episodio de podcast conducido", monto: 200, unidad: "por episodio grabado y aprobado",
-    nota: "Incluye preparación, pre-entrevista con el guru invitado y conducción." },
-  { pieza: "Evento o panel en vivo conducido", monto: 300, unidad: "por evento",
-    nota: "Presencial o virtual. Incluye moderación y coordinación previa con los panelistas." },
+  { pieza: "Episodio de podcast conducido", monto: 250, unidad: "por episodio grabado y aprobado",
+    nota: "Hasta 60 minutos de grabación (unos 40 publicados) y hasta dos invitados. Incluye revisión del tema y de los invitados, guion de preguntas, estructura de la conversación y conducción." },
+  { pieza: "Evento o panel presencial conducido", monto: 400, unidad: "por evento de hasta 2 horas",
+    nota: "Incluye preparación, moderación y coordinación previa con los panelistas. Más de 2 horas o jornadas completas se cotizan aparte, por escrito y antes de confirmar." },
+  { pieza: "Evento o panel virtual conducido", monto: 300, unidad: "por evento de hasta 2 horas",
+    nota: "Misma preparación y moderación, en sala virtual." },
   { pieza: "Masterclass o charla principal conducida", monto: 250, unidad: "por sesión",
     nota: "Presentación, moderación de preguntas y cierre." }
 ];
@@ -48,7 +52,7 @@ export const CLAUSULAS = [
   },
   {
     t: "2. Alcance de los Servicios de Host",
-    c: `Los Servicios de Host comprenden, para cada pieza encargada: (a) la preparación editorial, incluida la pre-entrevista o coordinación previa con el guru o los panelistas invitados; (b) la conducción de la grabación o del encuentro en vivo, presencial o virtual; (c) la participación en la planificación de la programación de contenidos y en la propuesta de temas e invitados; y (d) la relación cordial y profesional con los gurus de la red en todo lo relativo a las piezas que conduce. Gadamax aporta la producción: plataforma, estudio o sala virtual, edición, publicación y difusión. La Contratista no está obligada a asumir tareas administrativas, de venta ni de soporte a usuarios.`
+    c: `Los Servicios de Host comprenden, para cada pieza encargada: (a) la preparación editorial: revisión del tema y de la trayectoria de los invitados, elaboración de las preguntas y de la estructura de la conversación, y la pre-entrevista o coordinación previa con el guru o los panelistas; (b) la conducción de la grabación o del encuentro en vivo, presencial o virtual; (c) la participación en la planificación de la programación de contenidos y en la propuesta de temas e invitados; y (d) la relación cordial y profesional con los gurus de la red en todo lo relativo a las piezas que conduce. Gadamax aporta la producción: plataforma, estudio o sala virtual, edición, publicación y difusión. La Contratista no está obligada a asumir tareas administrativas, de venta ni de soporte a usuarios.`
   },
   {
     t: "3. Doble rol: Host y Guru",
@@ -56,11 +60,11 @@ export const CLAUSULAS = [
   },
   {
     t: "4. Encargo de piezas y programación",
-    c: `Cada pieza se encarga por escrito —correo electrónico o herramienta de la plataforma— indicando formato, tema, invitados, fecha y modalidad. Los eventos y paneles se programan con al menos treinta (30) días de anticipación y los episodios de podcast con al menos siete (7) días, salvo acuerdo distinto en cada caso. La Contratista puede declinar cualquier encargo que no le sea posible atender, avisando con la mayor anticipación posible. Gadamax no garantiza un número mínimo de piezas y la Contratista no queda obligada a un mínimo de entregas; las Partes procurarán mantener un ritmo regular de contenido, que revisarán conforme a la cláusula 7.`
+    c: `Cada pieza se encarga por escrito —correo electrónico o herramienta de la plataforma— indicando formato, tema, invitados, fecha y modalidad. Los eventos y paneles se programan con al menos treinta (30) días de anticipación y los episodios de podcast con al menos siete (7) días, salvo acuerdo distinto en cada caso. La Contratista puede declinar cualquier encargo que no le sea posible atender, avisando con la mayor anticipación posible. Las Partes fijan como meta de trabajo la grabación de un (1) episodio de podcast por semana, con un calendario de grabaciones acordado mensualmente y con anticipación, que podrá reprogramarse cuando existan inconvenientes de agenda o de disponibilidad de los invitados. Esa meta orienta la planificación y no constituye un mínimo garantizado por Gadamax ni una obligación de entrega mínima para la Contratista; las Partes revisarán el ritmo real conforme a la cláusula 7.`
   },
   {
     t: "5. Honorarios por pieza",
-    c: `Gadamax pagará a la Contratista, por cada pieza conducida y aprobada, los honorarios siguientes, en dólares de los Estados Unidos: ${TARIFAS.map((x) => `${x.pieza.toLowerCase()}: USD ${x.monto} ${x.unidad}`).join("; ")}. Una pieza se considera entregada cuando fue grabada o realizada en la fecha acordada; la aprobación de Gadamax no se negará sin causa razonable y se entenderá otorgada si no hay observaciones dentro de los cinco (5) días hábiles siguientes. Los honorarios cubren íntegramente la preparación, la conducción y la licencia de la cláusula 9. Gadamax cubrirá los costos de producción; cualquier gasto de viaje, alojamiento u otro desembolso de la Contratista solo será reembolsable si Gadamax lo aprobó por escrito antes de incurrirlo.`
+    c: `Gadamax pagará a la Contratista, por cada pieza conducida y aprobada, los honorarios siguientes, en dólares de los Estados Unidos: ${TARIFAS.map((x) => `${x.pieza.toLowerCase()}: USD ${x.monto} ${x.unidad}`).join("; ")}. Un episodio de podcast comprende hasta sesenta (60) minutos de grabación, para una duración publicada de unos cuarenta (40) minutos, con hasta dos (2) invitados; un evento o panel comprende hasta dos (2) horas de duración. Una pieza se considera entregada cuando fue grabada o realizada en la fecha acordada; la aprobación de Gadamax no se negará sin causa razonable y se entenderá otorgada si no hay observaciones dentro de los cinco (5) días hábiles siguientes. Los honorarios cubren íntegramente la preparación, la conducción y la licencia de la cláusula 9. Gadamax cubrirá los costos de producción; cualquier gasto de viaje, alojamiento u otro desembolso de la Contratista solo será reembolsable si Gadamax lo aprobó por escrito antes de incurrirlo.`
   },
   {
     t: "6. Liquidación, forma de pago e impuestos",
@@ -88,7 +92,7 @@ export const CLAUSULAS = [
   },
   {
     t: "12. No circunvención",
-    c: `Durante la vigencia del Contrato y por veinticuatro (24) meses después, la Contratista no ofrecerá ni prestará por fuera de Gurumba servicios pagos de mentoría, cursos, eventos o contenidos a los gurus, clientes, empresas o usuarios que haya conocido a través de Gurumba, ni intermediará para que otros lo hagan, sin autorización escrita de Gadamax. Esta cláusula no restringe las relaciones profesionales que la Contratista tuviera con anterioridad, y así lo podrá acreditar, ni su actividad independiente con personas ajenas a la red de Gurumba.`
+    c: `Esta cláusula se limita a los servicios que Gurumba ofrece en su plataforma: sesiones de mentoría 1:1, cursos, y los podcasts, eventos, paneles y masterclasses producidos por Gurumba (los «Servicios de Gurumba»). Durante la vigencia del Contrato y por veinticuatro (24) meses después, la Contratista no ofrecerá ni prestará por fuera de Gurumba Servicios de Gurumba a los gurus, clientes, empresas o usuarios que haya conocido a través de la plataforma, ni intermediará para que otros lo hagan, sin autorización escrita de Gadamax. Queda expresamente fuera de esta restricción la actividad profesional propia de la Contratista —media training, comunicación estratégica, oratoria, relaciones públicas, consultoría en comunicación, producción de contenidos para terceros y servicios análogos—, que podrá ofrecer y prestar libremente a cualquier persona o empresa, incluidos los gurus y sus organizaciones; en ese caso, y solo cuando el cliente sea un guru de la red o su empresa, la Contratista lo informará a Gadamax por simple aviso, sin necesidad de autorización. Tampoco se restringen las relaciones profesionales que la Contratista tuviera con anterioridad, y así lo podrá acreditar.`
   },
   {
     t: "13. Estándares profesionales y cancelaciones",
