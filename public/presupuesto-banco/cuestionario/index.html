@@ -81,16 +81,7 @@ section.sec{margin-top:40px;background:var(--paper-3);border:1px solid var(--rul
 .btn.ghost:hover{background:#fff}
 .done-banner{display:none;margin-top:28px;padding:18px 20px;background:var(--gain-soft);border:1px solid #b8e0d4;border-radius:var(--radius);color:#0b5f4f}
 .done-banner.show{display:block}
-/* admin */
-.admin{display:none;margin:24px 0;padding:16px 18px;background:var(--ink);color:#fff;border-radius:var(--radius)}
-.admin.show{display:block}
-.admin h3{margin:0 0 6px;font-size:15px}
-.admin p{margin:0 0 10px;color:var(--muted-dark);font-size:13px}
-.admin .btn{background:#fff;color:var(--ink);border-color:#fff;margin-right:8px}
-.admin table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px;font-family:var(--f-mono)}
-.admin td,.admin th{border-top:1px solid #2A3550;padding:6px 4px;text-align:left;vertical-align:top}
-.admin th{color:var(--muted-dark);font-weight:500}
-@media print{.topbar,.footer,.tips,.toc,.note,.admin{display:none!important}section.sec{box-shadow:none;break-inside:avoid}}
+@media print{.topbar,.footer,.tips,.toc,.note{display:none!important}section.sec{box-shadow:none;break-inside:avoid}}
 @media (max-width:640px){.q{grid-template-columns:26px 1fr;padding:16px 16px}.sec-h{padding:18px 16px 14px}.area{margin-left:0}}
 </style>
 </head>
@@ -130,15 +121,6 @@ section.sec{margin-top:40px;background:var(--paper-3);border:1px solid var(--rul
     <div class="toc" id="toc"></div>
   </div>
 
-  <div class="admin" id="admin">
-    <h3>Vista de administración · Gadamax</h3>
-    <p>Muestra quién respondió cada punto y permite descargar todo. Esta vista solo aparece con la clave.</p>
-    <button class="btn" id="dlJson">Descargar JSON</button>
-    <button class="btn" id="dlCsv">Descargar CSV</button>
-    <button class="btn" id="printBtn">Imprimir / PDF</button>
-    <div id="adminTable"></div>
-  </div>
-
   <div id="form"></div>
 
   <div class="done-banner" id="doneBanner">
@@ -147,8 +129,6 @@ section.sec{margin-top:40px;background:var(--paper-3);border:1px solid var(--rul
 
   <div class="footer">
     <span>Gadamax · mvg@gadamax.com · Las respuestas se guardan en servidor y se usan únicamente para preparar la propuesta.</span>
-    <span class="spacer"></span>
-    <button class="btn ghost" id="exportBtn">Descargar mis respuestas (JSON)</button>
   </div>
 </div>
 
@@ -388,40 +368,10 @@ async function pull(){
     if(changed){ updateProgress(); saveLocal(); }
     serverOK=true;
     if(!Object.keys(dirty).length) setStatus('ok', Object.keys(remote).length? 'Sincronizado · '+new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}) : 'Conectado · sin respuestas aún');
-    if(CLAVE && data.admin) renderAdmin(data);
   }catch(err){
     if(serverOK===null){ serverOK=false; setStatus('local','Sin servidor: se guarda en este navegador'); }
   }
 }
-
-/* ---------- admin ---------- */
-function renderAdmin(data){
-  const box=$('#admin'); box.classList.add('show');
-  let rows='';
-  SECCIONES.forEach(s=>s.preguntas.forEach(q=>{
-    const a=answers[q.id]; if(!a||!isAnswered(a.v)) return;
-    rows+=`<tr><td>${esc(q.id)}</td><td>${esc(q.t)}</td><td>${esc(valueToText(a.v))}</td><td>${esc(a.by||'')}</td><td>${esc(fmt(a.at))}</td></tr>`;
-  }));
-  $('#adminTable').innerHTML = rows ? `<table><thead><tr><th>id</th><th>Pregunta</th><th>Respuesta</th><th>Quién</th><th>Cuándo</th></tr></thead><tbody>${rows}</tbody></table>` : '<p>Sin respuestas todavía.</p>';
-}
-function valueToText(v){
-  if(typeof v==='string') return v;
-  if(Array.isArray(v.sel)) return v.sel.join('; ') + (v.otro?' · '+v.otro:'');
-  return (v.sel||'') + (v.otro?' · '+v.otro:'');
-}
-function exportJSON(){
-  const out={doc:DOC, exportado:new Date().toISOString(), respuestas:[]};
-  SECCIONES.forEach(s=>s.preguntas.forEach(q=>{ const a=answers[q.id]; out.respuestas.push({seccion:s.titulo, area:s.area, id:q.id, pregunta:q.t, respuesta:a?valueToText(a.v):'', por:a?.by||'', fecha:a?.at?new Date(a.at).toISOString():''}); }));
-  download(`cuestionario-${DOC}.json`, JSON.stringify(out,null,2), 'application/json');
-}
-function exportCSV(){
-  const q = s => '"'+String(s??'').replace(/"/g,'""')+'"';
-  let csv='seccion,area,id,pregunta,respuesta,por,fecha\n';
-  SECCIONES.forEach(s=>s.preguntas.forEach(p=>{ const a=answers[p.id]; csv+=[s.titulo,s.area,p.id,p.t,a?valueToText(a.v):'',a?.by||'',a?.at?new Date(a.at).toISOString():''].map(q).join(',')+'\n'; }));
-  download(`cuestionario-${DOC}.csv`, '﻿'+csv, 'text/csv');
-}
-function download(name, content, type){ const b=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); }
-$('#exportBtn').onclick=exportJSON; $('#dlJson').onclick=exportJSON; $('#dlCsv').onclick=exportCSV; $('#printBtn').onclick=()=>print();
 
 /* ---------- arranque ---------- */
 render(); loadLocal();
