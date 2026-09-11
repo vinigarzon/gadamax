@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cuestionario · Herramienta presupuestaria · Gadamax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1321;--ink-2:#182033;--ink-3:#2A3550;--muted:#5C6880;--muted-dark:#8C99B2;
+  --paper:#EDF0F6;--paper-2:#F7F9FC;--paper-3:#FFFFFF;--rule:#C9D2E1;--rule-soft:#DEE4EE;
+  --cobalt:#1F3BE0;--cobalt-ink:#152BA8;--cobalt-soft:#E3E8FF;
+  --gain:#0E8F76;--gain-soft:#DFF2ED;--amber:#B07C10;--amber-soft:#FBF0D8;--flag:#B23A2E;--flag-soft:#F7E4E1;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;--f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;--f-serif:"Source Serif 4",Georgia,serif;
+  --radius:3px;--max:980px;--pad:clamp(18px,4vw,48px);
+  --shadow:0 1px 2px rgba(13,19,33,.06),0 12px 32px -18px rgba(13,19,33,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--cobalt)}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(247,249,252,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule-soft)}
+.topbar .in{max-width:var(--max);margin:0 auto;padding:10px var(--pad);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{font-weight:800;letter-spacing:-.02em;font-size:18px}
+.brand small{font-weight:500;color:var(--muted);margin-left:8px;letter-spacing:0;font-size:13px}
+.spacer{flex:1}
+.status{font-family:var(--f-mono);font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted-dark)}
+.dot.ok{background:var(--gain)}.dot.saving{background:var(--cobalt);animation:pulse 1s infinite}.dot.local{background:var(--amber)}.dot.err{background:var(--flag)}
+@keyframes pulse{50%{opacity:.3}}
+.progress{height:3px;background:var(--rule-soft)}
+.progress i{display:block;height:100%;width:0;background:var(--gain);transition:width .4s}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 80px}
+.hero{padding:44px 0 28px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--cobalt);font-weight:600}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.12;letter-spacing:-.025em;margin:10px 0 14px;font-weight:800}
+.lead{font-family:var(--f-serif);font-size:18px;color:var(--ink-3);max-width:720px;margin:0 0 20px}
+.note{background:var(--paper-3);border:1px solid var(--rule-soft);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);display:grid;gap:12px}
+.note .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.note label{font-weight:600;font-size:14px}
+input[type=text],input[type=number],textarea,select{font:inherit;color:var(--ink);background:var(--paper-3);border:1px solid var(--rule);border-radius:var(--radius);padding:9px 11px;width:100%}
+input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{outline:2px solid var(--cobalt-soft);border-color:var(--cobalt)}
+textarea{min-height:84px;resize:vertical}
+.name-in{max-width:320px}
+.hint{color:var(--muted);font-size:13.5px}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:22px 0 8px}
+.tip{background:var(--paper-2);border:1px solid var(--rule-soft);border-radius:var(--radius);padding:12px 14px;font-size:13.5px;color:var(--ink-3)}
+.tip b{display:block;color:var(--ink);margin-bottom:2px}
+.toc{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 6px}
+.toc a{text-decoration:none;font-size:13px;font-family:var(--f-mono);padding:6px 10px;border:1px solid var(--rule);border-radius:999px;background:var(--paper-3);color:var(--ink-2)}
+.toc a span{color:var(--muted);margin-left:6px}
+section.sec{margin-top:40px;background:var(--paper-3);border:1px solid var(--rule-soft);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.sec-h{padding:22px 24px 16px;border-bottom:1px solid var(--rule-soft);display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.sec-h .n{font-family:var(--f-mono);font-size:12px;color:var(--cobalt);font-weight:600;letter-spacing:.06em}
+.sec-h h2{margin:2px 0 4px;font-size:22px;letter-spacing:-.02em}
+.sec-h p{margin:0;color:var(--muted);font-size:14px;max-width:640px}
+.area{margin-left:auto;font-family:var(--f-mono);font-size:11.5px;background:var(--cobalt-soft);color:var(--cobalt-ink);padding:5px 9px;border-radius:999px;white-space:nowrap;align-self:center}
+.q{padding:18px 24px;border-bottom:1px solid var(--rule-soft);display:grid;grid-template-columns:34px 1fr;gap:12px;transition:background .3s}
+.q:last-child{border-bottom:0}
+.q.done{background:linear-gradient(90deg,var(--gain-soft) 0,rgba(223,242,237,.25) 60%,transparent)}
+.q .chk{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--rule);display:grid;place-items:center;font-size:13px;color:#fff;margin-top:2px}
+.q.done .chk{background:var(--gain);border-color:var(--gain)}
+.q .t{font-weight:600;margin:0 0 4px;font-size:15.5px}
+.q .why{color:var(--muted);font-size:13.5px;margin:0 0 10px}
+.opts{display:grid;gap:6px;margin:6px 0 2px}
+.opts label{display:flex;gap:10px;align-items:flex-start;padding:7px 10px;border:1px solid var(--rule-soft);border-radius:var(--radius);background:var(--paper-2);cursor:pointer;font-size:14.5px}
+.opts label:hover{border-color:var(--rule)}
+.opts input{margin-top:3px;accent-color:var(--cobalt)}
+.opts.inline{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.otro{margin-top:6px}
+.meta{font-family:var(--f-mono);font-size:11.5px;color:var(--muted-dark);margin-top:8px;min-height:14px}
+.num{max-width:260px}
+.scale{display:flex;gap:6px;flex-wrap:wrap}
+.scale label{flex:1;min-width:64px;text-align:center;justify-content:center}
+.footer{margin-top:40px;padding:22px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--rule);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.footer .spacer{flex:1}
+.btn{font:inherit;font-weight:600;font-size:14px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:9px 14px;border-radius:var(--radius);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{background:#fff}
+.done-banner{display:none;margin-top:28px;padding:18px 20px;background:var(--gain-soft);border:1px solid #b8e0d4;border-radius:var(--radius);color:#0b5f4f}
+.done-banner.show{display:block}
+/* admin */
+.admin{display:none;margin:24px 0;padding:16px 18px;background:var(--ink);color:#fff;border-radius:var(--radius)}
+.admin.show{display:block}
+.admin h3{margin:0 0 6px;font-size:15px}
+.admin p{margin:0 0 10px;color:var(--muted-dark);font-size:13px}
+.admin .btn{background:#fff;color:var(--ink);border-color:#fff;margin-right:8px}
+.admin table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px;font-family:var(--f-mono)}
+.admin td,.admin th{border-top:1px solid #2A3550;padding:6px 4px;text-align:left;vertical-align:top}
+.admin th{color:var(--muted-dark);font-weight:500}
+@media print{.topbar,.footer,.tips,.toc,.note,.admin{display:none!important}section.sec{box-shadow:none;break-inside:avoid}}
+@media (max-width:640px){.q{grid-template-columns:26px 1fr;padding:16px 16px}.sec-h{padding:18px 16px 14px}.area{margin-left:0}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="in">
+    <span class="brand">Gadamax<small>Cuestionario · Herramienta presupuestaria</small></span>
+    <span class="spacer"></span>
+    <span class="status"><i class="dot" id="dot"></i><span id="statusTxt">Conectando…</span></span>
+    <span class="status" id="count">0 / 0</span>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="kicker">Levantamiento para dimensionar la herramienta</div>
+    <h1>Presupuesto a 3 años mensualizado: lo que necesitamos saber para proponer bien</h1>
+    <p class="lead">Este cuestionario es colaborativo: cada área responde lo suyo sobre el mismo documento, se guarda solo y todos ven lo que los demás ya contestaron. No hay campos obligatorios; si algo no aplica o no lo saben todavía, sáltenlo. Tiempo estimado: 15 minutos por área.</p>
+
+    <div class="note">
+      <div class="row">
+        <label for="who">Su nombre y área</label>
+        <input type="text" id="who" class="name-in" placeholder="Ej. María Pérez · Planificación" autocomplete="off">
+        <span class="hint">Solo para saber quién respondió cada punto.</span>
+      </div>
+      <div class="hint">Página privada, no indexada. Las respuestas se usan únicamente para preparar el alcance y la cotización. Pueden volver a entrar con este mismo enlace cuantas veces necesiten.</div>
+    </div>
+
+    <div class="tips">
+      <div class="tip"><b>Se guarda solo</b>Cada respuesta se envía al momento. El punto verde arriba confirma que quedó guardada.</div>
+      <div class="tip"><b>Varias personas a la vez</b>Lo que responda otra área aparece aquí en segundos, sin recargar.</div>
+      <div class="tip"><b>Sin cifras confidenciales</b>Rangos y órdenes de magnitud bastan. Nada de saldos reales todavía.</div>
+    </div>
+
+    <div class="toc" id="toc"></div>
+  </div>
+
+  <div class="admin" id="admin">
+    <h3>Vista de administración · Gadamax</h3>
+    <p>Muestra quién respondió cada punto y permite descargar todo. Esta vista solo aparece con la clave.</p>
+    <button class="btn" id="dlJson">Descargar JSON</button>
+    <button class="btn" id="dlCsv">Descargar CSV</button>
+    <button class="btn" id="printBtn">Imprimir / PDF</button>
+    <div id="adminTable"></div>
+  </div>
+
+  <div id="form"></div>
+
+  <div class="done-banner" id="doneBanner">
+    <b>Gracias.</b> Con esto tenemos lo necesario para armar alcance y cotización. Si después quieren corregir algo, vuelvan a entrar con el mismo enlace: se actualiza solo.
+  </div>
+
+  <div class="footer">
+    <span>Gadamax · mvg@gadamax.com · Las respuestas se guardan en servidor y se usan únicamente para preparar la propuesta.</span>
+    <span class="spacer"></span>
+    <button class="btn ghost" id="exportBtn">Descargar mis respuestas (JSON)</button>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   CUESTIONARIO · definición de secciones y preguntas
+   Tipos: text | textarea | number | radio | check | scale
+   ========================================================== */
+const SECCIONES = [
+{
+  id:"contexto", titulo:"La entidad y su ciclo presupuestario", area:"Gerencia · Planificación",
+  intro:"Para entender el tamaño del problema y quién vive el presupuesto día a día.",
+  preguntas:[
+    {id:"tipo", t:"¿Qué tipo de entidad es?", tipo:"radio", opts:["Banco","Cooperativa de ahorro y crédito","Mutualista","Financiera / microfinanzas","Otra"], otro:true},
+    {id:"pais", t:"¿En qué país opera y ante qué regulador reporta?", tipo:"text", why:"Define la estructura de cuentas, los índices obligatorios y el calendario de reportes.", ph:"Ej. Ecuador · Superintendencia de Bancos"},
+    {id:"tamano", t:"Orden de magnitud de la entidad", tipo:"check", why:"Marque lo que aplique; son rangos, no cifras exactas.", opts:["Menos de 10 oficinas","Entre 10 y 50 oficinas","Más de 50 oficinas","Menos de 300 empleados","Entre 300 y 1.500 empleados","Más de 1.500 empleados"]},
+    {id:"lidera", t:"¿Qué área lidera el presupuesto y cuántas personas participan en armarlo?", tipo:"textarea", ph:"Ej. Planificación Financiera coordina; participan 14 gerencias y 3 analistas consolidan."},
+    {id:"horizonte", t:"¿Con qué horizonte y detalle presupuestan hoy?", tipo:"radio", opts:["Un año, mensualizado","Un año, sin mensualizar","Tres años, solo el primero mensualizado","Tres años, todos mensualizados","Otro"], otro:true},
+    {id:"ciclo", t:"¿Cuánto dura el ciclo completo, desde que arranca hasta que el Directorio lo aprueba?", tipo:"radio", opts:["Menos de 1 mes","1 a 2 meses","2 a 4 meses","Más de 4 meses"]},
+    {id:"inicio", t:"¿Cuándo arranca el próximo ciclo presupuestario?", tipo:"text", why:"Nos dice si la herramienta tiene que estar lista para ese ciclo o para el siguiente.", ph:"Ej. Octubre 2026, para el presupuesto 2027-2029"},
+    {id:"revision", t:"¿Con qué frecuencia revisan y reproyectan el presupuesto durante el año?", tipo:"radio", opts:["Mensual","Trimestral","Semestral","Solo cuando hay un cambio grande","No se reproyecta"]}
+  ]
+},
+{
+  id:"proceso", titulo:"Cómo lo hacen hoy y qué duele", area:"Planificación · Finanzas",
+  intro:"Lo que funciona se conserva; lo que duele es lo que la herramienta tiene que resolver primero.",
+  preguntas:[
+    {id:"herramienta", t:"¿Con qué herramienta arman y consolidan el presupuesto hoy?", tipo:"check", opts:["Excel / Google Sheets","Módulo del core bancario","SAP BPC / Oracle Hyperion / Anaplan u otra plataforma de planificación","Power BI u otro BI para el seguimiento","Desarrollo propio"], otro:true},
+    {id:"detalle", t:"¿A qué nivel de detalle se presupuesta?", tipo:"check", opts:["Por cuenta contable","Por centro de costo / área","Por oficina o agencia","Por producto (cartera, captaciones, servicios)","Por línea de negocio / segmento","Por proyecto o iniciativa"]},
+    {id:"versiones", t:"¿Cuántas versiones o iteraciones pasa el presupuesto antes de aprobarse?", tipo:"radio", opts:["1 a 2","3 a 5","6 a 10","Más de 10, se pierde la cuenta"]},
+    {id:"dolor", t:"¿Cuál es el principal dolor del proceso actual?", tipo:"textarea", why:"Sea concreto: lo que más tiempo consume o más errores genera.", ph:"Ej. Cada cambio de tasa obliga a rehacer 20 hojas; consolidar toma dos semanas; nadie sabe cuál es la versión vigente."},
+    {id:"cambio", t:"Cuando cambia un supuesto (una tasa, el crecimiento de cartera), ¿cuánto tarda en reflejarse en todo el presupuesto?", tipo:"radio", opts:["Minutos: está automatizado","Horas","Días","Prácticamente hay que rehacerlo"]},
+    {id:"aprobacion", t:"¿Cómo es el flujo de aprobación?", tipo:"textarea", ph:"Ej. Cada gerencia carga, Planificación consolida, Gerencia General revisa, Comité y Directorio aprueban."},
+    {id:"conserva", t:"¿Qué de lo actual quieren conservar sí o sí?", tipo:"textarea", ph:"Ej. La estructura del plan de cuentas, los formatos que ya conoce el Directorio."}
+  ]
+},
+{
+  id:"variables", titulo:"Variables, supuestos y escenarios", area:"Finanzas · Riesgos · Tesorería",
+  intro:"Aquí está el corazón de la herramienta: qué palancas mueven el presupuesto y cómo deben recalcular los 36 meses.",
+  preguntas:[
+    {id:"vars", t:"¿Qué variables deben poder cambiarse y recalcular todo el horizonte?", tipo:"check", why:"Marque todas las que apliquen.", opts:["Tasas activas por producto","Tasas pasivas por producto","Crecimiento de cartera por producto / segmento","Crecimiento de captaciones (vista, ahorro, plazo)","Morosidad y provisiones","Inflación","Tipo de cambio","Encaje / requerimientos de liquidez","Gastos de personal (plantilla, incrementos)","Gastos operativos y administrativos","Inversiones y CAPEX","Comisiones e ingresos por servicios","Impuestos y contribuciones","Apertura o cierre de oficinas"], otro:true},
+    {id:"frecuentes", t:"¿Cuáles de esos supuestos cambian con más frecuencia durante el año?", tipo:"textarea", ph:"Ej. Tasas pasivas cada mes según competencia; crecimiento de cartera cada trimestre."},
+    {id:"escenarios", t:"¿Manejan escenarios (base, optimista, pesimista) o análisis de sensibilidad?", tipo:"radio", opts:["Sí, formalmente, y se presentan al Directorio","Sí, de manera informal en Excel","No, pero queremos hacerlo","No lo necesitamos"]},
+    {id:"drivers", t:"¿Cómo se construye hoy la proyección de cartera y captaciones?", tipo:"radio", opts:["Por saldos: crecimiento % sobre el saldo anterior","Por flujos: desembolsos, recuperaciones y castigos","Por oficina y luego se suma","Mezcla de las anteriores","Otro"], otro:true},
+    {id:"regulatorio", t:"¿Qué indicadores regulatorios o de gestión deben salir del presupuesto?", tipo:"check", opts:["Margen financiero / NIM","Eficiencia operativa","ROE y ROA","Cartera vencida / cobertura de provisiones","Solvencia / patrimonio técnico","Liquidez estructural","Cumplimiento de límites internos"], otro:true},
+    {id:"balance", t:"¿El presupuesto debe proyectar solo el estado de resultados, o también balance y flujo?", tipo:"radio", opts:["Solo resultados","Resultados y balance","Resultados, balance y flujo de caja","No estamos seguros; queremos recomendación"]}
+  ]
+},
+{
+  id:"seguimiento", titulo:"Seguimiento: real contra presupuesto", area:"Control de gestión · Contraloría",
+  intro:"La herramienta solo sirve si el real entra cada mes sin esfuerzo y las desviaciones saltan solas.",
+  preguntas:[
+    {id:"fuente_real", t:"¿De dónde sale el dato real cada mes?", tipo:"check", opts:["Balance de comprobación del core bancario","Contabilidad / ERP","Data warehouse o BI","Archivos que prepara cada área","Todavía se arma a mano"], otro:true},
+    {id:"cierre", t:"¿Qué día del mes está disponible el real cerrado?", tipo:"text", ph:"Ej. Entre el día 5 y el 8 del mes siguiente"},
+    {id:"alertas", t:"¿Cómo debería avisar la herramienta cuando algo se desvía?", tipo:"check", opts:["Semáforos en el tablero","Correo al responsable del rubro","Resumen mensual automático a Gerencia","Tolerancias distintas por rubro (ej. 3 % en gastos, 10 % en cartera)","No lo hemos definido"]},
+    {id:"tolerancia", t:"¿Qué desviación consideran hoy significativa?", tipo:"text", ph:"Ej. Más del 5 % en gastos; más del 10 % en colocaciones"},
+    {id:"reportes", t:"¿Qué reportes de seguimiento producen hoy y para quién?", tipo:"textarea", ph:"Ej. Ejecución presupuestaria mensual para Comité; informe trimestral para Directorio; reporte regulatorio X."},
+    {id:"quien_ve", t:"¿Quiénes deberían ver los tableros?", tipo:"check", opts:["Directorio","Gerencia General","Gerencias de área","Jefes de oficina / agencia","Auditoría interna","Control de gestión / Planificación"]}
+  ]
+},
+{
+  id:"sistemas", titulo:"Sistemas, datos y accesos", area:"Tecnología",
+  intro:"Lo caro nunca es el cálculo; es conectar con los sistemas sin fricción y sin romper nada. Esto define buena parte del alcance.",
+  preguntas:[
+    {id:"core", t:"¿Qué core bancario usan?", tipo:"radio", opts:["Cobis","Temenos (T24 / Transact)","Bantotal","Fisa","Desarrollo propio","Otro"], otro:true},
+    {id:"contab", t:"¿Contabilidad y presupuesto viven en el core o en otro sistema?", tipo:"text", ph:"Ej. Contabilidad en el core; presupuesto en Excel"},
+    {id:"acceso", t:"¿Cómo podría la herramienta leer los datos reales?", tipo:"check", why:"Marque lo que ya existe o lo que TI estaría dispuesta a habilitar.", opts:["API o servicio web del core","Vistas de solo lectura sobre la base de datos","Data warehouse / BI existente","Archivos exportados (Excel, CSV, TXT) de forma periódica","Ninguna de las anteriores por política de seguridad"]},
+    {id:"nube", t:"¿Qué política tienen sobre nube y proveedores externos?", tipo:"radio", opts:["Nube permitida sin restricción","Nube permitida con condiciones (región, cifrado, contratos)","Solo infraestructura propia (on-premise)","No está definido"]},
+    {id:"sso", t:"¿Con qué se autentican los usuarios?", tipo:"check", opts:["Microsoft Entra / Active Directory","Google Workspace","Directorio propio del core","Usuario y contraseña independientes"]},
+    {id:"autoriza", t:"¿Quién autoriza accesos a datos y sistemas, y quién sería el contacto técnico del proyecto?", tipo:"textarea", ph:"Nombre, cargo y correo. Si aún no está definido, díganlo."},
+    {id:"maestros", t:"¿El plan de cuentas y los catálogos (oficinas, centros de costo, productos) están limpios y estables?", tipo:"radio", opts:["Sí, están ordenados","Más o menos; hay duplicados o cuentas en desuso","No, es parte del problema","No lo sabemos"]}
+  ]
+},
+{
+  id:"proyecto", titulo:"Usuarios, seguridad, plazos y decisión", area:"Gerencia · TI · Auditoría",
+  intro:"Para que la cotización sea real y no un rango.",
+  preguntas:[
+    {id:"usuarios", t:"¿Cuántas personas usarían la herramienta?", tipo:"radio", opts:["Menos de 10","10 a 30","30 a 100","Más de 100"]},
+    {id:"roles", t:"¿Qué roles necesitan?", tipo:"check", opts:["Administrador de supuestos y versiones","Responsable de área (carga y justifica)","Aprobador (Gerencia / Comité)","Solo lectura (Directorio, Auditoría)"]},
+    {id:"trazabilidad", t:"¿Qué exige Auditoría o el regulador sobre trazabilidad?", tipo:"textarea", ph:"Ej. Bitácora de quién cambió cada supuesto y cuándo; versiones inmutables una vez aprobadas; retención de 7 años."},
+    {id:"idiomas", t:"¿Necesitan algo particular de formato o idioma?", tipo:"text", ph:"Ej. Reportes en el formato del regulador; exportación a Excel obligatoria"},
+    {id:"plazo", t:"¿Para cuándo necesitan la herramienta operando?", tipo:"radio", opts:["Antes del próximo ciclo presupuestario","En los próximos 3 meses","En 3 a 6 meses","No hay fecha definida"]},
+    {id:"inversion", t:"¿Tienen un rango de inversión aprobado o estimado para esto?", tipo:"radio", why:"Ayuda a proponer el alcance correcto desde el inicio, no a ajustar el precio.", opts:["Sí, y lo compartimos en la reunión","Sí, pero aún no lo compartimos","No; esperamos la propuesta para definirlo"]},
+    {id:"decision", t:"¿Quién toma la decisión final y qué proceso sigue la contratación?", tipo:"textarea", ph:"Ej. Gerencia General con aval del Directorio; se comparan al menos dos ofertas."},
+    {id:"exito", t:"¿Cómo sabrían en 12 meses que el proyecto fue un éxito?", tipo:"textarea", ph:"Ej. Ciclo de 4 meses a 3 semanas; reproyección mensual en un día; cero versiones en Excel."},
+    {id:"extra", t:"¿Algo más que debamos saber?", tipo:"textarea", ph:"Lo que no cupo en las preguntas anteriores."}
+  ]
+}];
+
+/* ==========================================================
+   ESTADO Y ALMACENAMIENTO
+   ========================================================== */
+const params = new URLSearchParams(location.search);
+const DOC = (params.get('doc') || 'banco').replace(/[^a-z0-9-]/gi,'').slice(0,40) || 'banco';
+const CLAVE = params.get('clave') || '';
+const API = '/.netlify/functions/cuestionario-banco';
+const LS_ANS = 'gdx-cuest-'+DOC, LS_WHO = 'gdx-cuest-who';
+let answers = {};            // qid -> {v, by, at}
+let serverOK = null;         // null desconocido, true, false
+let dirty = {};              // qid -> timer
+let total = 0;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s??'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function setStatus(kind, txt){ $('#dot').className='dot '+kind; $('#statusTxt').textContent=txt; }
+
+/* ---------- render ---------- */
+function render(){
+  const f = $('#form'), toc = $('#toc');
+  let html='', tocHtml=''; total=0;
+  SECCIONES.forEach((s,si)=>{
+    html += `<section class="sec" id="sec-${s.id}"><div class="sec-h"><div><div class="n">SECCIÓN ${si+1} DE ${SECCIONES.length}</div><h2>${esc(s.titulo)}</h2><p>${esc(s.intro)}</p></div><span class="area">${esc(s.area)}</span></div>`;
+    s.preguntas.forEach((q,qi)=>{
+      total++;
+      const n = `${si+1}.${qi+1}`;
+      html += `<div class="q" id="q-${q.id}" data-box="${q.id}"><div class="chk">✓</div><div>`;
+      html += `<p class="t">${n} · ${esc(q.t)}</p>`;
+      if(q.why) html += `<p class="why">${esc(q.why)}</p>`;
+      if(q.tipo==='text') html += `<input type="text" data-q="${q.id}" placeholder="${esc(q.ph||'')}" autocomplete="off">`;
+      else if(q.tipo==='number') html += `<input type="number" class="num" data-q="${q.id}" placeholder="${esc(q.ph||'')}">`;
+      else if(q.tipo==='textarea') html += `<textarea data-q="${q.id}" placeholder="${esc(q.ph||'')}"></textarea>`;
+      else if(q.tipo==='radio'||q.tipo==='check'){
+        const t = q.tipo==='radio'?'radio':'checkbox';
+        html += `<div class="opts${q.opts.length>6?'':' inline'}">`;
+        q.opts.forEach((o,oi)=> html += `<label><input type="${t}" name="${q.id}" value="${esc(o)}" data-q="${q.id}"><span>${esc(o)}</span></label>`);
+        html += `</div>`;
+        if(q.otro) html += `<input type="text" class="otro" data-q="${q.id}" data-otro="1" placeholder="Si marcó «Otro» o quiere precisar, escríbalo aquí">`;
+      }
+      html += `<div class="meta" id="meta-${q.id}"></div></div></div>`;
+    });
+    html += `</section>`;
+    tocHtml += `<a href="#sec-${s.id}">${si+1}. ${esc(s.titulo)}<span id="toc-${s.id}"></span></a>`;
+  });
+  f.innerHTML = html; toc.innerHTML = tocHtml;
+  f.addEventListener('input', onInput);
+  f.addEventListener('change', onInput);
+}
+
+/* valor actual de una pregunta desde el DOM */
+function readValue(qid){
+  const q = findQ(qid);
+  if(q.tipo==='radio'){
+    const r = document.querySelector(`input[name="${qid}"]:checked`);
+    const otro = document.querySelector(`input[data-q="${qid}"][data-otro]`);
+    return {sel: r?r.value:'', otro: otro?otro.value.trim():''};
+  }
+  if(q.tipo==='check'){
+    const sel = [...document.querySelectorAll(`input[name="${qid}"]:checked`)].map(i=>i.value);
+    const otro = document.querySelector(`input[data-q="${qid}"][data-otro]`);
+    return {sel, otro: otro?otro.value.trim():''};
+  }
+  const el = document.querySelector(`[data-q="${qid}"]`);
+  return el.value.trim();
+}
+function isAnswered(v){
+  if(v==null) return false;
+  if(typeof v==='string') return v.length>0;
+  if(Array.isArray(v.sel)) return v.sel.length>0 || !!v.otro;
+  return !!v.sel || !!v.otro;
+}
+function findQ(qid){ for(const s of SECCIONES){ for(const q of s.preguntas){ if(q.id===qid) return q; } } }
+
+/* escribir valor en el DOM (sin disparar eventos) */
+function writeValue(qid, v){
+  const q = findQ(qid); if(!q) return;
+  if(q.tipo==='radio'||q.tipo==='check'){
+    const sel = q.tipo==='radio' ? [v?.sel].filter(Boolean) : (v?.sel||[]);
+    document.querySelectorAll(`input[name="${qid}"]`).forEach(i=> i.checked = sel.includes(i.value));
+    const otro = document.querySelector(`input[data-q="${qid}"][data-otro]`);
+    if(otro && document.activeElement!==otro) otro.value = v?.otro||'';
+  } else {
+    const el = document.querySelector(`[data-q="${qid}"]`);
+    if(el && document.activeElement!==el) el.value = v||'';
+  }
+}
+function paint(qid){
+  const a = answers[qid];
+  const box = $('#q-'+qid); if(!box) return;
+  const ok = a && isAnswered(a.v);
+  box.classList.toggle('done', !!ok);
+  const m = $('#meta-'+qid);
+  m.textContent = ok && a.by ? `${a.by} · ${fmt(a.at)}` : '';
+}
+function fmt(ts){ if(!ts) return ''; const d=new Date(ts); return d.toLocaleDateString('es',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}); }
+function updateProgress(){
+  let n=0; SECCIONES.forEach(s=>{ let k=0; s.preguntas.forEach(q=>{ if(answers[q.id]&&isAnswered(answers[q.id].v)){n++;k++;} }); const t=$('#toc-'+s.id); if(t) t.textContent = `${k}/${s.preguntas.length}`; });
+  $('#count').textContent = `${n} / ${total}`;
+  $('#bar').style.width = (100*n/total)+'%';
+  $('#doneBanner').classList.toggle('show', n>=Math.round(total*0.8));
+}
+
+/* ---------- entrada del usuario ---------- */
+function onInput(e){
+  const qid = e.target.dataset.q; if(!qid) return;
+  const v = readValue(qid);
+  answers[qid] = {v, by: who(), at: Date.now()};
+  paint(qid); updateProgress(); saveLocal();
+  clearTimeout(dirty[qid]);
+  dirty[qid] = setTimeout(()=>push(qid), 500);
+}
+function who(){ return ($('#who').value||'').trim().slice(0,80) || 'Sin nombre'; }
+$('#who').addEventListener('input', ()=>{ try{localStorage.setItem(LS_WHO,$('#who').value)}catch(e){} });
+
+/* ---------- local ---------- */
+function saveLocal(){ try{ localStorage.setItem(LS_ANS, JSON.stringify(answers)); }catch(e){} }
+function loadLocal(){ try{ const s=localStorage.getItem(LS_ANS); if(s) answers=JSON.parse(s)||{}; $('#who').value = localStorage.getItem(LS_WHO)||''; }catch(e){} }
+
+/* ---------- servidor ---------- */
+async function push(qid){
+  delete dirty[qid];
+  const a = answers[qid]; if(!a) return;
+  setStatus('saving','Guardando…');
+  try{
+    const r = await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({doc:DOC,qid,v:a.v,by:a.by,at:a.at})});
+    if(!r.ok) throw new Error(r.status);
+    serverOK = true; setStatus('ok','Guardado en servidor');
+  }catch(err){
+    serverOK = false; setStatus('local','Sin servidor: guardado en este navegador');
+    setTimeout(()=>push(qid), 8000); // reintenta
+  }
+}
+async function pull(){
+  try{
+    const r = await fetch(API+'?doc='+encodeURIComponent(DOC)+(CLAVE?'&clave='+encodeURIComponent(CLAVE):''),{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    const remote = data.answers||{};
+    let changed=false;
+    for(const qid in remote){
+      const loc = answers[qid];
+      if(!loc || (remote[qid].at||0) > (loc.at||0)){
+        if(dirty[qid]) continue;            // el usuario está escribiendo aquí
+        answers[qid]=remote[qid]; writeValue(qid, remote[qid].v); paint(qid); changed=true;
+      }
+    }
+    if(changed){ updateProgress(); saveLocal(); }
+    serverOK=true;
+    if(!Object.keys(dirty).length) setStatus('ok', Object.keys(remote).length? 'Sincronizado · '+new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}) : 'Conectado · sin respuestas aún');
+    if(CLAVE && data.admin) renderAdmin(data);
+  }catch(err){
+    if(serverOK===null){ serverOK=false; setStatus('local','Sin servidor: se guarda en este navegador'); }
+  }
+}
+
+/* ---------- admin ---------- */
+function renderAdmin(data){
+  const box=$('#admin'); box.classList.add('show');
+  let rows='';
+  SECCIONES.forEach(s=>s.preguntas.forEach(q=>{
+    const a=answers[q.id]; if(!a||!isAnswered(a.v)) return;
+    rows+=`<tr><td>${esc(q.id)}</td><td>${esc(q.t)}</td><td>${esc(valueToText(a.v))}</td><td>${esc(a.by||'')}</td><td>${esc(fmt(a.at))}</td></tr>`;
+  }));
+  $('#adminTable').innerHTML = rows ? `<table><thead><tr><th>id</th><th>Pregunta</th><th>Respuesta</th><th>Quién</th><th>Cuándo</th></tr></thead><tbody>${rows}</tbody></table>` : '<p>Sin respuestas todavía.</p>';
+}
+function valueToText(v){
+  if(typeof v==='string') return v;
+  if(Array.isArray(v.sel)) return v.sel.join('; ') + (v.otro?' · '+v.otro:'');
+  return (v.sel||'') + (v.otro?' · '+v.otro:'');
+}
+function exportJSON(){
+  const out={doc:DOC, exportado:new Date().toISOString(), respuestas:[]};
+  SECCIONES.forEach(s=>s.preguntas.forEach(q=>{ const a=answers[q.id]; out.respuestas.push({seccion:s.titulo, area:s.area, id:q.id, pregunta:q.t, respuesta:a?valueToText(a.v):'', por:a?.by||'', fecha:a?.at?new Date(a.at).toISOString():''}); }));
+  download(`cuestionario-${DOC}.json`, JSON.stringify(out,null,2), 'application/json');
+}
+function exportCSV(){
+  const q = s => '"'+String(s??'').replace(/"/g,'""')+'"';
+  let csv='seccion,area,id,pregunta,respuesta,por,fecha\n';
+  SECCIONES.forEach(s=>s.preguntas.forEach(p=>{ const a=answers[p.id]; csv+=[s.titulo,s.area,p.id,p.t,a?valueToText(a.v):'',a?.by||'',a?.at?new Date(a.at).toISOString():''].map(q).join(',')+'\n'; }));
+  download(`cuestionario-${DOC}.csv`, '﻿'+csv, 'text/csv');
+}
+function download(name, content, type){ const b=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); }
+$('#exportBtn').onclick=exportJSON; $('#dlJson').onclick=exportJSON; $('#dlCsv').onclick=exportCSV; $('#printBtn').onclick=()=>print();
+
+/* ---------- arranque ---------- */
+render(); loadLocal();
+for(const qid in answers){ writeValue(qid, answers[qid].v); paint(qid); }
+updateProgress();
+pull(); setInterval(pull, 5000);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) pull(); });
+</script>
+</body>
+</html>

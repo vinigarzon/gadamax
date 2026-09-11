@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Presupuesto dinámico a 3 años · Demo · Gadamax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1321;--ink-2:#182033;--ink-3:#2A3550;--muted:#5C6880;--muted-dark:#8C99B2;
+  --paper:#EDF0F6;--paper-2:#F7F9FC;--paper-3:#FFFFFF;--rule:#C9D2E1;--rule-soft:#DEE4EE;
+  --cobalt:#1F3BE0;--cobalt-ink:#152BA8;--cobalt-soft:#E3E8FF;
+  --gain:#0E8F76;--gain-soft:#DFF2ED;--amber:#B07C10;--amber-soft:#FBF0D8;--flag:#B23A2E;--flag-soft:#F7E4E1;
+  --violet:#7A4BC7;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;--f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;--f-serif:"Source Serif 4",Georgia,serif;
+  --radius:3px;--max:1280px;--pad:clamp(16px,4vw,48px);
+  --shadow:0 1px 2px rgba(13,19,33,.06),0 12px 32px -18px rgba(13,19,33,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--cobalt)}
+button{font:inherit}
+.topbar{position:sticky;top:0;z-index:30;background:rgba(247,249,252,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule-soft)}
+.topbar .in{max-width:var(--max);margin:0 auto;padding:10px var(--pad);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:800;letter-spacing:-.02em;font-size:18px}
+.brand small{font-weight:500;color:var(--muted);margin-left:8px;letter-spacing:0;font-size:13px}
+.spacer{flex:1}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{border:1px solid var(--rule);background:var(--paper-3);color:var(--ink-2);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer}
+.pill.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pill.custom.on{background:var(--amber);border-color:var(--amber)}
+.btn{font-weight:600;font-size:13.5px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:8px 13px;border-radius:var(--radius);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{background:#fff}
+.btn.cobalt{background:var(--cobalt);border-color:var(--cobalt)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 80px}
+.hero{padding:40px 0 22px;display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:end}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--cobalt);font-weight:600}
+h1{font-size:clamp(26px,3.6vw,40px);line-height:1.1;letter-spacing:-.025em;margin:10px 0 12px;font-weight:800}
+.lead{font-family:var(--f-serif);font-size:17.5px;color:var(--ink-3);margin:0;max-width:680px}
+.synthetic{background:var(--amber-soft);border:1px solid #ecd9a6;border-radius:var(--radius);padding:12px 14px;font-size:13.5px;color:#6b4a06}
+.synthetic b{display:block;margin-bottom:2px}
+h2{font-size:22px;letter-spacing:-.02em;margin:0 0 4px}
+.sec{margin-top:44px}
+.sec-h{display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
+.sec-h p{margin:0;color:var(--muted);font-size:14px;max-width:760px}
+.sec-h .n{font-family:var(--f-mono);font-size:12px;color:var(--cobalt);font-weight:600;letter-spacing:.06em}
+.card{background:var(--paper-3);border:1px solid var(--rule-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px}
+.card h3{margin:0 0 4px;font-size:15px}
+.card .sub{color:var(--muted);font-size:13px;margin:0 0 10px}
+/* layout modelo */
+.model{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+.panel{position:sticky;top:64px;max-height:calc(100vh - 80px);overflow:auto;padding:0}
+.panel .ph{padding:14px 16px 10px;border-bottom:1px solid var(--rule-soft);display:flex;align-items:center;gap:8px}
+.panel .ph h3{margin:0;font-size:14px}
+.panel .ph small{color:var(--muted);font-size:12px}
+details.grp{border-bottom:1px solid var(--rule-soft)}
+details.grp summary{cursor:pointer;padding:11px 16px;font-weight:600;font-size:13.5px;list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
+details.grp summary::-webkit-details-marker{display:none}
+details.grp summary::before{content:"▸";color:var(--muted);font-size:12px;transition:transform .2s}
+details.grp[open] summary::before{transform:rotate(90deg)}
+details.grp summary .cnt{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--muted-dark);font-weight:500}
+.ctl{padding:6px 16px 10px;display:grid;grid-template-columns:1fr 84px;gap:4px 10px;align-items:center}
+.ctl label{font-size:13px;color:var(--ink-2)}
+.ctl .val{font-family:var(--f-mono);font-size:12.5px;text-align:right;color:var(--ink);border:1px solid var(--rule-soft);border-radius:var(--radius);padding:3px 6px;background:var(--paper-2);width:84px}
+.ctl input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--cobalt);margin:0;height:22px}
+.ctl.changed label{color:var(--amber);font-weight:600}
+.panel .foot{padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap}
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--paper-3);border:1px solid var(--rule-soft);border-radius:var(--radius);padding:12px 14px;box-shadow:var(--shadow)}
+.kpi .l{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.kpi .v{font-family:var(--f-mono);font-size:22px;font-weight:600;letter-spacing:-.02em;margin:4px 0 2px}
+.kpi .d{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+.kpi .d.up{color:var(--gain)}.kpi .d.down{color:var(--flag)}
+.kpi.warn{border-color:#ecd9a6;background:var(--amber-soft)}.kpi.bad{border-color:#e7b7b1;background:var(--flag-soft)}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-card{background:var(--paper-3);border:1px solid var(--rule-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px 8px;position:relative}
+.chart-card h3{margin:0;font-size:14.5px}
+.chart-card .sub{color:var(--muted);font-size:12.5px;margin:2px 0 8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-3);margin:0 0 6px}
+.legend i{display:inline-block;width:14px;height:0;border-top:2.5px solid;vertical-align:middle;margin-right:6px}
+.legend i.dash{border-top-style:dashed}
+.legend i.area{height:10px;border:0;opacity:.35}
+svg.chart{width:100%;height:auto;display:block;font-family:var(--f-mono);font-size:10.5px}
+svg.chart text{fill:var(--muted)}
+svg.chart .grid{stroke:var(--rule-soft);stroke-width:1}
+svg.chart .axis{stroke:var(--rule);stroke-width:1}
+svg.chart .ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+svg.chart .ar{opacity:.18}
+svg.chart .xh{stroke:var(--ink);stroke-width:1;opacity:0;stroke-dasharray:3 3}
+svg.chart .dot{r:4;stroke:#fff;stroke-width:2;opacity:0}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-family:var(--f-mono);font-size:11.5px;padding:8px 10px;border-radius:var(--radius);opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5;line-height:1.5}
+.tip b{color:var(--muted-dark);font-weight:500;display:block;margin-bottom:2px}
+.tip .r{display:flex;gap:10px;justify-content:space-between}
+.tip .r i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+/* tablas */
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:right;padding:6px 8px;border-bottom:1px solid var(--rule)}
+table.t th:first-child,table.t td:first-child{text-align:left}
+table.t td{padding:7px 8px;border-bottom:1px solid var(--rule-soft);text-align:right;font-family:var(--f-mono);font-size:12.5px}
+table.t td:first-child{font-family:var(--f-body);font-size:13px}
+table.t tr.tot td{font-weight:600;border-top:1px solid var(--rule);background:var(--paper-2)}
+table.t tr.sub td:first-child{padding-left:20px;color:var(--ink-3)}
+.twrap{overflow-x:auto}
+/* seguimiento */
+.track{display:grid;grid-template-columns:1fr 360px;gap:14px;align-items:start}
+.controls{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.controls label{font-size:13px;font-weight:600}
+.controls input[type=range]{width:220px;accent-color:var(--cobalt)}
+.controls .mono{font-family:var(--f-mono);font-size:13px}
+.sem{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:12px;padding:2px 8px;border-radius:999px}
+.sem.ok{background:var(--gain-soft);color:#0b5f4f}.sem.warn{background:var(--amber-soft);color:#6b4a06}.sem.bad{background:var(--flag-soft);color:#7d2419}
+.sem::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.alerts{display:grid;gap:8px}
+.alert{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px 12px;border-radius:var(--radius);border:1px solid var(--rule-soft);background:var(--paper-2);font-size:13px}
+.alert.bad{border-color:#e7b7b1;background:var(--flag-soft)}.alert.warn{border-color:#ecd9a6;background:var(--amber-soft)}
+.alert .ic{font-family:var(--f-mono);font-weight:600;font-size:12px}
+.alert b{display:block}
+.alert small{color:var(--muted)}
+.tol{display:grid;grid-template-columns:1fr 70px;gap:6px 10px;align-items:center;font-size:13px}
+.tol input{font:inherit;font-family:var(--f-mono);font-size:12.5px;width:70px;border:1px solid var(--rule);border-radius:var(--radius);padding:4px 6px;text-align:right}
+.repro{margin-top:12px;padding:12px 14px;background:var(--cobalt-soft);border-radius:var(--radius);font-size:13.5px;display:none}
+.repro.show{display:block}
+/* versiones */
+.versions{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.log{font-family:var(--f-mono);font-size:12px;max-height:260px;overflow:auto;display:grid;gap:4px}
+.log div{padding:6px 8px;border-left:2px solid var(--rule);background:var(--paper-2)}
+.log div b{color:var(--cobalt);font-weight:500}
+.vlist{display:grid;gap:8px}
+.ver{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--rule-soft);border-radius:var(--radius);background:var(--paper-2);font-size:13px}
+.ver .m{font-family:var(--f-mono);font-size:12.5px}
+.ver.approved{border-color:#b8e0d4;background:var(--gain-soft)}
+/* integración */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.cols .card ul{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:var(--ink-3)}
+.cols .card li{margin:3px 0}
+.empty{color:var(--muted);font-size:13px;padding:8px 0}
+.footer{margin-top:48px;padding:22px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--rule);display:flex;gap:14px;flex-wrap:wrap}
+@media (max-width:1000px){.model{grid-template-columns:1fr}.panel{position:static;max-height:none}.track{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.versions{grid-template-columns:1fr}}
+@media (max-width:720px){.charts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="in">
+    <span class="brand">Gadamax<small>Presupuesto dinámico · Entidad bancaria · 2027–2029</small></span>
+    <span class="spacer"></span>
+    <div class="pills" id="scen">
+      <button class="pill on" data-s="base">Base</button>
+      <button class="pill" data-s="optimista">Optimista</button>
+      <button class="pill" data-s="pesimista">Pesimista</button>
+      <button class="pill custom" data-s="custom" style="display:none">Personalizado</button>
+    </div>
+    <button class="btn ghost" id="btnReset">Restablecer</button>
+    <button class="btn" id="btnSave">Guardar versión</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <div class="kicker">Modelo en vivo · Herramienta presupuestaria a medida</div>
+      <h1>Un presupuesto a 3 años que se recalcula entero cada vez que cambia un supuesto</h1>
+      <p class="lead">Mueva cualquier variable del panel: tasas, cartera, captaciones, morosidad, plantilla, inflación, apertura de oficinas. Los 36 meses, los estados financieros, los indicadores y las alertas se recalculan al instante. Abajo, el seguimiento real contra presupuesto con semáforos, y la reproyección con un clic.</p>
+    </div>
+    <div class="synthetic"><b>Datos 100 % sintéticos</b>Una entidad ficticia de tamaño mediano. Ninguna cifra es real ni de referencia. En la versión para su entidad, los saldos iniciales y el real mensual vienen de su core y su contabilidad; el plan de cuentas y los rubros son los suyos.</div>
+  </div>
+
+  <!-- ============ MODELO ============ -->
+  <div class="sec" id="modelo">
+    <div class="sec-h"><div><div class="n">01 · SUPUESTOS Y PROYECCIÓN</div><h2>Cambie un supuesto, cambia todo el horizonte</h2><p>Cada control es una variable del modelo. La línea punteada de los gráficos es la versión aprobada por el Directorio; la sólida, lo que usted está proyectando ahora.</p></div></div>
+    <div class="model">
+      <div class="card panel" id="panel">
+        <div class="ph"><h3>Supuestos</h3><small id="scenTag">Escenario base</small></div>
+        <div id="controls"></div>
+        <div class="foot"><button class="btn ghost" id="btnCsv">Exportar 36 meses (CSV)</button></div>
+      </div>
+      <div>
+        <div class="kpis" id="kpis"></div>
+        <div class="charts">
+          <div class="chart-card" id="chUtil"></div>
+          <div class="chart-card" id="chBal"></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3>Estado de resultados y balance proyectados</h3>
+          <p class="sub">Cifras en millones de USD. Los tres años salen de los 36 meses; abajo puede ver cualquier mes.</p>
+          <div class="twrap" id="tblPyG"></div>
+          <div class="controls" style="margin:14px 0 6px"><label for="mesVer">Ver un mes</label><input type="range" id="mesVer" min="1" max="36" value="12"><span class="mono" id="mesVerTxt"></span></div>
+          <div class="twrap" id="tblMes"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SEGUIMIENTO ============ -->
+  <div class="sec" id="seguimiento">
+    <div class="sec-h"><div><div class="n">02 · SEGUIMIENTO REAL CONTRA PRESUPUESTO</div><h2>El real entra cada mes; las desviaciones saltan solas</h2><p>Simule el paso de los meses del primer año. El real (sintético) se compara contra la versión aprobada, con tolerancias distintas por rubro. Lo que se sale de tolerancia genera una alerta con responsable.</p></div></div>
+    <div class="controls">
+      <label for="mesCerrado">Meses cerrados de 2027</label>
+      <input type="range" id="mesCerrado" min="1" max="12" value="8">
+      <span class="mono" id="mesCerradoTxt"></span>
+      <span class="spacer"></span>
+      <button class="btn cobalt" id="btnRepro">Reproyectar el año con el real</button>
+    </div>
+    <div class="track">
+      <div>
+        <div class="chart-card" id="chReal"></div>
+        <div class="card" style="margin-top:14px">
+          <h3 id="tblRealTitle">Ejecución presupuestaria</h3>
+          <p class="sub">Mes cerrado y acumulado del año. Desviación = real − presupuesto; en gastos y provisiones, un real mayor es desfavorable.</p>
+          <div class="twrap" id="tblReal"></div>
+          <div class="repro" id="reproBox"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h3>Alertas del mes</h3>
+          <p class="sub" id="alertSub"></p>
+          <div class="alerts" id="alerts"></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3>Tolerancias por rubro</h3>
+          <p class="sub">Editables. En producción las define Control de Gestión y quedan en la bitácora.</p>
+          <div class="tol" id="tols"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ LÍNEAS DE NEGOCIO ============ -->
+  <div class="sec" id="lineas">
+    <div class="sec-h"><div><div class="n">03 · TABLERO POR LÍNEA DE NEGOCIO</div><h2>La misma lógica, abierta por producto</h2><p>En la versión real esta apertura es por oficina, centro de costo, producto o segmento: la que use su plan de cuentas.</p></div></div>
+    <div class="card"><div class="twrap" id="tblLineas"></div></div>
+  </div>
+
+  <!-- ============ VERSIONES ============ -->
+  <div class="sec" id="versiones">
+    <div class="sec-h"><div><div class="n">04 · VERSIONES Y BITÁCORA</div><h2>Cada cambio queda registrado; cada versión, comparable</h2><p>Quién cambió qué supuesto, cuándo y qué efecto tuvo. Las versiones aprobadas se congelan: nadie las edita después.</p></div></div>
+    <div class="versions">
+      <div class="card"><h3>Versiones guardadas</h3><p class="sub">Compare la utilidad a 3 años entre versiones. Se guardan en este navegador para el demo.</p><div class="vlist" id="vlist"></div></div>
+      <div class="card"><h3>Bitácora de cambios</h3><p class="sub">Registro automático de esta sesión.</p><div class="log" id="log"></div></div>
+    </div>
+  </div>
+
+  <!-- ============ INTEGRACIÓN ============ -->
+  <div class="sec" id="integracion">
+    <div class="sec-h"><div><div class="n">05 · CÓMO SE CONECTA CON SUS SISTEMAS</div><h2>Lo que aquí es un control, en producción es un dato de su core</h2></div></div>
+    <div class="cols">
+      <div class="card"><h3>Entradas</h3><ul><li>Saldos iniciales y real mensual desde el core bancario o el balance de comprobación (API, vistas de solo lectura o archivos periódicos: lo que TI autorice).</li><li>Plan de cuentas, oficinas, centros de costo y productos: los suyos, sin traducciones.</li><li>Supuestos macro cargados por Planificación; supuestos de área cargados por cada gerencia con su usuario.</li></ul></div>
+      <div class="card"><h3>Motor</h3><ul><li>Reglas de cálculo transparentes y auditables: cada cifra muestra de qué supuesto y qué fórmula sale.</li><li>Escenarios ilimitados, sensibilidad por variable y reproyección mensual.</li><li>Flujo de aprobación por niveles; versiones congeladas al aprobarse.</li></ul></div>
+      <div class="card"><h3>Salidas</h3><ul><li>Tableros por rol: Directorio, Gerencia, áreas, oficinas, Auditoría.</li><li>Alertas por correo con tolerancias por rubro y responsable.</li><li>Exportación a Excel y al formato de reportes del regulador; bitácora inmutable.</li></ul></div>
+      <div class="card"><h3>Seguridad</h3><ul><li>Acceso con su directorio corporativo (Microsoft Entra u otro), permisos por rol y por oficina.</li><li>Cifrado en tránsito y en reposo; datos en la región que su política exija, o en su propia infraestructura.</li><li>Bitácora inmutable de cambios y accesos para Auditoría.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>Gadamax · mvg@gadamax.com · Demo con datos sintéticos. Ningún dato de esta página se envía a servidor.</span></div>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script>
+/* ============================================================
+   PARÁMETROS
+   Unidades: saldos y montos en millones de USD; g = crecimiento % mensual;
+   tasas = % anual; salario en USD/mes; plantilla en personas.
+   ============================================================ */
+const DEF = {
+  cartera:{ consumo:{s0:180,g:1.4,tasa:16.5}, comercial:{s0:260,g:1.0,tasa:11.0}, vivienda:{s0:140,g:0.6,tasa:9.5}, micro:{s0:90,g:1.8,tasa:22.0} },
+  capt:{ vista:{s0:210,g:0.6,tasa:0.5}, ahorro:{s0:230,g:0.7,tasa:2.5}, plazo:{s0:300,g:0.8,tasa:6.5} },
+  morosidad:3.8, cobertura:140, castigo:1.0,
+  plantilla:610, salario:1900, cargas:35, incremento:5.0,
+  operativo:2.5, inflacion:4.0, deprec:0.35,
+  comisiones:1.8, servicios:0.4, impuestos:36.25,
+  encaje:9, liquidezMin:12, tasaFondeo:8.5,
+  patrimonio0:95, otrosActivos:45, otrosPasivos:20, solvenciaMin:9,
+  oficinas:0, mesApertura:7, costoOficina:0.045, personalOficina:8, aporteCartera:0.9, aporteCapt:1.2
+};
+const ESCENARIOS = {
+  base: p=>p,
+  optimista: p=>{ for(const k in p.cartera) p.cartera[k].g+=0.3; for(const k in p.capt) p.capt[k].g+=0.2; p.morosidad=2.6; p.incremento=3.5; p.inflacion=2.5; return p; },
+  pesimista: p=>{ for(const k in p.cartera) p.cartera[k].g-=0.4; for(const k in p.capt) p.capt[k].g-=0.3; p.morosidad=4.6; p.capt.plazo.tasa+=1.0; p.inflacion=5.0; p.tasaFondeo=10.5; p.incremento=5.0; return p; }
+};
+const NOM = {consumo:'Consumo',comercial:'Comercial',vivienda:'Vivienda',micro:'Microcrédito',vista:'Vista',ahorro:'Ahorro',plazo:'Plazo'};
+const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const clone = o => JSON.parse(JSON.stringify(o));
+
+/* Definición de controles: [ruta, etiqueta, min, max, paso, unidad] */
+const GRUPOS = [
+  {t:'Cartera de crédito', c:[
+    ['cartera.consumo.g','Crecimiento mensual · Consumo',-1,3,0.1,'%'],['cartera.consumo.tasa','Tasa activa · Consumo',8,30,0.25,'%'],
+    ['cartera.comercial.g','Crecimiento mensual · Comercial',-1,3,0.1,'%'],['cartera.comercial.tasa','Tasa activa · Comercial',6,20,0.25,'%'],
+    ['cartera.vivienda.g','Crecimiento mensual · Vivienda',-1,3,0.1,'%'],['cartera.vivienda.tasa','Tasa activa · Vivienda',5,15,0.25,'%'],
+    ['cartera.micro.g','Crecimiento mensual · Microcrédito',-1,4,0.1,'%'],['cartera.micro.tasa','Tasa activa · Microcrédito',12,30,0.25,'%']]},
+  {t:'Captaciones', c:[
+    ['capt.vista.g','Crecimiento mensual · Vista',-1,3,0.1,'%'],['capt.vista.tasa','Tasa pasiva · Vista',0,3,0.1,'%'],
+    ['capt.ahorro.g','Crecimiento mensual · Ahorro',-1,3,0.1,'%'],['capt.ahorro.tasa','Tasa pasiva · Ahorro',0,6,0.1,'%'],
+    ['capt.plazo.g','Crecimiento mensual · Plazo',-1,3,0.1,'%'],['capt.plazo.tasa','Tasa pasiva · Plazo',2,12,0.1,'%']]},
+  {t:'Riesgo de crédito', c:[
+    ['morosidad','Morosidad (cartera vencida / total)',0.5,10,0.1,'%'],['cobertura','Cobertura de provisiones',80,250,5,'%'],['castigo','Castigos anuales',0,3,0.1,'%']]},
+  {t:'Personal y gastos', c:[
+    ['plantilla','Plantilla',300,900,5,'pers.'],['salario','Salario promedio mensual',1000,3500,25,'USD'],['cargas','Cargas sociales',20,50,1,'%'],['incremento','Incremento salarial anual',0,12,0.5,'%'],
+    ['operativo','Gasto operativo mensual',0.8,4,0.05,'M'],['inflacion','Inflación anual',0,12,0.5,'%'],['deprec','Depreciación mensual',0.1,1,0.05,'M']]},
+  {t:'Ingresos por servicios e impuestos', c:[
+    ['comisiones','Comisiones sobre cartera (anual)',0,5,0.1,'%'],['servicios','Servicios sobre captaciones (anual)',0,2,0.05,'%'],['impuestos','Impuestos y participaciones',20,45,0.25,'%']]},
+  {t:'Liquidez, fondeo y capital', c:[
+    ['encaje','Encaje / liquidez obligatoria',2,20,0.5,'%'],['liquidezMin','Liquidez mínima interna',5,30,0.5,'%'],['tasaFondeo','Tasa de fondeo externo',4,16,0.25,'%'],['solvenciaMin','Solvencia mínima',6,15,0.5,'%']]},
+  {t:'Expansión', c:[
+    ['oficinas','Oficinas nuevas',0,10,1,'ofic.'],['mesApertura','Mes de apertura',1,36,1,'mes'],['costoOficina','Costo operativo por oficina (mes)',0.02,0.12,0.005,'M'],['personalOficina','Personal por oficina',4,15,1,'pers.'],['aporteCartera','Cartera nueva por oficina (mes)',0,3,0.1,'M'],['aporteCapt','Captaciones nuevas por oficina (mes)',0,3,0.1,'M']]}
+];
+const get = (o,path)=>path.split('.').reduce((a,k)=>a[k],o);
+const set = (o,path,v)=>{ const ks=path.split('.'); const last=ks.pop(); ks.reduce((a,k)=>a[k],o)[last]=v; };
+const labelOf = path => { for(const g of GRUPOS) for(const c of g.c) if(c[0]===path) return c[1]; return path; };
+
+/* ============================================================
+   MOTOR DE CÁLCULO · 36 meses
+   ============================================================ */
+function calc(p){
+  const out=[]; let prev=null;
+  const cart={}, cap={}; for(const k in p.cartera) cart[k]=p.cartera[k].s0; for(const k in p.capt) cap[k]=p.capt[k].s0;
+  let patrimonio=p.patrimonio0, provStock = (Object.values(cart).reduce((a,b)=>a+b,0))*p.morosidad/100*p.cobertura/100;
+  let activoFijo = 38;
+  for(let m=1;m<=36;m++){
+    const year=Math.ceil(m/12), mi=(m-1)%12;
+    const ofAbiertas = p.oficinas>0 && m>=p.mesApertura ? p.oficinas : 0;
+    // saldos
+    const cartMes={}; let cartTot=0;
+    for(const k in p.cartera){ cart[k]*= (1+p.cartera[k].g/100); if(ofAbiertas) cart[k]+= p.aporteCartera*ofAbiertas*(k==='consumo'?0.5:k==='micro'?0.3:0.1); cartMes[k]=cart[k]; cartTot+=cart[k]; }
+    const capMes={}; let capTot=0;
+    for(const k in p.capt){ cap[k]*= (1+p.capt[k].g/100); if(ofAbiertas) cap[k]+= p.aporteCapt*ofAbiertas*(k==='vista'?0.4:k==='ahorro'?0.4:0.2); capMes[k]=cap[k]; capTot+=cap[k]; }
+    // liquidez y fondeo (balance)
+    const liquidez = capTot*(Math.max(p.encaje,p.liquidezMin))/100;
+    const activos = cartTot + liquidez + activoFijo + p.otrosActivos;
+    const fondeo = Math.max(0, activos - capTot - p.otrosPasivos - patrimonio);
+    // resultados
+    let ingFin=0; const ingPorProd={}; for(const k in p.cartera){ ingPorProd[k]=cartMes[k]*p.cartera[k].tasa/100/12; ingFin+=ingPorProd[k]; }
+    let gastoFin=0; for(const k in p.capt) gastoFin+=capMes[k]*p.capt[k].tasa/100/12; gastoFin+= fondeo*p.tasaFondeo/100/12;
+    const margenBruto = ingFin-gastoFin;
+    const vencida = cartTot*p.morosidad/100;
+    const provReq = vencida*p.cobertura/100;
+    const castigos = cartTot*p.castigo/100/12;
+    const provisiones = Math.max(0, provReq-provStock) + castigos; provStock = provReq;
+    const margenNeto = margenBruto - provisiones;
+    const comisiones = cartTot*p.comisiones/100/12 + capTot*p.servicios/100/12;
+    const plantilla = p.plantilla + ofAbiertas*p.personalOficina;
+    const personal = plantilla*p.salario*(1+p.cargas/100)*Math.pow(1+p.incremento/100, year-1)/1e6;
+    const operativo = p.operativo*Math.pow(1+p.inflacion/100,(m-1)/12) + ofAbiertas*p.costoOficina;
+    const deprec = p.deprec;
+    const gastos = personal+operativo+deprec;
+    const uai = margenNeto + comisiones - gastos;
+    const impuestos = uai>0 ? uai*p.impuestos/100 : 0;
+    const neta = uai - impuestos;
+    patrimonio += neta;
+    const eficiencia = gastos/(margenNeto+comisiones);
+    const solvencia = patrimonio/(cartTot+activoFijo+p.otrosActivos*0.5);
+    const liqRatio = liquidez/capTot;
+    out.push({m,year,mi,label:MESES[mi]+' '+(2026+year), cartera:cartMes, cartTot, capt:capMes, capTot, liquidez, fondeo, activos, patrimonio, ingFin, ingPorProd, gastoFin, margenBruto, vencida, provisiones, margenNeto, comisiones, personal, operativo, deprec, gastos, uai, impuestos, neta, eficiencia, solvencia, liqRatio, plantilla});
+    prev=out[out.length-1];
+  }
+  // indicadores anualizados
+  for(let y=1;y<=3;y++){ const ms=out.filter(r=>r.year===y); const neta=ms.reduce((a,r)=>a+r.neta,0); const patProm=ms.reduce((a,r)=>a+r.patrimonio,0)/12; const cartProm=ms.reduce((a,r)=>a+r.cartTot,0)/12; const mb=ms.reduce((a,r)=>a+r.margenBruto,0); const g=ms.reduce((a,r)=>a+r.gastos,0), base=ms.reduce((a,r)=>a+r.margenNeto+r.comisiones,0); ms.forEach(r=>{ r.roeY=neta/patProm; r.nimY=mb/cartProm; r.efY=g/base; r.netaY=neta; }); }
+  return out;
+}
+const sumY = (rows,y,k)=>rows.filter(r=>r.year===y).reduce((a,r)=>a+r[k],0);
+const last = (rows,y)=>rows.filter(r=>r.year===y).slice(-1)[0];
+
+/* ============================================================
+   FORMATO
+   ============================================================ */
+const fM = v => (v<0?'−':'')+Math.abs(v).toLocaleString('es',{minimumFractionDigits:1,maximumFractionDigits:1})+' M';
+const fM2 = v => (v<0?'−':'')+Math.abs(v).toLocaleString('es',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fP = (v,d=1) => (v*100).toLocaleString('es',{minimumFractionDigits:d,maximumFractionDigits:d})+' %';
+const fPd = (v,d=1) => (v>0?'+':v<0?'−':'')+Math.abs(v*100).toLocaleString('es',{minimumFractionDigits:d,maximumFractionDigits:d})+' %';
+const fN = v => v.toLocaleString('es');
+const esc = s => String(s??'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+let scen='base';
+let P = clone(DEF);
+const APROBADO = calc(clone(DEF));          // versión aprobada por el Directorio (congelada)
+let rows = calc(P);
+let mesCerrado = 8;
+let repro = null;
+const TOL = {ingFin:5, gastoFin:5, provisiones:10, comisiones:5, personal:3, operativo:3, neta:10, cartTot:5, capTot:5};
+const RUBROS = [
+  ['ingFin','Ingresos financieros',+1],['gastoFin','Gastos financieros',-1],['provisiones','Provisiones',-1],['comisiones','Comisiones y servicios',+1],
+  ['personal','Gastos de personal',-1],['operativo','Gastos operativos',-1],['neta','Utilidad neta',+1],['cartTot','Cartera (saldo)',+1],['capTot','Captaciones (saldo)',+1]];
+const RESP = {ingFin:'Gerencia de Negocios',gastoFin:'Tesorería',provisiones:'Riesgos',comisiones:'Gerencia de Negocios',personal:'Talento Humano',operativo:'Administración',neta:'Gerencia General',cartTot:'Gerencia de Negocios',capTot:'Tesorería'};
+let versions=[], logs=[];
+
+/* ============================================================
+   REAL SINTÉTICO (determinístico) · 12 meses de 2027
+   ============================================================ */
+function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const REAL = (()=>{
+  const r = rng(20270101); const out=[];
+  let cartBias=0, capBias=0;
+  for(let i=0;i<12;i++){
+    const b=APROBADO[i]; const n=()=> (r()-0.5)*2;
+    cartBias += -0.004 + n()*0.003;             // la cartera crece algo por debajo del presupuesto
+    capBias  += 0.003 + n()*0.003;              // captaciones un poco por encima
+    const cartTot = b.cartTot*(1+cartBias);
+    const capTot = b.capTot*(1+capBias);
+    const ingFin = b.ingFin*(1+cartBias-0.006+n()*0.015);
+    const gastoFin = b.gastoFin*(1+capBias+0.01+n()*0.02);
+    const provisiones = b.provisiones*(1+(i>=4?0.16:0.02)+n()*0.06);   // morosidad se deteriora desde mayo
+    const comisiones = b.comisiones*(1+0.01+n()*0.03);
+    const personal = b.personal*(1+(i>=2?0.055:0.004)+n()*0.006);      // ajuste salarial no presupuestado desde marzo
+    const operativo = b.operativo*(1+0.02+n()*0.025);
+    const deprec = b.deprec;
+    const margenBruto=ingFin-gastoFin, margenNeto=margenBruto-provisiones, gastos=personal+operativo+deprec;
+    const uai=margenNeto+comisiones-gastos, impuestos=uai>0?uai*DEF.impuestos/100:0, neta=uai-impuestos;
+    out.push({m:i+1,label:b.label,cartTot,capTot,ingFin,gastoFin,provisiones,comisiones,personal,operativo,deprec,gastos,margenBruto,margenNeto,uai,impuestos,neta});
+  }
+  return out;
+})();
+
+/* ============================================================
+   UI · controles
+   ============================================================ */
+function buildControls(){
+  const box=document.getElementById('controls'); let html='';
+  GRUPOS.forEach((g,gi)=>{
+    html+=`<details class="grp"${gi<2?' open':''}><summary>${g.t}<span class="cnt">${g.c.length}</span></summary>`;
+    g.c.forEach(c=>{ const [path,lab,min,max,step,unit]=c; const id='c_'+path.replace(/\./g,'_');
+      html+=`<div class="ctl" id="w_${id}"><label for="${id}">${lab}</label><input class="val" id="v_${id}" data-path="${path}" data-unit="${unit}" value=""><input type="range" id="${id}" data-path="${path}" min="${min}" max="${max}" step="${step}"></div>`; });
+    html+='</details>';
+  });
+  box.innerHTML=html;
+  box.addEventListener('input',e=>{ const path=e.target.dataset.path; if(!path) return; let v=parseFloat(String(e.target.value).replace(',','.')); if(isNaN(v)) return; applyChange(path,v,e.target.type==='range'); });
+  box.addEventListener('change',e=>{ const path=e.target.dataset.path; if(!path||e.target.type==='range') return; let v=parseFloat(String(e.target.value).replace(',','.')); if(isNaN(v)) return; applyChange(path,v,true); });
+  syncControls();
+}
+function syncControls(){
+  const base = clone(DEF); ESCENARIOS[scen==='custom'?'base':scen](base);
+  GRUPOS.forEach(g=>g.c.forEach(c=>{ const [path,,,,step,unit]=c; const id='c_'+path.replace(/\./g,'_'); const v=get(P,path); const r=document.getElementById(id), t=document.getElementById('v_'+id);
+    if(document.activeElement!==r) r.value=v; if(document.activeElement!==t) t.value=(unit==='USD'||unit==='pers.'||unit==='ofic.'||unit==='mes')?fN(v):v.toLocaleString('es',{minimumFractionDigits:step<1?(step<0.1?3:step<0.5?2:1):0,maximumFractionDigits:3})+(unit==='%'?' %':unit==='M'?' M':'');
+    document.getElementById('w_'+id).classList.toggle('changed', Math.abs(get(DEF,path)-v)>1e-9); }));
+  document.getElementById('scenTag').textContent = scen==='custom'?'Escenario personalizado':'Escenario '+scen;
+  document.querySelectorAll('#scen .pill').forEach(b=>{ b.classList.toggle('on',b.dataset.s===scen); if(b.dataset.s==='custom') b.style.display=scen==='custom'?'':'none'; });
+}
+let logTimer={}, firstBefore={};
+function applyChange(path,v,logIt){
+  const before=get(P,path); if(before===v) return;
+  set(P,path,v); if(scen!=='custom'){ scen='custom'; }
+  recalc();
+  if(logIt){ if(firstBefore[path]==null) firstBefore[path]=before; clearTimeout(logTimer[path]); logTimer[path]=setTimeout(()=>{ addLog(`${labelOf(path)}: ${fmtVal(path,firstBefore[path])} → ${fmtVal(path,v)}`, `Utilidad 3 años ${fM(rows.reduce((a,r)=>a+r.neta,0))}`); delete firstBefore[path]; },700); }
+  syncControls();
+}
+function fmtVal(path,v){ const c=GRUPOS.flatMap(g=>g.c).find(c=>c[0]===path); const u=c?c[5]:''; return (u==='%')?v.toLocaleString('es',{maximumFractionDigits:2})+' %':u==='M'?fM(v):fN(v)+(u==='USD'?' USD':''); }
+function setScenario(s){ scen=s; P=clone(DEF); ESCENARIOS[s](P); recalc(); syncControls(); addLog(`Escenario cambiado a «${s}»`, `Utilidad 3 años ${fM(rows.reduce((a,r)=>a+r.neta,0))}`); }
+function addLog(t,eff){ const d=new Date(); logs.unshift({t:d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit',second:'2-digit'}),txt:t,eff}); if(logs.length>60) logs.pop(); renderLog(); }
+function renderLog(){ document.getElementById('log').innerHTML = logs.length? logs.map(l=>`<div><b>${l.t}</b> · Usuario demo · ${esc(l.txt)}${l.eff?` <span style="color:var(--muted)">· ${esc(l.eff)}</span>`:''}</div>`).join('') : '<div class="empty">Sin cambios todavía. Mueva un supuesto.</div>'; }
+
+/* ============================================================
+   RENDER · KPIs
+   ============================================================ */
+function renderKPIs(){
+  const tot=rows.reduce((a,r)=>a+r.neta,0), totA=APROBADO.reduce((a,r)=>a+r.neta,0);
+  const y3=last(rows,3), y3A=last(APROBADO,3);
+  const k=[
+    {l:'Utilidad neta · 3 años', v:fM(tot), d:delta(tot,totA,'M')},
+    {l:'ROE · año 3', v:fP(y3.roeY), d:deltaP(y3.roeY,y3A.roeY)},
+    {l:'Eficiencia · año 3', v:fP(y3.efY), d:deltaP(y3.efY,y3A.efY,true), warn:y3.efY>0.7, bad:y3.efY>0.85},
+    {l:'Margen (NIM) · año 3', v:fP(y3.nimY), d:deltaP(y3.nimY,y3A.nimY)},
+    {l:'Cartera · dic 2029', v:fM(y3.cartTot), d:delta(y3.cartTot,y3A.cartTot,'M')},
+    {l:'Solvencia · dic 2029', v:fP(y3.solvencia), d:'mín. '+P.solvenciaMin.toLocaleString('es')+' %', warn:y3.solvencia<P.solvenciaMin/100*1.15, bad:y3.solvencia<P.solvenciaMin/100},
+  ];
+  document.getElementById('kpis').innerHTML = k.map(x=>`<div class="kpi${x.bad?' bad':x.warn?' warn':''}"><div class="l">${x.l}</div><div class="v">${x.v}</div><div class="d${x.cls||''}">${x.d}</div></div>`).join('');
+  function delta(a,b,u){ const d=a-b; if(Math.abs(d)<0.05) return 'igual a la versión aprobada'; return `<span class="${d>0?'up':'down'}">${d>0?'+':'−'}${fM(Math.abs(d))}</span> vs. aprobada`; }
+  function deltaP(a,b,inv){ const d=a-b; if(Math.abs(d)<0.0005) return 'igual a la versión aprobada'; const good=inv?d<0:d>0; return `<span class="${good?'up':'down'}">${fPd(d)}</span> vs. aprobada`; }
+}
+
+/* ============================================================
+   RENDER · gráficos SVG (línea/área con crosshair + tooltip)
+   ============================================================ */
+const tipEl=document.getElementById('tip');
+function lineChart(el,{title,sub,labels,series,fmt=fM,h=230,yMin=null}){
+  el._spec=arguments[1];
+  const W=Math.max(320,Math.round((el.clientWidth||640)-34)),H=h,pl=50,pr=14,pt=14,pb=26;
+  const all=series.flatMap(s=>s.values.filter(v=>v!=null));
+  let lo=yMin!=null?yMin:Math.min(0,...all), hi=Math.max(...all); if(hi===lo) hi=lo+1; const pad=(hi-lo)*0.08; hi+=pad; if(lo<0) lo-=pad;
+  const n=labels.length, x=i=>pl+(W-pl-pr)*i/(n-1), y=v=>pt+(H-pt-pb)*(1-(v-lo)/(hi-lo));
+  const ticks=5, tv=[...Array(ticks+1)].map((_,i)=>lo+(hi-lo)*i/ticks);
+  let svg=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}">`;
+  tv.forEach(v=>{ svg+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end">${fmtTick(v)}</text>`; });
+  if(lo<0&&hi>0) svg+=`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y(0)}" y2="${y(0)}"/>`;
+  const maxLab=Math.max(3,Math.floor((W-pl-pr)/64)); const step=Math.ceil(n/maxLab); labels.forEach((l,i)=>{ if(i%step===0) svg+=`<text x="${x(i)}" y="${H-8}" text-anchor="${i===0?'start':'middle'}">${esc(short(l))}</text>`; });
+  series.forEach(s=>{ const pts=s.values.map((v,i)=>v==null?null:[x(i),y(v)]).filter(Boolean); if(!pts.length) return;
+    if(s.area) svg+=`<path class="ar" fill="${s.color}" d="M${pts[0][0]},${y(Math.max(0,lo))} ${pts.map(p=>'L'+p[0]+','+p[1]).join(' ')} L${pts[pts.length-1][0]},${y(Math.max(0,lo))} Z"/>`;
+    svg+=`<path class="ln" stroke="${s.color}" ${s.dash?'stroke-dasharray="6 5"':''} d="${pts.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join(' ')}"/>`; });
+  svg+=`<line class="xh" id="xh" x1="0" x2="0" y1="${pt}" y2="${H-pb}"/>`;
+  series.forEach((s,si)=>svg+=`<circle class="dot" data-si="${si}" fill="${s.color}" cx="0" cy="0"/>`);
+  svg+=`<rect x="${pl}" y="${pt}" width="${W-pl-pr}" height="${H-pt-pb}" fill="transparent" id="hit"/></svg>`;
+  el.innerHTML=`<h3>${esc(title)}</h3><div class="sub">${esc(sub||'')}</div><div class="legend">${series.map(s=>`<span><i class="${s.area?'area':s.dash?'dash':''}" style="border-color:${s.color};background:${s.area?s.color:'transparent'}"></i>${esc(s.name)}</span>`).join('')}</div>${svg}`;
+  const svgEl=el.querySelector('svg'), hit=el.querySelector('#hit'), xh=el.querySelector('#xh'), dots=[...el.querySelectorAll('.dot')];
+  hit.addEventListener('mousemove',ev=>{ const r=svgEl.getBoundingClientRect(); const px=(ev.clientX-r.left)*W/r.width; let i=Math.round((px-pl)/(W-pl-pr)*(n-1)); i=Math.max(0,Math.min(n-1,i));
+    xh.setAttribute('x1',x(i)); xh.setAttribute('x2',x(i)); xh.style.opacity=1;
+    dots.forEach((d,si)=>{ const v=series[si].values[i]; if(v==null){d.style.opacity=0;return;} d.setAttribute('cx',x(i)); d.setAttribute('cy',y(v)); d.style.opacity=1; });
+    tipEl.innerHTML=`<b>${esc(labels[i])}</b>`+series.map(s=>s.values[i]==null?'':`<div class="r"><span><i style="background:${s.color}"></i>${esc(s.name)}</span><span>${fmt(s.values[i])}</span></div>`).join('');
+    const cr=el.getBoundingClientRect(); let tx=ev.clientX-cr.left+14, ty=ev.clientY-cr.top-10; if(tx+220>cr.width) tx-=240; tipEl.style.left=(cr.left+tx+window.scrollX)+'px'; tipEl.style.top=(cr.top+ty+window.scrollY)+'px'; tipEl.style.opacity=1; });
+  hit.addEventListener('mouseleave',()=>{ xh.style.opacity=0; dots.forEach(d=>d.style.opacity=0); tipEl.style.opacity=0; });
+  function fmtTick(v){ return Math.abs(v)>=100?Math.round(v).toLocaleString('es'):v.toLocaleString('es',{maximumFractionDigits:1}); }
+  function short(l){ return l.replace(/^(\w{3}) 20(\d\d)$/,(m,a,b)=>a.toLowerCase()+' '+b); }
+}
+let rsT; window.addEventListener('resize',()=>{ clearTimeout(rsT); rsT=setTimeout(()=>{ document.querySelectorAll('.chart-card').forEach(el=>{ if(el._spec) lineChart(el,el._spec); }); },150); });
+function renderCharts(){
+  const labels=rows.map(r=>r.label);
+  lineChart(document.getElementById('chUtil'),{title:'Utilidad neta mensual · 36 meses',sub:'Millones de USD. Sólida: proyección actual · punteada: versión aprobada por el Directorio',labels,
+    series:[{name:'Proyección actual',color:'#1F3BE0',values:rows.map(r=>r.neta)},{name:'Versión aprobada',color:'#5C6880',dash:true,values:APROBADO.map(r=>r.neta)}],fmt:v=>fM2(v)+' M'});
+  lineChart(document.getElementById('chBal'),{title:'Cartera, captaciones y fondeo externo',sub:'Saldos en millones de USD. El área es el fondeo que hay que salir a buscar cuando la cartera crece más que las captaciones',labels,
+    series:[{name:'Cartera',color:'#1F3BE0',values:rows.map(r=>r.cartTot)},{name:'Captaciones',color:'#0E8F76',values:rows.map(r=>r.capTot)},{name:'Fondeo externo',color:'#B07C10',area:true,values:rows.map(r=>r.fondeo)}],fmt:fM});
+}
+
+/* ============================================================
+   RENDER · tablas
+   ============================================================ */
+function renderPyG(){
+  const L=[['Ingresos financieros','ingFin'],['Gastos financieros','gastoFin',-1],['Margen financiero bruto','margenBruto','tot'],['Provisiones','provisiones',-1],['Margen financiero neto','margenNeto','tot'],['Comisiones y servicios','comisiones'],['Gastos de personal','personal',-1],['Gastos operativos','operativo',-1],['Depreciación','deprec',-1],['Utilidad antes de impuestos','uai','tot'],['Impuestos y participaciones','impuestos',-1],['Utilidad neta','neta','tot']];
+  let h='<table class="t"><thead><tr><th>Estado de resultados</th><th>2027</th><th>2028</th><th>2029</th><th>3 años</th><th>vs. aprobada</th></tr></thead><tbody>';
+  L.forEach(([n,k,t])=>{ const v=[1,2,3].map(y=>sumY(rows,y,k)); const tot=v[0]+v[1]+v[2]; const totA=[1,2,3].reduce((a,y)=>a+sumY(APROBADO,y,k),0); const d=tot-totA;
+    h+=`<tr class="${t==='tot'?'tot':'sub'}"><td>${n}</td>${v.map(x=>`<td>${fM2(t===-1?-x:x)}</td>`).join('')}<td>${fM2(t===-1?-tot:tot)}</td><td style="color:${Math.abs(d)<0.005?'var(--muted)':((d>0)!==(t===-1))?'var(--gain)':'var(--flag)'}">${Math.abs(d)<0.005?'—':(d>0?'+':'−')+fM2(Math.abs(d))}</td></tr>`; });
+  h+='</tbody></table>';
+  h+='<table class="t" style="margin-top:16px"><thead><tr><th>Balance e indicadores · cierre de año</th><th>dic 2027</th><th>dic 2028</th><th>dic 2029</th></tr></thead><tbody>';
+  const B=[['Cartera de crédito','cartTot',fM],['Cartera vencida','vencida',fM],['Liquidez','liquidez',fM],['Captaciones','capTot',fM],['Fondeo externo','fondeo',fM],['Patrimonio','patrimonio',fM],['ROE (anual)','roeY',fP],['Eficiencia (anual)','efY',fP],['NIM (anual)','nimY',fP],['Solvencia','solvencia',fP],['Liquidez / captaciones','liqRatio',fP],['Plantilla','plantilla',fN]];
+  B.forEach(([n,k,f])=>{ h+=`<tr><td>${n}</td>${[1,2,3].map(y=>`<td>${f(last(rows,y)[k])}</td>`).join('')}</tr>`; });
+  h+='</tbody></table>';
+  document.getElementById('tblPyG').innerHTML=h;
+}
+function renderMes(){
+  const m=+document.getElementById('mesVer').value; const r=rows[m-1], a=APROBADO[m-1];
+  document.getElementById('mesVerTxt').textContent=r.label;
+  const L=[['Ingresos financieros','ingFin'],['Gastos financieros','gastoFin'],['Provisiones','provisiones'],['Comisiones y servicios','comisiones'],['Gastos de personal','personal'],['Gastos operativos','operativo'],['Utilidad neta','neta'],['Cartera','cartTot'],['Captaciones','capTot'],['Fondeo externo','fondeo'],['Patrimonio','patrimonio']];
+  let h=`<table class="t"><thead><tr><th>${r.label}</th><th>Proyección actual</th><th>Versión aprobada</th><th>Diferencia</th></tr></thead><tbody>`;
+  L.forEach(([n,k])=>{ const d=r[k]-a[k]; h+=`<tr><td>${n}</td><td>${fM2(r[k])}</td><td>${fM2(a[k])}</td><td style="color:${Math.abs(d)<0.005?'var(--muted)':'var(--ink)'}">${Math.abs(d)<0.005?'—':(d>0?'+':'−')+fM2(Math.abs(d))}</td></tr>`; });
+  document.getElementById('tblMes').innerHTML=h+'</tbody></table>';
+}
+function renderLineas(){
+  const y1=last(rows,1), y3=last(rows,3);
+  let h='<table class="t"><thead><tr><th>Línea de negocio</th><th>Tasa activa</th><th>Crec. mensual</th><th>Saldo dic 2027</th><th>Saldo dic 2029</th><th>Ingresos 2027</th><th>Ingresos 3 años</th><th>Participación</th><th>Real vs ppto (cartera, mes cerrado)</th></tr></thead><tbody>';
+  const totIng=rows.reduce((a,r)=>a+r.ingFin,0);
+  const realRatio = REAL[mesCerrado-1].cartTot/APROBADO[mesCerrado-1].cartTot-1;
+  const share = {consumo:0.5,comercial:0.15,vivienda:0.1,micro:0.25};
+  for(const k in P.cartera){ const ing=rows.reduce((a,r)=>a+r.ingPorProd[k],0), i1=rows.filter(r=>r.year===1).reduce((a,r)=>a+r.ingPorProd[k],0);
+    const dev = realRatio*(share[k]/0.25); const cls=Math.abs(dev)<=TOL.cartTot/100?'ok':Math.abs(dev)<=TOL.cartTot/50?'warn':'bad';
+    h+=`<tr><td>${NOM[k]}</td><td>${P.cartera[k].tasa.toLocaleString('es')} %</td><td>${P.cartera[k].g.toLocaleString('es')} %</td><td>${fM(y1.cartera[k])}</td><td>${fM(y3.cartera[k])}</td><td>${fM2(i1)}</td><td>${fM2(ing)}</td><td>${fP(ing/totIng)}</td><td><span class="sem ${cls}">${fPd(dev)}</span></td></tr>`; }
+  document.getElementById('tblLineas').innerHTML=h+'</tbody></table>';
+}
+
+/* ============================================================
+   SEGUIMIENTO · real vs presupuesto, alertas, reproyección
+   ============================================================ */
+function renderTrack(){
+  const m=mesCerrado; const b=APROBADO[m-1], r=REAL[m-1];
+  document.getElementById('mesCerradoTxt').textContent=`Cierre: ${r.label} · ${m} de 12`;
+  document.getElementById('tblRealTitle').textContent=`Ejecución presupuestaria · ${r.label}`;
+  const ytd=k=>({b:APROBADO.slice(0,m).reduce((a,x)=>a+x[k],0), r:REAL.slice(0,m).reduce((a,x)=>a+x[k],0)});
+  let h='<table class="t"><thead><tr><th>Rubro</th><th>Ppto mes</th><th>Real mes</th><th>Desv.</th><th>Ppto acum.</th><th>Real acum.</th><th>Desv. acum.</th><th>Estado</th></tr></thead><tbody>';
+  const alerts=[];
+  RUBROS.forEach(([k,n,sign])=>{ const isBal=k==='cartTot'||k==='capTot'; const bm=b[k], rm=r[k]; const dm=rm/bm-1; const y=isBal?{b:bm,r:rm}:ytd(k); const dy=y.r/y.b-1;
+    const tol=TOL[k]/100; const dev=isBal?dm:dm; const a=Math.abs(dev); const cls=a<=tol?'ok':a<=tol*2?'warn':'bad';
+    const favorable = (dev*sign)>0;
+    h+=`<tr><td>${n}</td><td>${fM2(bm)}</td><td>${fM2(rm)}</td><td style="color:${cls==='ok'?'var(--ink)':favorable?'var(--gain)':'var(--flag)'}">${fPd(dm)}</td><td>${fM2(y.b)}</td><td>${fM2(y.r)}</td><td>${fPd(dy)}</td><td><span class="sem ${cls}">${cls==='ok'?'en tolerancia':cls==='warn'?'atención':'fuera'}</span></td></tr>`;
+    if(cls!=='ok') alerts.push({cls,k,n,dev:dm,favorable,tol,resp:RESP[k],monto:rm-bm,y:dy}); });
+  document.getElementById('tblReal').innerHTML=h+'</tbody></table>';
+  alerts.sort((a,b)=>(a.cls==='bad'?0:1)-(b.cls==='bad'?0:1)||Math.abs(b.dev)-Math.abs(a.dev));
+  document.getElementById('alertSub').textContent=`${r.label} · ${alerts.length} ${alerts.length===1?'rubro fuera de tolerancia':'rubros fuera de tolerancia'} · notificadas por correo al responsable`;
+  document.getElementById('alerts').innerHTML = alerts.length? alerts.map(a=>`<div class="alert ${a.favorable?'':a.cls}"><span class="ic">${a.favorable?'▲':'●'}</span><div><b>${a.n}: ${fPd(a.dev)} (${a.monto>0?'+':'−'}${fM2(Math.abs(a.monto))} M)</b>${a.favorable?'Desviación favorable, fuera de tolerancia igual: revisar si el supuesto quedó corto.':'Desfavorable. Tolerancia '+(a.tol*100).toLocaleString('es')+' %; acumulado del año '+fPd(a.y)+'.'}<br><small>Responsable: ${a.resp} · acción: justificar en 5 días hábiles o reproyectar</small></div></div>`).join('') : '<div class="empty">Todos los rubros dentro de tolerancia este mes.</div>';
+  // gráfico acumulado
+  const labels=APROBADO.slice(0,12).map(x=>x.label); let accB=0,accR=0,accP=0;
+  const sB=APROBADO.slice(0,12).map(x=>accB+=x.neta), sR=REAL.map((x,i)=>i<m?(accR+=x.neta):null);
+  let sP=null; if(repro){ accP=0; sP=repro.map((x,i)=>i<m?(accP+=REAL[i].neta):(accP+=x.neta)); sP=sP.map((v,i)=>i<m-1?null:v); }
+  const series=[{name:'Presupuesto aprobado',color:'#5C6880',dash:true,values:sB},{name:'Real',color:'#1F3BE0',values:sR}]; if(sP) series.push({name:'Reproyección',color:'#B07C10',values:sP});
+  lineChart(document.getElementById('chReal'),{title:'Utilidad neta acumulada 2027 · real vs. presupuesto',sub:'Millones de USD acumulados. La reproyección toma el real cerrado y proyecta lo que falta con la tendencia observada.',labels,series,fmt:v=>fM2(v)+' M',h:240});
+  // caja reproyección
+  const box=document.getElementById('reproBox');
+  if(repro){ const totB=sB[11], totP=sP[11]; const d=totP-totB; box.classList.add('show'); box.innerHTML=`<b>Reproyección 2027:</b> utilidad neta estimada ${fM2(totP)} M frente a ${fM2(totB)} M aprobados (<b style="color:${d<0?'var(--flag)':'var(--gain)'}">${d>0?'+':'−'}${fM2(Math.abs(d))} M</b>). Se mantienen los supuestos aprobados para los meses restantes, ajustados por la tendencia real de los últimos 3 meses en cada rubro. En producción esta reproyección se guarda como versión y pasa por el flujo de aprobación.`; }
+  else { box.classList.remove('show'); }
+  // tolerancias
+  document.getElementById('tols').innerHTML = RUBROS.map(([k,n])=>`<label for="tol_${k}">${n}</label><input id="tol_${k}" data-k="${k}" value="${TOL[k]}" inputmode="decimal">`).join('');
+}
+document.getElementById('tols').addEventListener('change',e=>{ const k=e.target.dataset.k; if(!k) return; const v=parseFloat(String(e.target.value).replace(',','.')); if(isNaN(v)||v<0) return; addLog(`Tolerancia «${RUBROS.find(r=>r[0]===k)[1]}»: ${TOL[k]} % → ${v} %`); TOL[k]=v; renderTrack(); renderLineas(); });
+function reproyectar(){
+  const m=mesCerrado; const K=['ingFin','gastoFin','provisiones','comisiones','personal','operativo'];
+  const w=Math.min(3,m); const ratio={}; K.forEach(k=>{ let b=0,r=0; for(let i=m-w;i<m;i++){ b+=APROBADO[i][k]; r+=REAL[i][k]; } ratio[k]=r/b; });
+  repro = APROBADO.slice(0,12).map((b,i)=>{ if(i<m) return REAL[i]; const o={}; K.forEach(k=>o[k]=b[k]*ratio[k]); o.deprec=b.deprec; const uai=o.ingFin-o.gastoFin-o.provisiones+o.comisiones-o.personal-o.operativo-o.deprec; o.uai=uai; o.impuestos=uai>0?uai*DEF.impuestos/100:0; o.neta=uai-o.impuestos; o.label=b.label; return o; });
+  addLog(`Reproyección 2027 generada con ${m} meses reales`); renderTrack();
+}
+
+/* ============================================================
+   VERSIONES
+   ============================================================ */
+function renderVersions(){
+  const tot=APROBADO.reduce((a,r)=>a+r.neta,0);
+  let h=`<div class="ver approved"><div><b>v1 · Aprobada por el Directorio</b><br><small style="color:var(--muted)">Escenario base · congelada</small></div><span class="m">${fM(tot)}</span><span class="sem ok">vigente</span></div>`;
+  versions.forEach((v,i)=>{ const d=v.total-tot; h+=`<div class="ver"><div><b>v${i+2} · ${esc(v.name)}</b><br><small style="color:var(--muted)">${esc(v.when)} · ${esc(v.scen)} · ${v.changes} supuestos distintos a la aprobada</small></div><span class="m">${fM(v.total)} <span style="color:${d>=0?'var(--gain)':'var(--flag)'}">(${d>=0?'+':'−'}${fM(Math.abs(d))})</span></span><button class="btn ghost" data-load="${i}">Cargar</button></div>`; });
+  document.getElementById('vlist').innerHTML=h;
+  document.querySelectorAll('[data-load]').forEach(b=>b.onclick=()=>{ const v=versions[+b.dataset.load]; P=clone(v.P); scen=v.scen; recalc(); syncControls(); addLog(`Versión «${v.name}» cargada`); });
+}
+function saveVersion(){
+  const name=prompt('Nombre de la versión (ej. «Escenario con 3 oficinas nuevas»):', scen==='custom'?'Ajuste de supuestos':'Escenario '+scen); if(name===null) return;
+  const changes=GRUPOS.flatMap(g=>g.c).filter(c=>Math.abs(get(DEF,c[0])-get(P,c[0]))>1e-9).length;
+  versions.push({name:name||'Sin nombre',when:new Date().toLocaleString('es',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),scen,P:clone(P),total:rows.reduce((a,r)=>a+r.neta,0),changes});
+  try{ localStorage.setItem('gdx-ppto-versions',JSON.stringify(versions)); }catch(e){}
+  addLog(`Versión guardada: «${name}»`); renderVersions();
+}
+function exportCSV(){
+  const K=[['mes','label'],['cartera','cartTot'],['captaciones','capTot'],['liquidez','liquidez'],['fondeo_externo','fondeo'],['patrimonio','patrimonio'],['ingresos_financieros','ingFin'],['gastos_financieros','gastoFin'],['margen_bruto','margenBruto'],['provisiones','provisiones'],['margen_neto','margenNeto'],['comisiones','comisiones'],['gastos_personal','personal'],['gastos_operativos','operativo'],['depreciacion','deprec'],['utilidad_antes_impuestos','uai'],['impuestos','impuestos'],['utilidad_neta','neta'],['plantilla','plantilla']];
+  let csv=K.map(k=>k[0]).join(';')+'\n'; rows.forEach(r=>{ csv+=K.map(k=>typeof r[k[1]]==='number'?r[k[1]].toFixed(4).replace('.',','):r[k[1]]).join(';')+'\n'; });
+  const b=new Blob(['﻿'+csv],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=`presupuesto-36m-${scen}.csv`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  addLog('Exportación CSV de 36 meses');
+}
+
+/* ============================================================
+   ORQUESTACIÓN
+   ============================================================ */
+function recalc(){ rows=calc(P); renderKPIs(); renderCharts(); renderPyG(); renderMes(); renderLineas(); }
+document.getElementById('scen').addEventListener('click',e=>{ const s=e.target.dataset.s; if(!s||s==='custom') return; setScenario(s); });
+document.getElementById('btnReset').onclick=()=>{ scen='base'; P=clone(DEF); repro=null; recalc(); syncControls(); renderTrack(); addLog('Supuestos restablecidos a la versión aprobada'); };
+document.getElementById('btnSave').onclick=saveVersion;
+document.getElementById('btnCsv').onclick=exportCSV;
+document.getElementById('btnRepro').onclick=reproyectar;
+document.getElementById('mesVer').addEventListener('input',renderMes);
+document.getElementById('mesCerrado').addEventListener('input',e=>{ mesCerrado=+e.target.value; if(repro) repro=null; renderTrack(); renderLineas(); });
+try{ const v=localStorage.getItem('gdx-ppto-versions'); if(v) versions=JSON.parse(v)||[]; }catch(e){}
+buildControls(); recalc(); renderTrack(); renderVersions(); renderLog();
+</script>
+</body>
+</html>
